@@ -1,6 +1,6 @@
 global using Eshop.Shared;
 using Eshop.Server.Database;
-using Microsoft.AspNetCore.ResponseCompression;
+using Eshop.Server.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +21,8 @@ builder.Services.AddRazorPages();
 //** SWAGGER CONFIG **//
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 app.UseSwaggerUI();

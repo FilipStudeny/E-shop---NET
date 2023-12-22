@@ -1,8 +1,8 @@
 ﻿.media-img{
-    max-height: 200px;
-    max-width: 200px;
+    max-height: 500px;
+    max-width: 500px;
     border-radius: 6px;
-    margin-bottom: 10px;
+    margin: 0 10px 10px 10px;
     transition: transform .2s;
 }
 
@@ -11,24 +11,17 @@
 }
 
 .media-img-wrapper{
-    width: 200px;
+    width: 500px;
+    max-height: 500px;
     text-align: center;
 }
 
-.media{
-    display: flex;
-    align-items: flex-start;
-}
-
-.media-body{
-    flex: 1;
-}
-
 @media (max-width: 1023.98px){
-    .media{
-        flex-direction: column;
-    }
     
+    .media-img{
+        max-width: 300px;
+    }
+
     .media-img-wrapper{
         width: 100%;
         height: auto;
