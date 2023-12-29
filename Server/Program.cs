@@ -1,5 +1,6 @@
 global using Eshop.Shared;
 using Eshop.Server.Database;
+using Eshop.Server.Services.CategoryService;
 using Eshop.Server.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,16 +14,15 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
 
 //** SWAGGER CONFIG **//
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 app.UseSwaggerUI();

@@ -14,18 +14,37 @@ else
         <div class="media-body">
             <h2 class="mb-0">@_product.Title</h2>
             <p>@_product.Description</p>
-            <h4 class="price">$@_product.Price</h4>
+            @if (_product.Variants != null && _product.Variants.Count > 0)
+            {
+                <div class="mb-3">
+                    <select class="form-select" @bind="_currentProductVariantId">
+                        @foreach (var variant in _product.Variants)
+                        {
+                            <option value="@variant.ProductTypeId">@variant.ProductType.Name</option>
+                        }
+                    </select>
+                </div>
+            }
+            @if (GetSelectedProductVariant() != null)
+            {
+                @if (GetSelectedProductVariant().OriginalPrice > GetSelectedProductVariant().Price)
+                {
+                    <h6 class="text-muted original-price">$@GetSelectedProductVariant().OriginalPrice</h6>
+                }
+                
+                <h4 class="price">$@GetSelectedProductVariant().Price</h4>
+            }
         </div>
     </article>
 }
 
 @code {
-    
+
     private Product? _product;
     private string _message = string.Empty;
-    
-    [Parameter]
-    public int Id { get; set; }
+    private int _currentProductVariantId = 1;
+
+    [Parameter] public int Id { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -38,8 +57,17 @@ else
         else
         {
             _product = response.Data;
+            if (_product.Variants.Count > 0)
+            {
+                _currentProductVariantId = _product.Variants[0].ProductTypeId;
+            }
         }
-        
     }
 
+    private ProductVariant GetSelectedProductVariant()
+    {
+        var variant = _product.Variants.FirstOrDefault(p => p.ProductTypeId == _currentProductVariantId);
+        return variant;
+    }
+    
 }

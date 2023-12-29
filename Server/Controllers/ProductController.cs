@@ -1,5 +1,6 @@
 ﻿using Eshop.Server.Database;
 using Eshop.Server.Services.ProductService;
+using Eshop.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,30 @@ public class ProductController : ControllerBase
     {
         var product = await _productService.GetProduct(id);
         return Ok(product);
+    }
+    
+    [HttpGet]
+    [Route("category/{category}")]
+    public async Task<ActionResult<ServiceResponse<Product>>> GetProductsByCategory(string category)
+    {
+        var products = await _productService.GetProductsByCategory(category);
+        return Ok(products);
+    }
+    
+    [HttpGet]
+    [Route("search/{search}")]
+    public async Task<ActionResult<ServiceResponse<Product>>> SearchForProduct(string search)
+    {
+        var products = await _productService.SearchProducts(search);
+        return Ok(products);
+    }
+    
+    [HttpGet]
+    [Route("suggestions/{search}")]
+    public async Task<ActionResult<ServiceResponse<Product>>> SearchProductSuggestions(string search)
+    {
+        var products = await _productService.GetProductSearchSuggestions(search);
+        return Ok(products);
     }
 
 }

@@ -15,4 +15,8 @@
         <ProjectReference Include="..\Shared\Eshop.Shared.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Shared\Layouts\Layout_Shop.razor" />
+    </ItemGroup>
+
 </Project>

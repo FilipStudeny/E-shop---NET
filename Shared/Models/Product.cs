@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eshop.Shared;
+namespace Eshop.Shared.Models;
 
 public class Product
 {
@@ -8,7 +8,10 @@ public class Product
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
+
+    public List<ProductVariant> Variants { get; set; } = new (); //for ex. book - hard copy or ebook
     
-    [Column(TypeName = "decimal(18,2)")]
-    public decimal Price { get; set; }
+    // Relationship with Category
+    public Category? Category { get; set; }
+    public int CategoryId { get; set; }
 }

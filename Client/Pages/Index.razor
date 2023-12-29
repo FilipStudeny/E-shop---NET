@@ -1,5 +1,31 @@
 ﻿@page "/"
+@page "/{category}"
+@page "/search/{search}"
+
+@inject IProductService ProductService
 
 <PageTitle>E-shop</PageTitle>
 
 <ProductList/>
+
+
+@code
+{
+    //Lifecycle methods
+    [Parameter] public string category { get; set; } = string.Empty;
+    [Parameter] public string Search { get; set; } = string.Empty;
+
+    //Changes products based on selected category,
+    //product list listens for action change and subscribes to it, if call is invoked it changes aand display proper data
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Search != null)
+        {
+            await ProductService.SearchProducts(Search);
+        }
+        else
+        {
+            await ProductService.GetProducts(category);
+        }
+    }
+}
