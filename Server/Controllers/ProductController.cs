@@ -1,5 +1,6 @@
 ﻿using Eshop.Server.Database;
 using Eshop.Server.Services.ProductService;
+using Eshop.Shared.DTOs;
 using Eshop.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,10 +43,10 @@ public class ProductController : ControllerBase
     }
     
     [HttpGet]
-    [Route("search/{search}")]
-    public async Task<ActionResult<ServiceResponse<Product>>> SearchForProduct(string search)
+    [Route("search/{search}/{page}")]
+    public async Task<ActionResult<ServiceResponse<ProductSearchDto>>> SearchForProduct(string search, int page = 1)
     {
-        var products = await _productService.SearchProducts(search);
+        var products = await _productService.SearchProducts(search, page);
         return Ok(products);
     }
     

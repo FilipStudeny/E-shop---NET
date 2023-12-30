@@ -1,4 +1,5 @@
 ﻿using Eshop.Server.Database;
+using Eshop.Shared.DTOs;
 using Eshop.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,18 +57,35 @@ public class ProductService : IProductService
         return response;
     }
 
-    public async Task<ServiceResponse<List<Product>>> SearchProducts(string search)
+    public async Task<ServiceResponse<ProductSearchDto>> SearchProducts(string search, int page)
     {
-        var products = new ServiceResponse<List<Product>>
-        {
-            Data = await _dataContext.Products
+        var number_of_results = 2f;
+        var page_count = Math.Ceiling((
+            await _dataContext.Products
                 .Where(p => p.Title.ToLower().Contains(search.ToLower()) ||
                             p.Description.ToLower().Contains(search.ToLower()))
                 .Include(p => p.Variants)
-                .ToListAsync()
+                .ToListAsync()).Count / number_of_results);
+
+        var products = await _dataContext.Products
+            .Where(p => p.Title.ToLower().Contains(search.ToLower()) ||
+                        p.Description.ToLower().Contains(search.ToLower()))
+            .Include(p => p.Variants)
+            .Skip((page - 1) * (int)number_of_results)
+            .Take((int)number_of_results)
+            .ToListAsync();
+        
+        var response = new ServiceResponse<ProductSearchDto>
+        {
+            Data = new ProductSearchDto
+            {
+                Products = products,
+                Pages = (int)page_count,
+                CurrentPage = page
+            }
         };
 
-        return products;
+        return response;
     }
 
     public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string search)

@@ -1,14 +1,19 @@
 ﻿using System.Net.Http.Json;
+using Eshop.Shared.DTOs;
 using Eshop.Shared.Models;
 
 namespace Eshop.Client.Services.ProductService;
 
 public class ProductService : IProductService
 {
-    public event Action? ChangeProducts;
     public string Message { get; set; }
-    private readonly HttpClient _http;
+    public int CurrentPage { get; set; }
+    public int PageCount { get; set; }
+    public string LastSearch { get; set; }
     
+    private readonly HttpClient _http;
+    public event Action? ChangeProducts;
+
     public List<Product> Products { get; set; } = new ();
 
     public ProductService(HttpClient http)
@@ -26,7 +31,14 @@ public class ProductService : IProductService
         {
             Products = response.Data;
         }
-        
+
+        CurrentPage = 1;
+        PageCount = 0;
+
+        if (Products.Count == 0)
+        {
+            Message = "No products found.";
+        }
         ChangeProducts?.Invoke();
     }
 
@@ -36,13 +48,16 @@ public class ProductService : IProductService
         return response;
     }
 
-    public async Task SearchProducts(string search)
+    public async Task SearchProducts(string search, int page)
     {
-        var response = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/search/{search}");
+        LastSearch = search;
+        var response = await _http.GetFromJsonAsync<ServiceResponse<ProductSearchDto>>($"api/product/search/{search}/{page}");
 
         if (response is { Data: not null })
         {
-            Products = response.Data;
+            Products = response.Data.Products;
+            CurrentPage = response.Data.CurrentPage;
+            PageCount = response.Data.Pages;
         }
 
         if (Products.Count == 0) Message = "No products found.";
