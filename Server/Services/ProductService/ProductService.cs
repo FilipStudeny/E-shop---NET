@@ -107,6 +107,16 @@ public class ProductService : IProductService
         };
 
     }
+
+    public async Task<ServiceResponse<List<Product>>> GetFeaturedProducts()
+    {
+        var products = new ServiceResponse<List<Product>>
+        {
+            Data = await _dataContext.Products.Where(p => p.FeaturedProduct).Include(p => p.Variants).ToListAsync()
+        };
+
+        return products;
+    }
 }
 
 

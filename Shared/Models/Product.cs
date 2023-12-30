@@ -14,4 +14,6 @@ public class Product
     // Relationship with Category
     public Category? Category { get; set; }
     public int CategoryId { get; set; }
+
+    public bool FeaturedProduct { get; set; } = false;
 }
