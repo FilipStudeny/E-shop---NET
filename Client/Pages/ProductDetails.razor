@@ -1,5 +1,8 @@
 ﻿@page "/product/{id:int}"
+@using Eshop.Client.Services.CartService
+@using Eshop.Shared.Models.Cart
 @inject IProductService ProductService
+@inject ICartService CartService
 
 @if (_product == null)
 {
@@ -34,6 +37,9 @@ else
                 
                 <h4 class="price">$@GetSelectedProductVariant().Price</h4>
             }
+            <button class="btn btn-primary" @onclick="AddItemToCart">
+                <i class="oi oi-cart"></i>&nbsp;&nbsp;Add to cart
+            </button>
         </div>
     </article>
 }
@@ -68,6 +74,18 @@ else
     {
         var variant = _product.Variants.FirstOrDefault(p => p.ProductTypeId == _currentProductVariantId);
         return variant;
+    }
+
+    private async Task AddItemToCart()
+    {
+        var productVariant = GetSelectedProductVariant();
+        var cartItem = new CartItem
+        {
+            ProductId = productVariant.ProductId,
+            ProductTypeId = productVariant.ProductTypeId
+        };
+
+        await CartService.AddToCart(cartItem);
     }
     
 }

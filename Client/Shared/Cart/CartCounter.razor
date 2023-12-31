@@ -1,0 +1,30 @@
+﻿@using Eshop.Client.Services.CartService
+@using Eshop.Shared.Models.Cart
+@inject ICartService CartService
+@inject ISyncLocalStorageService LocalStorage
+@implements IDisposable
+
+<a href="cart" class="btn btn-info">
+    <i class="oi oi-cart"></i>
+    <span class="badge">@GetItemCountInCart()</span>
+</a>
+
+@code {
+
+    private int GetItemCountInCart()
+    {
+        var cart = LocalStorage.GetItem<List<CartItem>>("cart");
+        return cart?.Count ?? 0;
+    }
+
+    protected override void OnInitialized()
+    {
+        CartService.OnCartChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnCartChange -= StateHasChanged;
+    }
+
+}

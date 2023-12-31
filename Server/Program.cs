@@ -1,5 +1,6 @@
 global using Eshop.Shared;
 using Eshop.Server.Database;
+using Eshop.Server.Services.CartService;
 using Eshop.Server.Services.CategoryService;
 using Eshop.Server.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 var app = builder.Build();
 app.UseSwaggerUI();
