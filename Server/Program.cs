@@ -1,9 +1,13 @@
 global using Eshop.Shared;
+using System.Text;
 using Eshop.Server.Database;
+using Eshop.Server.Services.Authentication;
 using Eshop.Server.Services.CartService;
 using Eshop.Server.Services.CategoryService;
 using Eshop.Server.Services.ProductService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+//middleware
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
 
 var app = builder.Build();
 app.UseSwaggerUI();
@@ -43,12 +62,14 @@ else
 
 app.UseSwagger();
 app.UseHttpsRedirection();
-
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
-
 app.UseRouting();
 
+//atuh stuff
+app.UseAuthentication();
+app.UseAuthorization();
+//
 
 app.MapRazorPages();
 app.MapControllers();

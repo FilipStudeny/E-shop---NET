@@ -1,0 +1,51 @@
+﻿@page "/register"
+@inject IAuthenticationService AuthenticationService
+
+<PageTitle>E-Shop | Register</PageTitle>
+<h3>Register</h3>
+
+<EditForm Model="_user" OnValidSubmit="HandleRegistration">
+    <DataAnnotationsValidator/>
+    <div class="mb-3">
+        <div>
+            <label for="email">Email</label>
+            <InputText class="form-control" id="email" @bind-Value="_user.Email"/>
+            <ValidationMessage For="@(() => _user.Email)"/>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <InputText class="form-control" id="password" @bind-Value="_user.Password" type="password"/>
+            <ValidationMessage For="@(() => _user.Password)"/>
+        </div>
+        <div>
+            <label for="password_confirm">Confirm password</label>
+            <InputText class="form-control" id="password_confirm" @bind-Value="_user.ConfirmPassword" type="password"/>
+            <ValidationMessage For="@(() => _user.ConfirmPassword)"/>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+    <div class="@_messageCss">
+        <p>@_message</p>
+    </div>
+</EditForm>
+
+@code {
+    readonly UserRegister _user = new UserRegister();
+    string? _message = string.Empty;
+    string _messageCss = string.Empty;
+
+    private async void HandleRegistration()
+    {
+        var response = await AuthenticationService.Register(_user);
+        _message = response?.Message;
+        if (response != null && !response.Success)
+        {
+            _messageCss = "text-danger";
+        }
+        else
+        {
+            _messageCss = "text-success";
+        }
+        
+    }
+}
