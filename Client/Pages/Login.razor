@@ -4,6 +4,7 @@
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ICartService CartService
 
 <PageTitle>E-Shop | Login</PageTitle>
 <h3>Login</h3>
@@ -32,7 +33,6 @@
     private readonly UserLogin _user = new();
     string? _message = string.Empty;
     string _messageCss = string.Empty;
-
     string? _returnUrl = string.Empty;
 
     protected override void OnInitialized()
@@ -43,8 +43,7 @@
             _returnUrl = returnUrl;
         }
     }
-
-
+    
     private async Task HandleLogin()
     {
         var response = await AuthenticationService.Login(_user);
@@ -52,13 +51,13 @@
         if (response is { Success: false })
         {
             _messageCss = "text-danger";
-        }
-        else
-        {
+        }else{
             _messageCss = "text-success";
             await LocalStorage.SetItemAsync("token", response?.Data);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            NavigationManager.NavigateTo(_returnUrl);
+            await CartService.StoreCartItemsInDatabase(true);
+            await CartService.GetCartItemCount();
+            if (_returnUrl != null) NavigationManager.NavigateTo(_returnUrl);
         }
     }
 }

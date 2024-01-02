@@ -1,4 +1,5 @@
 ﻿using Eshop.Shared.Models;
+using Eshop.Shared.Models.Cart;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eshop.Server.Database;
@@ -15,6 +16,13 @@ public class DataContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //Composite key setup
+        modelBuilder.Entity<CartItem>().HasKey(cart => new
+        {
+            cart.UserId,
+            cart.ProductId,
+            cart.ProductTypeId
+        });
+        
         modelBuilder.Entity<ProductVariant>().HasKey(product => new
         {
             product.ProductId, 
@@ -273,5 +281,6 @@ public class DataContext : DbContext
     public DbSet<ProductType> ProductTypes { get; set; }
     public DbSet<ProductVariant> ProductVariants { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
 
 }

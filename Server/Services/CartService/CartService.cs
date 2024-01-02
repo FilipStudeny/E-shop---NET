@@ -1,5 +1,7 @@
-﻿using Eshop.Server.Database;
+﻿using System.Security.Claims;
+using Eshop.Server.Database;
 using Eshop.Shared.DTOs;
+using Eshop.Shared.Models;
 using Eshop.Shared.Models.Cart;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +10,12 @@ namespace Eshop.Server.Services.CartService;
 public class CartService : ICartService
 {
     private readonly DataContext _dataContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CartService(DataContext dataContext)
+    public CartService(DataContext dataContext, IHttpContextAccessor httpContextAccessor)
     {
         _dataContext = dataContext;
+        _httpContextAccessor = httpContextAccessor;
     }
     public async Task<ServiceResponse<List<CartDto>>> GetProductsInCart(List<CartItem> cartItems)
     {
@@ -54,4 +58,35 @@ public class CartService : ICartService
 
         return result;
     }
+
+    //Stores local cart in database for authenticated users
+    public async Task<ServiceResponse<List<CartDto>>> StoreCartItemsInDatabase(List<CartItem> cartItems)
+    {
+        var userId = GetUserId();
+        cartItems.ForEach(item => item.UserId = userId);
+        _dataContext.CartItems.AddRange(cartItems);
+        await _dataContext.SaveChangesAsync();
+
+        return await GetStoredCart();
+    }
+
+    public async Task<ServiceResponse<int>> GetCartItemCount()
+    {
+        var count = (await _dataContext.CartItems.Where(cart => cart.UserId == GetUserId()).ToListAsync()).Count;
+        return new ServiceResponse<int>
+        {
+            Data = count
+        };
+
+    }
+
+    public async Task<ServiceResponse<List<CartDto>>> GetStoredCart()
+    {
+        var userId = GetUserId();
+        var cart = await _dataContext.CartItems.Where(cart => cart.UserId == userId).ToListAsync();
+        return await GetProductsInCart(cart);
+    }
+
+    private int GetUserId() =>
+        int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 }

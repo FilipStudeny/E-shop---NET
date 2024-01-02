@@ -13,8 +13,8 @@
 
     private int GetItemCountInCart()
     {
-        var cart = LocalStorage.GetItem<List<CartItem>>("cart");
-        return cart?.Count ?? 0;
+        var cart = LocalStorage.GetItem<int>("itemCount");
+        return cart;
     }
 
     protected override void OnInitialized()
