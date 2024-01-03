@@ -12,11 +12,13 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly DataContext _dataContext;
     private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthenticationService(DataContext dataContext, IConfiguration configuration)
+    public AuthenticationService(DataContext dataContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _dataContext = dataContext;
         _configuration = configuration;
+        _httpContextAccessor = httpContextAccessor;
     }
     
         public async Task<ServiceResponse<string>> Login(string email, string password)
@@ -67,6 +69,7 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
+        
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
             if (await UserExists(user.Email))
@@ -134,5 +137,11 @@ public class AuthenticationService : IAuthenticationService
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+        
+        public int GetUserId()
+        {
+            var userIdString = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(userIdString);
         }
     }

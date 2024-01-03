@@ -1,5 +1,6 @@
 ﻿using Eshop.Shared.Models;
 using Eshop.Shared.Models.Cart;
+using Eshop.Shared.Models.Order;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eshop.Server.Database;
@@ -27,6 +28,13 @@ public class DataContext : DbContext
         {
             product.ProductId, 
             product.ProductTypeId
+        });
+        
+        modelBuilder.Entity<OrderItem>().HasKey(order => new
+        {
+            order.OrderId,
+            order.ProductId, 
+            order.ProductTypeId
         });
         
         modelBuilder.Entity<ProductType>().HasData(
@@ -282,5 +290,7 @@ public class DataContext : DbContext
     public DbSet<ProductVariant> ProductVariants { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 
 }

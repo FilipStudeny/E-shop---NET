@@ -1,5 +1,6 @@
 ﻿@page "/cart"
 @inject ICartService CartService
+@inject IOrderService OrderService
 
 <PageTitle>E-Shop | Shopping cart</PageTitle>
 
@@ -8,6 +9,12 @@
 @if (cartProducts.Count == 0)
 {
     <span>@message</span>
+}else if (_orderCreated)
+{
+    <div class="text-center">
+        <h2 class="text-center">Thank you for your order.</h2>
+        <p>You can view your order <a class="text-capitalize" href="/orders">here</a></p>
+    </div>
 }
 else
 {
@@ -22,9 +29,9 @@ else
                     <h5><a href="/product/@product.ProductId">@product.ProductTitle</a></h5>
                     <span>@product.ProductType</span><br />
                     <input type="number" value="@product.Quantity"
-                       @onchange="@((ChangeEventArgs e) => UpdateQuantity(e, product))"
-                       class="form-control input-quantity"
-                       min="1" />
+                           @onchange="@((ChangeEventArgs e) => UpdateQuantity(e, product))"
+                           class="form-control input-quantity"
+                           min="1" />
                     <button class="btn-delete" 
                             @onclick="@(() => RemoveItemFromCart(product.ProductId, product.ProductTypeId))">
                         Delete
@@ -37,14 +44,19 @@ else
             Total (@cartProducts.Count): $@cartProducts.Sum(product => @product.Price * product.Quantity)
         </div>
     </div>
+    <div class="mt-2">
+        <button @onclick="PlaceOrder" class="btn alert-success float-end mt-1">Place order</button>
+    </div>
 }
 
 @code {
     List<CartDto> cartProducts = new();
     string message = "Loading products in cart ...";
+    bool _orderCreated = false;
 
     protected override async Task OnInitializedAsync()
     {
+        _orderCreated = false;
         await LoadCartItems();
     }
 
@@ -72,6 +84,13 @@ else
 
         await CartService.UpdateQuantityForProduct(item);
 
+    }
+
+    private async Task PlaceOrder()
+    {
+        await OrderService.PlaceOrder();
+        await CartService.GetCartItemCount();
+        _orderCreated = true;
     }
 
 }

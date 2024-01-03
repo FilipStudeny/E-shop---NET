@@ -1,7 +1,6 @@
-﻿using System.Security.Claims;
-using Eshop.Server.Database;
+﻿using Eshop.Server.Database;
+using Eshop.Server.Services.Authentication;
 using Eshop.Shared.DTOs;
-using Eshop.Shared.Models;
 using Eshop.Shared.Models.Cart;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,15 +9,14 @@ namespace Eshop.Server.Services.CartService;
 public class CartService : ICartService
 {
     private readonly DataContext _dataContext;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IAuthenticationService _authenticationService;
 
-        public CartService(DataContext dataContext, IHttpContextAccessor httpContextAccessor)
+    public CartService(DataContext dataContext, IAuthenticationService authenticationService)
         {
             _dataContext = dataContext;
-            _httpContextAccessor = httpContextAccessor;
+            _authenticationService = authenticationService;
         }
 
-        //private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
         public async Task<ServiceResponse<List<CartDto>>> GetCartProducts(List<CartItem> cartItems)
         {
@@ -63,8 +61,8 @@ public class CartService : ICartService
         }
 
         public async Task<ServiceResponse<List<CartDto>>> StoreCartItems(List<CartItem> cartItems)
-        { 
-            var userId = GetUserId();
+        {
+            var userId =  _authenticationService.GetUserId();
             cartItems.ForEach(item => item.UserId = userId);
             _dataContext.CartItems.AddRange(cartItems);
             await _dataContext.SaveChangesAsync();
@@ -74,21 +72,21 @@ public class CartService : ICartService
 
         public async Task<ServiceResponse<int>> GetCartItemsCount()
         {
-            var count = (await _dataContext.CartItems.Where(ci => ci.UserId == GetUserId()).ToListAsync()).Count;
+            var count = (await _dataContext.CartItems.Where(ci => ci.UserId == _authenticationService.GetUserId()).ToListAsync()).Count;
             return new ServiceResponse<int> { Data = count };
 
         }
 
         public async Task<ServiceResponse<List<CartDto>>> GetDbCartProducts()
         {
-            var userId = GetUserId();
+            var userId = _authenticationService.GetUserId();
             var cart = await _dataContext.CartItems.Where(cart => cart.UserId == userId).ToListAsync();
             return await GetCartProducts(cart);
         }
 
         public async Task<ServiceResponse<bool>> AddToCart(CartItem cartItem)
         {
-            cartItem.UserId = GetUserId();
+            cartItem.UserId = _authenticationService.GetUserId();
             var sameItemInCart = await _dataContext.CartItems
                 .FirstOrDefaultAsync(cart =>
                     cart.ProductId == cartItem.ProductId &&
@@ -114,7 +112,7 @@ public class CartService : ICartService
                 .FirstOrDefaultAsync(cart =>
                     cart.ProductId == productId &&
                     cart.ProductTypeId == productTypeId && 
-                    cart.UserId == GetUserId());
+                    cart.UserId == _authenticationService.GetUserId());
             
             if (item == null)
             {
@@ -137,7 +135,7 @@ public class CartService : ICartService
                 .FirstOrDefaultAsync(cart =>
                     cart.ProductId == cartItem.ProductId &&
                     cart.ProductTypeId == cartItem.ProductTypeId && 
-                    cart.UserId == GetUserId());
+                    cart.UserId == _authenticationService.GetUserId());
 
             if (sameItemInCart == null)
             {
@@ -154,13 +152,10 @@ public class CartService : ICartService
             return new ServiceResponse<bool>
             {
                 Data = true
-            };        }
-
-
-        public int GetUserId()
-        {
-            var userIdString = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.Parse(userIdString);
+            };        
         }
+
+
+
 }
     

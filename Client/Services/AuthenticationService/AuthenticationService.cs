@@ -1,15 +1,18 @@
 ﻿using System.Net.Http.Json;
 using Eshop.Shared.Models;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Eshop.Client.Services.AuthenticationService;
 
 public class AuthenticationService : IAuthenticationService
 {
     private readonly HttpClient _httpClient;
+    private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-    public AuthenticationService(HttpClient httpClient)
+    public AuthenticationService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider)
     {
         _httpClient = httpClient;
+        _authenticationStateProvider = authenticationStateProvider;
     }
     
     public async Task<ServiceResponse<int>?> Register(UserRegister userRegister)
@@ -28,6 +31,10 @@ public class AuthenticationService : IAuthenticationService
     {
         var response =  await _httpClient.PostAsJsonAsync("api/authentication/passwordchange", userPasswordChange.Password);
         return await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-
+    }
+    
+    public async Task<bool> IsAuthenticated()
+    {
+        return (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
     }
 }

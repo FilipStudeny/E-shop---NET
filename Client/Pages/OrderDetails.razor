@@ -1,0 +1,50 @@
+﻿@page "/orders/order/{OrderId:int}"
+@using Eshop.Shared.Models.Order
+@inject IOrderService OrderService
+
+<h3>Order @OrderId</h3>
+
+@if (_order == null)
+{
+    <div class="text-center">
+        <h3>Loading order ...</h3>
+    </div>
+}
+else
+{
+    <h2 class="text-center">Order from @_order.OrderDate</h2>
+    <hr/>
+    <div>
+        @foreach (var product in _order.Products)
+        {
+            <div class="container">
+                <div class="image-wrapper">
+                    <img src="@product.Image" alt="@product.Title"/>
+                </div>
+                <div class="name">
+                    <h2><a href="/product/@product.Id">@product.Title</a></h2>
+                    <h3>@product.ProductType</h3><br/>
+                    <p>Quantity: @product.Quantity</p>
+                </div>
+                <h3 class="product-price">$@product.TotalPrice</h3>
+            </div>
+        }
+        <hr/>
+        <div class="product-price mt-2">
+            <p>Total: $@_order.TotalPrice</p>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter] public int OrderId { get; set; }
+    OrderDetailDto _order = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await OrderService.GetOrderDetails(OrderId);
+        _order = response;
+    }
+
+}
