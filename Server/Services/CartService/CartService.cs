@@ -108,16 +108,55 @@ public class CartService : ICartService
             return new ServiceResponse<bool> { Data = true };
         }
 
-        public Task<ServiceResponse<bool>> UpdateQuantity(CartItem cartItem)
+        public async Task<ServiceResponse<bool>> RemoveItemFromCart(int productId, int productTypeId)
         {
-            throw new NotImplementedException();
+            var item = await _dataContext.CartItems
+                .FirstOrDefaultAsync(cart =>
+                    cart.ProductId == productId &&
+                    cart.ProductTypeId == productTypeId && 
+                    cart.UserId == GetUserId());
+            
+            if (item == null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Cart item does not exist."
+                };
+            }
+
+            _dataContext.CartItems.Remove(item);
+            await _dataContext.SaveChangesAsync();
+            return new ServiceResponse<bool> { Data = true };
         }
 
-        public Task<ServiceResponse<bool>> RemoveItemFromCart(int productId, int productTypeId)
+        public async Task<ServiceResponse<bool>> UpdateQauntity(CartItem cartItem)
         {
-            throw new NotImplementedException();
-        }
-        
+            var sameItemInCart = await _dataContext.CartItems
+                .FirstOrDefaultAsync(cart =>
+                    cart.ProductId == cartItem.ProductId &&
+                    cart.ProductTypeId == cartItem.ProductTypeId && 
+                    cart.UserId == GetUserId());
+
+            if (sameItemInCart == null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Cart item does not exist."
+                };
+            }
+
+            sameItemInCart.Quantity = cartItem.Quantity;
+            await _dataContext.SaveChangesAsync();
+            return new ServiceResponse<bool>
+            {
+                Data = true
+            };        }
+
+
         public int GetUserId()
         {
             var userIdString = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);

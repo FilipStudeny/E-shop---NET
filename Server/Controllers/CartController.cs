@@ -41,9 +41,9 @@ namespace Eshop.Server.Controllers;
         }
 
         [HttpPut("update-quantity")]
-        public async Task<ActionResult<ServiceResponse<bool>>> UpdateQuantity(CartItem cartItem)
+        public async Task<ActionResult<ServiceResponse<bool>>> UpdateProductQuantity(CartItem cartItem)
         {
-            var result = await _cartService.UpdateQuantity(cartItem);
+            var result = await _cartService.UpdateQauntity(cartItem);
             return Ok(result);
         }
 

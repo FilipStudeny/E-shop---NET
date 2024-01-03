@@ -75,27 +75,45 @@ public class CartService : ICartService
 
     public async Task RemoveItemFromCart(int productId, int productTypeId)
     {
-        var cartItems = await _localStorage.GetItemAsync<List<CartItem>>("cart");
-
-        var cartItemToRemove = cartItems?.Find(i => i.ProductId == productId && i.ProductTypeId == productTypeId);
-        if (cartItemToRemove != null)
+        if (await IsAuthenticated())
         {
-            cartItems?.Remove(cartItemToRemove);
-            await _localStorage.SetItemAsync("cart", cartItems);
-            await GetCartItemCount();
+            await _httpClient.DeleteAsync($"api/Cart/{productId}/{productTypeId}");
+        }
+        else
+        {
+            var cartItems = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+
+            var cartItemToRemove = cartItems?.Find(i => i.ProductId == productId && i.ProductTypeId == productTypeId);
+            if (cartItemToRemove != null)
+            {
+                cartItems?.Remove(cartItemToRemove);
+                await _localStorage.SetItemAsync("cart", cartItems);
+            }
         }
     }
 
     public async Task UpdateQuantityForProduct(CartDto item)
     {
-        var cartItems = await _localStorage.GetItemAsync<List<CartItem>>("cart");
-
-        var cartItem = cartItems?.Find(i => i.ProductId == item.ProductId && i.ProductTypeId == item.ProductTypeId);
-        if (cartItem != null)
+        if (await IsAuthenticated())
         {
-            cartItem.Quantity = item.Quantity;
-            await _localStorage.SetItemAsync("cart", cartItems);
+            await _httpClient.PutAsJsonAsync("api/cart/update-quantity", new CartItem
+            {
+                ProductId = item.ProductId,
+                Quantity = item.Quantity,
+                ProductTypeId = item.ProductTypeId
+            });
         }
+        else
+        {
+            var cartItems = await _localStorage.GetItemAsync<List<CartItem>>("cart");
+            var cartItem = cartItems?.Find(i => i.ProductId == item.ProductId && i.ProductTypeId == item.ProductTypeId);
+            if (cartItem != null)
+            {
+                cartItem.Quantity = item.Quantity;
+                await _localStorage.SetItemAsync("cart", cartItems);
+            }
+        }
+       
     }
 
     public async Task StoreCartItemsInDatabase(bool emptyLocalCart = false)
