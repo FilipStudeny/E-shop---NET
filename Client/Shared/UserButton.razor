@@ -42,9 +42,9 @@
 
     private async Task Logout()
     {
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
         await LocalStorage.RemoveItemAsync("token");
         await CartService.GetCartItemCount();
-        await AuthenticationStateProvider.GetAuthenticationStateAsync();
         NavigationManager.NavigateTo("/");
     }
 }

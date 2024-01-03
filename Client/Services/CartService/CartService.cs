@@ -63,7 +63,9 @@ public class CartService : ICartService
         {
             var cartItems = await _localStorage.GetItemAsync<List<CartItem>>("cart");
             if (cartItems == null)
+            {
                 return new List<CartDto>();
+            }
             var response = await _httpClient.PostAsJsonAsync("api/cart/products", cartItems);
             var cartProducts =
                 await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartDto>>>();

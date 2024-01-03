@@ -43,9 +43,7 @@ public class AuthenticationController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost]
-    [Route("passwordchange")]
-    [Authorize]
+    [HttpPost("passwordchange"), Authorize ]
     public async Task<ActionResult<ServiceResponse<bool>>> ChangePassword([FromBody] string newPassword)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
