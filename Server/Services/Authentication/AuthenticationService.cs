@@ -115,18 +115,15 @@ public class AuthenticationService : IAuthenticationService
 
         private string CreateToken(User user)
         {
-            List<Claim> claims = new()
+            List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Email)
             };
 
             var value = _configuration.GetSection("AppSettings:Token").Value;
-            SymmetricSecurityKey? key = null;
-            if (value != null)
-            {
-                key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(value));
-            }
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(value));
+            
             
             var signature = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(

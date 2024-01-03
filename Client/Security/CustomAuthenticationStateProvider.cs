@@ -53,17 +53,16 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
             case 2: base64 += "=="; break;
             case 3: base64 += "="; break;
         }
-
         return Convert.FromBase64String(base64);
     }
 
-    private IEnumerable<Claim>? ParseClaimsFromToken(string token)
+    private IEnumerable<Claim> ParseClaimsFromToken(string token)
     {
         var payload = token.Split('.')[1];
         var jsonBytes = ParseBase64WithoutPadding(payload);
         var keyPair = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
-        var claims = keyPair?.Select(kv => new Claim(kv.Key, kv.Value.ToString()!));
+        var claims = keyPair.Select(kv => new Claim(kv.Key, kv.Value.ToString()!));
         return claims;
     }
 }

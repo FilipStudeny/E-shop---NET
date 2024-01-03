@@ -9,5 +9,6 @@ public interface ICartService
     Task<ServiceResponse<List<CartDto>>> StoreCartItemsInDatabase(List<CartItem> cartItems);
     Task<ServiceResponse<int>> GetCartItemCount();
     Task<ServiceResponse<List<CartDto>>> GetStoredCart();
+    Task<ServiceResponse<bool>> AddToCart(CartItem cartItem);
 
 }

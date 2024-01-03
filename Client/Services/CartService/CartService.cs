@@ -21,40 +21,33 @@ public class CartService : ICartService
         _authenticationStateProvider = authenticationStateProvider;
     }
 
-    public async Task<bool> IsAuthenticated()
+    private async Task<bool> IsAuthenticated()
     {
-        var userIdentity = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
-        return userIdentity != null && userIdentity.IsAuthenticated;
+        return (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
     }
     
     public async Task AddToCart(CartItem item)
     {
         if (await IsAuthenticated())
         {
-            
+            await _httpClient.PostAsJsonAsync("api/cart/add", item);
         }
         else
         {
-            
+            var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart") ?? new List<CartItem>();
+            var itemAlreadyInCart = cart.Find(i => i.ProductId == item.ProductId && i.ProductTypeId == item.ProductTypeId);
+            if (itemAlreadyInCart == null)
+            {
+                cart.Add(item);
+            }
+            else
+            {
+                itemAlreadyInCart.Quantity += item.Quantity;
+            }
+            await _localStorage.SetItemAsync("cart", cart);
         }
-        var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
-        if (cart is null)
-        {
-            cart = new();
-        }
-
-        var itemAlreadyInCart = cart.Find(i => i.ProductId == item.ProductId && i.ProductTypeId == item.ProductTypeId);
-        if (itemAlreadyInCart == null)
-        {
-            cart.Add(item);
-        }
-        else
-        {
-            itemAlreadyInCart.Quantity += item.Quantity;
-        }
-        
-        await _localStorage.SetItemAsync("cart", cart);
         await GetCartItemCount();
+
     }
 
     
@@ -127,19 +120,16 @@ public class CartService : ICartService
         if (await IsAuthenticated())
         {
             var response = await _httpClient.GetFromJsonAsync<ServiceResponse<int>>("api/cart/count");
-            if (response != null)
-            {
-                var count = response.Data;
-                await _localStorage.SetItemAsync<int>("itemCount", count);
-            }
+            var count = response.Data;
+            await _localStorage.SetItemAsync<int>("itemCount", count);
+            
         }
         else
         {
             var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
-            var count = cart?.Count ?? 0;
-            await _localStorage.SetItemAsync<int>("itemCount", count);
+            await _localStorage.SetItemAsync<int>("cartItemsCount", cart != null ? cart.Count : 0);
         }
         
-        OnCartChange?.Invoke();
+        OnCartChange.Invoke();
     }
 }

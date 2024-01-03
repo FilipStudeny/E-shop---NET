@@ -11,10 +11,12 @@ namespace Eshop.Server.Controllers;
 public class CartController : ControllerBase
 {
     private readonly ICartService _cartService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CartController(ICartService cartService)
+    public CartController(ICartService cartService, IHttpContextAccessor httpContextAccessor)
     {
         _cartService = cartService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [HttpPost]
@@ -36,13 +38,22 @@ public class CartController : ControllerBase
     [Route("count")]
     public async Task<ActionResult<ServiceResponse<int>>> GetCartItemCount()
     {
-        return await _cartService.GetCartItemCount();
+        
+        return  await _cartService.GetCartItemCount();
     }
     
     [HttpGet]
     public async Task<ActionResult<ServiceResponse<List<CartDto>>>> GetCart()
     {
         return Ok(await _cartService.GetStoredCart());
+    }
+    
+    [HttpPost]
+    [Route("add")]
+    public async Task<ActionResult<ServiceResponse<bool>>> AddItemToCart(CartItem cartItem)
+    {
+        var result = await _cartService.AddToCart(cartItem);
+        return Ok(result);
     }
     
 }
