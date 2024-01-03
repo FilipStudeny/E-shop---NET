@@ -56,16 +56,14 @@ public class CartService : ICartService
 
         if (await IsAuthenticated())
         {
-            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<CartDto>>>("api/cart/products");
+            var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<CartDto>>>("api/cart");
             return response.Data;
         }
         else
         {
             var cartItems = await _localStorage.GetItemAsync<List<CartItem>>("cart");
             if (cartItems == null)
-            {
                 return new List<CartDto>();
-            }
             var response = await _httpClient.PostAsJsonAsync("api/cart/products", cartItems);
             var cartProducts =
                 await response.Content.ReadFromJsonAsync<ServiceResponse<List<CartDto>>>();
@@ -127,7 +125,7 @@ public class CartService : ICartService
         else
         {
             var cart = await _localStorage.GetItemAsync<List<CartItem>>("cart");
-            await _localStorage.SetItemAsync<int>("cartItemsCount", cart != null ? cart.Count : 0);
+            await _localStorage.SetItemAsync<int>("itemCount", cart != null ? cart.Count : 0);
         }
         
         OnCartChange.Invoke();

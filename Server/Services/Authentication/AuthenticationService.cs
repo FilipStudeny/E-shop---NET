@@ -121,17 +121,18 @@ public class AuthenticationService : IAuthenticationService
                 new Claim(ClaimTypes.Name, user.Email)
             };
 
-            var value = _configuration.GetSection("AppSettings:Token").Value;
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(value));
-            
-            
-            var signature = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+                .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
-                signingCredentials: signature);
+                signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
             return jwt;
         }
     }

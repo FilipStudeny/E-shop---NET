@@ -18,28 +18,29 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     }
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        string token = await _localStorageService.GetItemAsStringAsync("token");
+        string authToken = await _localStorageService.GetItemAsStringAsync("token");
+
         var identity = new ClaimsIdentity();
-        _httpClient.DefaultRequestHeaders.Authorization = null; //set to Unauthorized user
-        
-        //Set authorization header
-        if (!string.IsNullOrEmpty(token))
+        _httpClient.DefaultRequestHeaders.Authorization = null;
+
+        if (!string.IsNullOrEmpty(authToken))
         {
             try
             {
-                identity = new ClaimsIdentity(ParseClaimsFromToken(token), "jwt");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                    "Bearer", token.Replace("\"",""));
-            }catch (Exception e)
+                identity = new ClaimsIdentity(ParseClaimsFromToken(authToken), "jwt");
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
+            }
+            catch
             {
                 await _localStorageService.RemoveItemAsync("token");
                 identity = new ClaimsIdentity();
             }
         }
-        
-        //set identity to claims and stuff
+
         var user = new ClaimsPrincipal(identity);
         var state = new AuthenticationState(user);
+
         NotifyAuthenticationStateChanged(Task.FromResult(state));
 
         return state;
