@@ -150,4 +150,9 @@ public class AuthenticationService : IAuthenticationService
             var userEmailString = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
             return userEmailString;
         }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _dataContext.Users.FirstOrDefaultAsync(user => user.Email.Equals(email));
+        }
 }

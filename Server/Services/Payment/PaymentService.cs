@@ -15,16 +15,18 @@ public class PaymentService : IPaymentService
 
     public PaymentService(IOrderingService orderingService, IAuthenticationService authenticationService, ICartService cartService, IConfiguration configuration)
     {
-        var key = _configuration?.GetSection("StripeKey:key").Value;
-        StripeConfiguration.ApiKey = key;
         _orderingService = orderingService;
         _authenticationService = authenticationService;
         _cartService = cartService;
         _configuration = configuration;
     }
     
-    public async Task<Session> CreateCheckoutSession()
-    {
+    public async Task<Session> CreateCheckoutSession(){
+        var key = _configuration.GetSection("AppSettings:Stripe").Value;
+        StripeConfiguration.ApiKey = key;
+
+        Console.WriteLine(key);
+
         var products = (await _cartService.GetDbCartProducts()).Data;
         var lineItems = new List<SessionLineItemOptions>();
         
@@ -46,14 +48,18 @@ public class PaymentService : IPaymentService
         var options = new SessionCreateOptions()
         {
             CustomerEmail = _authenticationService.GetUserEmail(),
+            ShippingAddressCollection = new SessionShippingAddressCollectionOptions()
+            {
+                AllowedCountries = new List<string>{ "US", "CZ"}
+            },
             PaymentMethodTypes = new List<string>
             {
                 "card"
             },
             LineItems = lineItems,
             Mode = "payment",
-            SuccessUrl = "http//localhost:5080/order-success",
-            CancelUrl = "http//localhost:5080/cart"
+            SuccessUrl = "http://localhost:5080/order-success",
+            CancelUrl = "http://localhost:5080/cart"
         };
 
         var service = new SessionService();
@@ -61,5 +67,34 @@ public class PaymentService : IPaymentService
 
         return session;
 
+    }
+
+    public async Task<ServiceResponse<bool>> FulfillOrder(HttpRequest httpRequest)
+    {
+        var secret = _configuration.GetSection("AppSettings:Secret").Value;
+        var jsonObject = await new StreamReader(httpRequest.Body).ReadToEndAsync();
+        try
+        {
+            var stripeEvent = EventUtility.ConstructEvent(
+                jsonObject, httpRequest.Headers["Stripe-Signature"], secret
+            );
+
+            if (stripeEvent.Type != Events.CheckoutSessionCompleted) return new ServiceResponse<bool> { Data = true };
+            var session = stripeEvent.Data.Object as Session;
+            var user = await _authenticationService.GetUserByEmail(session.CustomerEmail);
+            await _orderingService.PlaceOrder(user.Id);
+
+            return new ServiceResponse<bool> { Data = true };
+
+        }
+        catch (StripeException e)
+        {
+            return new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = e.Message
+            };
+        }
     }
 }

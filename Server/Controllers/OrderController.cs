@@ -10,20 +10,12 @@ namespace Eshop.Server.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly IOrderingService _orderingService;
-    private readonly IAuthenticationService _authenticationService;
 
-    public OrderController(IOrderingService orderingService, IAuthenticationService authenticationService)
+    public OrderController(IOrderingService orderingService)
     {
         _orderingService = orderingService;
-        _authenticationService = authenticationService;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<ServiceResponse<bool>>> PlaceOrder()
-    {
-        var response = await _orderingService.PlaceOrder();
-        return Ok(response);
-    }
     
     [HttpGet]
     public async Task<ActionResult<ServiceResponse<List<OrderDto>>>> GetOrders()

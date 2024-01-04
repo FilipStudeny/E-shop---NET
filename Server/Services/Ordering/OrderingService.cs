@@ -20,9 +20,9 @@ public class OrderingService : IOrderingService
         _authenticationService = authenticationService;
     }
     
-    public async Task<ServiceResponse<bool>> PlaceOrder()
+    public async Task<ServiceResponse<bool>> PlaceOrder(int userId)
     {
-        var products = (await _cartService.GetDbCartProducts()).Data;
+        var products = (await _cartService.GetDbCartProducts(userId)).Data;
         decimal totalPrice = 0;
         products?.ForEach(p => totalPrice += (p.Price * p.Quantity));
 
@@ -37,7 +37,7 @@ public class OrderingService : IOrderingService
 
         var order = new Order
         {
-            UserId = _authenticationService.GetUserId(),
+            UserId = userId,
             OrderDate = DateTime.Now,
             TotalPrice = totalPrice,
             OrderItems = orderItems
@@ -46,7 +46,7 @@ public class OrderingService : IOrderingService
         _dataContext.Orders.Add(order);
         
         //Remove cart
-        _dataContext.CartItems.RemoveRange(_dataContext.CartItems.Where(cart => cart.UserId == _authenticationService.GetUserId()));
+        _dataContext.CartItems.RemoveRange(_dataContext.CartItems.Where(cart => cart.UserId == userId));
         await _dataContext.SaveChangesAsync();
 
         return new ServiceResponse<bool> { Data = true };
