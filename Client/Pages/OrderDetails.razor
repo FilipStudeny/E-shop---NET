@@ -2,7 +2,9 @@
 @using Eshop.Shared.Models.Order
 @inject IOrderService OrderService
 
-<h3>Order @OrderId</h3>
+<div class="section-header d-flex flex-row justify-content-evenly align-items-center">
+    <h2 class="text-center">Order #@OrderId</h2>
+</div>
 
 @if (_order == null)
 {
@@ -12,26 +14,28 @@
 }
 else
 {
-    <h2 class="text-center">Order from @_order.OrderDate</h2>
-    <hr/>
-    <div>
+    <div class="orders-container mb-3">
         @foreach (var product in _order.Products)
         {
-            <div class="container">
-                <div class="image-wrapper">
+            <div class="container p-2">
+                <div class="image-wrapper mx-2">
                     <img src="@product.Image" alt="@product.Title"/>
                 </div>
-                <div class="name">
-                    <h2><a href="/product/@product.Id">@product.Title</a></h2>
-                    <h3>@product.ProductType</h3><br/>
-                    <p>Quantity: @product.Quantity</p>
+                <div class="order-details">
+                    <div>
+                        <a class="product-title text-decoration-none" href="/product/@product.Id">@product.Title</a>
+                        <div class="d-flex flex-column justify-content-start">
+                            <p>Type: <span class="fw-bold">@product.ProductType</span></p>
+                            <p>Quantity: <span class="fw-bold">@product.Quantity</span> </p>
+                        </div>
+                    </div>
+                    <h2 class="product-price">$@product.TotalPrice</h2>
                 </div>
-                <h3 class="product-price">$@product.TotalPrice</h3>
             </div>
         }
-        <hr/>
-        <div class="product-price mt-2">
-            <p>Total: $@_order.TotalPrice</p>
+        <div class="order-price d-flex flex-row justify-content-between align-items-center mt-5 p-2">
+            <h4 class="text-center">Order from <span class="fw-bold">@_order.OrderDate.Day.ToString("D2")/@_order.OrderDate.Month.ToString("D2")/@_order.OrderDate.Year</span></h4>
+            <h4 class="mx-2">Total: <span class="fw-bold">$@_order.TotalPrice</span></h4>
         </div>
     </div>
 }

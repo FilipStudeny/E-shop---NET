@@ -1,7 +1,11 @@
 ﻿@page "/orders"
 @using Eshop.Shared.Models.Order
 @inject IOrderService OrderService
-<h3>Orders</h3>
+
+
+<div class="section-header">
+    <h2 class="text-center">Orders</h2>
+</div>
 
 @if (_orders == null)
 {
@@ -16,20 +20,30 @@
 }
 else
 {
-    foreach (var order in _orders)
-    {
-        <div class="container">
-            <div class="image-wrapper">
-                <img src="@order.Image" alt="@order.Product"/>
+    <div class="orders-container">
+        @foreach (var order in _orders)
+        {
+            <div class="container p-2">
+                <div class="order-header d-flex flex-row justify-content-start align-content-center">
+                    <a class="mx-1" href="/orders/order/@order.Id">#@order.Id</a>
+                    <time class="mx-1">Order date: @order.OrderDate.Day.ToString("D2")/@order.OrderDate.Month.ToString("D2")/@order.OrderDate.Year</time>            
+                </div>
+                <div class="order-images">
+                    <div class="image-wrapper mx-2">
+                        <img src="@order.Image" alt="@order.Product"/>
+                    </div>
+                </div>
+                
+                <div class="order-details">
+                    <div class="order-price">
+                        <p>Total price</p>
+                        <p>$@order.TotalPrice</p>
+                    </div>
+                    <a class="mx-2 btn btn-outline-primary" href="/orders/order/@order.Id">Show more</a>
+                </div>
             </div>
-            <div class="details">
-                <h3>@order.Product</h3>
-                <p>@order.OrderDate</p>
-                <a href="/orders/order/@order.Id">Show more</a>
-            </div>
-            <p class="order-price">$@order.TotalPrice</p>
-        </div>
-    }
+        }
+    </div>
 }
 
 @code {

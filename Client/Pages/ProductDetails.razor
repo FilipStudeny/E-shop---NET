@@ -15,8 +15,10 @@ else
             <img class="media-img" src="@_product.Image" alt="@_product.Title"/>
         </header>
         <div class="media-body">
-            <h2 class="mb-0">@_product.Title</h2>
-            <p>@_product.Description</p>
+            <div class="mt-1 mb-1">
+                <h2 class="mb-1">@_product.Title</h2>
+                <p>@_product.Description</p>
+            </div>
             @if (_product.Variants != null && _product.Variants.Count > 0)
             {
                 <div class="mb-3">
