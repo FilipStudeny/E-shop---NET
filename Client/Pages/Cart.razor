@@ -1,6 +1,7 @@
 ﻿@page "/cart"
 @inject ICartService CartService
 @inject IOrderService OrderService
+@inject NavigationManager NavigationManager
 
 <PageTitle>E-Shop | Shopping cart</PageTitle>
 
@@ -9,12 +10,6 @@
 @if (cartProducts.Count == 0)
 {
     <span>@message</span>
-}else if (_orderCreated)
-{
-    <div class="text-center">
-        <h2 class="text-center">Thank you for your order.</h2>
-        <p>You can view your order <a class="text-capitalize" href="/orders">here</a></p>
-    </div>
 }
 else
 {
@@ -45,18 +40,16 @@ else
         </div>
     </div>
     <div class="mt-2">
-        <button @onclick="PlaceOrder" class="btn alert-success float-end mt-1">Place order</button>
+        <button @onclick="PlaceOrder" class="btn alert-success float-end mt-1">Checkout</button>
     </div>
 }
 
 @code {
     List<CartDto> cartProducts = new();
     string message = "Loading products in cart ...";
-    bool _orderCreated = false;
 
     protected override async Task OnInitializedAsync()
     {
-        _orderCreated = false;
         await LoadCartItems();
     }
 
@@ -88,9 +81,10 @@ else
 
     private async Task PlaceOrder()
     {
-        await OrderService.PlaceOrder();
-        await CartService.GetCartItemCount();
-        _orderCreated = true;
+        string url = await OrderService.PlaceOrder();
+       // await CartService.GetCartItemCount();
+      //  _orderCreated = true;
+        NavigationManager.NavigateTo(url);
     }
 
 }

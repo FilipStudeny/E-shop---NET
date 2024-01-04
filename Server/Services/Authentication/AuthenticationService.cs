@@ -144,4 +144,10 @@ public class AuthenticationService : IAuthenticationService
             var userIdString = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(userIdString);
         }
-    }
+
+        public string GetUserEmail()
+        {
+            var userEmailString = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            return userEmailString;
+        }
+}

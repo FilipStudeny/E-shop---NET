@@ -19,16 +19,13 @@ public class OrderService : IOrderService
         _navigationManager = navigationManager;
     }
 
-    public async Task PlaceOrder()
+    public async Task<string> PlaceOrder()
     {
-        if (await _authenticationService.IsAuthenticated())
-        {
-            await _httpClient.PostAsync("api/order", null);
-        }
-        else
-        {
-            _navigationManager.NavigateTo("/login");
-        }
+        if (!await _authenticationService.IsAuthenticated()) return "/login";
+        var response = await _httpClient.PostAsync("api/payment/checkout", null);
+        var url = await response.Content.ReadAsStringAsync();
+        return url;
+
     }
 
     public async Task<List<OrderDto>> GetOrders()

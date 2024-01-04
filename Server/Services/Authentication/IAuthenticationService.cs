@@ -11,4 +11,5 @@ public interface IAuthenticationService
     Task<ServiceResponse<bool>> ChangePassword(int userId, string newPassword);
 
     int GetUserId();
+    string GetUserEmail();
 }
