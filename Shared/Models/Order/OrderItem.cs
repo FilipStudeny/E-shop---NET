@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Eshop.Shared.Models.ProductModels;
 
 namespace Eshop.Shared.Models.Order;
 

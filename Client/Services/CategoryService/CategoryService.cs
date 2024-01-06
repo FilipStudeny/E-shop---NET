@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
 
 namespace Eshop.Client.Services.CategoryService;
 

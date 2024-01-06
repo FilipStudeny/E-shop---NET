@@ -1,4 +1,5 @@
 ﻿using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
 
 namespace Eshop.Client.Services.ProductService;
 
@@ -12,9 +13,13 @@ public interface IProductService
     
     
     List<Product> Products { get; set; }
+    List<Product> AdminProducts { get; set; }
+
     Task GetProducts(string? category = null);
     Task<ServiceResponse<Product>> GetProduct(int id);
     Task SearchProducts(string search, int page);
     Task<List<string>> GetProductSearchSuggestions(string search);
+    Task GetAdminProducts();
+
     
 }

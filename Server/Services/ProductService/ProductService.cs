@@ -1,6 +1,7 @@
 ﻿using Eshop.Server.Database;
 using Eshop.Shared.DTOs;
 using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eshop.Server.Services.ProductService;
@@ -17,7 +18,10 @@ public class ProductService : IProductService
     {
         var response = new ServiceResponse<List<Product>>
         {
-            Data = await _dataContext.Products.Include(p => p.Variants).ToListAsync()
+            Data = await _dataContext.Products
+                .Where(p => p.Visible && !p.Deleted)
+                .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
+                .ToListAsync()
         };
 
         return response;
@@ -27,9 +31,9 @@ public class ProductService : IProductService
     {
         var response = new ServiceResponse<Product>();
         var product  = await _dataContext.Products
-            .Include(p => p.Variants)
+            .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
             .ThenInclude(variant => variant.ProductType)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id && p.Visible && !p.Deleted);
         
         if (product is null)
         {
@@ -49,8 +53,8 @@ public class ProductService : IProductService
         var response = new ServiceResponse<List<Product>>
         {
             Data = await _dataContext.Products
-                .Where( p => p.Category.Url.ToLower().Equals(category.ToLower()))
-                .Include( p => p.Variants)
+                .Where( p => p.Category.Url.ToLower().Equals(category.ToLower()) && p.Visible && !p.Deleted)
+                .Include( p => p.Variants.Where(v => v.Visible && !v.Deleted))
                 .ToListAsync()
         };
 
@@ -59,20 +63,16 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse<ProductSearchDto>> SearchProducts(string search, int page)
     {
-        var number_of_results = 2f;
-        var page_count = Math.Ceiling((
-            await _dataContext.Products
-                .Where(p => p.Title.ToLower().Contains(search.ToLower()) ||
-                            p.Description.ToLower().Contains(search.ToLower()))
-                .Include(p => p.Variants)
-                .ToListAsync()).Count / number_of_results);
+        var numberOfResults = 2f;
+        var pageCount = Math.Ceiling((await FindBySearchText(search)).Count / numberOfResults);
 
         var products = await _dataContext.Products
             .Where(p => p.Title.ToLower().Contains(search.ToLower()) ||
-                        p.Description.ToLower().Contains(search.ToLower()))
-            .Include(p => p.Variants)
-            .Skip((page - 1) * (int)number_of_results)
-            .Take((int)number_of_results)
+                        p.Description.ToLower().Contains(search.ToLower()) && 
+                                                         p.Visible && !p.Deleted)
+            .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
+            .Skip((page - 1) * (int)numberOfResults)
+            .Take((int)numberOfResults)
             .ToListAsync();
         
         var response = new ServiceResponse<ProductSearchDto>
@@ -80,7 +80,7 @@ public class ProductService : IProductService
             Data = new ProductSearchDto
             {
                 Products = products,
-                Pages = (int)page_count,
+                Pages = (int)pageCount,
                 CurrentPage = page
             }
         };
@@ -90,11 +90,7 @@ public class ProductService : IProductService
 
     public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestions(string search)
     {
-        var products = await _dataContext.Products
-            .Where(p => p.Title.ToLower().Contains(search.ToLower()) ||
-                        p.Description.ToLower().Contains(search.ToLower()))
-            .Include(p => p.Variants)
-            .ToListAsync();
+        var products = await FindBySearchText(search);
         
         List<string> productTitles = new();
         foreach (var product in products)
@@ -126,14 +122,41 @@ public class ProductService : IProductService
 
     }
 
+    private async Task<List<Product>> FindBySearchText(string search)
+    {
+        return await _dataContext.Products
+            .Where(p => p.Title.ToLower().Contains(search.ToLower()) ||
+                        p.Description.ToLower().Contains(search.ToLower()) && 
+                                                         p.Visible && !p.Deleted)
+            .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
+            .ToListAsync();
+    }
+
     public async Task<ServiceResponse<List<Product>>> GetFeaturedProducts()
     {
         var products = new ServiceResponse<List<Product>>
         {
-            Data = await _dataContext.Products.Where(p => p.FeaturedProduct).Include(p => p.Variants).ToListAsync()
+            Data = await _dataContext.Products
+                .Where(p => p.FeaturedProduct && p.Visible && !p.Deleted)
+                .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
+                .ToListAsync()
         };
 
         return products;
+    }
+
+    public async Task<ServiceResponse<List<Product>>> GetAdminProducts()
+    {
+        var response = new ServiceResponse<List<Product>>
+        {
+            Data = await _dataContext.Products
+                .Where(p => !p.Deleted)
+                .Include(p => p.Variants.Where(v => !v.Deleted))
+                .ThenInclude(pt => pt.ProductType)
+                .ToListAsync()
+        };
+
+        return response;
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace Eshop.Shared.Models;
+namespace Eshop.Shared.Models.ProductModels;
 
 public class ProductVariant
 {
@@ -18,4 +18,13 @@ public class ProductVariant
     
     [Column(TypeName = "decimal(18,2)")]
     public decimal OriginalPrice { get; set; } //For sales
+    
+    
+    public bool Visible { get; set; } = true;
+    public bool Deleted { get; set; } = false;
+    // for form edits, not visible in the DB
+    [NotMapped]
+    public bool Editing { get; set; } = false;
+    [NotMapped]
+    public bool IsNew { get; set; } = false;
 }

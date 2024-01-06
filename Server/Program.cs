@@ -7,6 +7,7 @@ using Eshop.Server.Services.CategoryService;
 using Eshop.Server.Services.Ordering;
 using Eshop.Server.Services.Payment;
 using Eshop.Server.Services.ProductService;
+using Eshop.Server.Services.ProductTypeService;
 using Eshop.Server.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IOrderingService, OrderingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 
 //middleware
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

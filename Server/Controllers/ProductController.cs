@@ -2,6 +2,8 @@
 using Eshop.Server.Services.ProductService;
 using Eshop.Shared.DTOs;
 using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -63,6 +65,14 @@ public class ProductController : ControllerBase
     public async Task<ActionResult<ServiceResponse<Product>>> GetFeaturedProducts()
     {
         var products = await _productService.GetFeaturedProducts();
+        return Ok(products);
+    }
+    
+    [HttpGet]
+    [Route("admin"), Authorize(Roles = "Admin")]
+    public async Task<ActionResult<ServiceResponse<List<Product>>>> GetAdminProducts()
+    {
+        var products = await _productService.GetAdminProducts();
         return Ok(products);
     }
 

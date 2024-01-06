@@ -1,4 +1,5 @@
 ﻿using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
 
 namespace Eshop.Server.Services.CategoryService;
 

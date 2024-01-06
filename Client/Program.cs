@@ -8,6 +8,7 @@ using Eshop.Client.Services.CartService;
 using Eshop.Client.Services.CategoryService;
 using Eshop.Client.Services.OrderService;
 using Eshop.Client.Services.ProductService;
+using Eshop.Client.Services.ProductTypeService;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -25,6 +26,7 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 
 //auth stuff
 builder.Services.AddOptions();

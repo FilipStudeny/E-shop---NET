@@ -1,6 +1,7 @@
 ﻿using Eshop.Shared.Models;
 using Eshop.Shared.Models.Cart;
 using Eshop.Shared.Models.Order;
+using Eshop.Shared.Models.ProductModels;
 using Eshop.Shared.Models.UserModels;
 using Microsoft.EntityFrameworkCore;
 

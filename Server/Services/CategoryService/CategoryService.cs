@@ -1,5 +1,6 @@
 ﻿using Eshop.Server.Database;
 using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eshop.Server.Services.CategoryService;

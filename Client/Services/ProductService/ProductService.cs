@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using Eshop.Shared.DTOs;
 using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
 
 namespace Eshop.Client.Services.ProductService;
 
@@ -15,6 +16,7 @@ public class ProductService : IProductService
     public event Action? ChangeProducts;
 
     public List<Product> Products { get; set; } = new ();
+    public List<Product> AdminProducts { get; set; } = new();
 
     public ProductService(HttpClient http)
     {
@@ -71,5 +73,16 @@ public class ProductService : IProductService
         
     }
 
+    public async Task GetAdminProducts()
+    {
+        var response = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/admin");
+        AdminProducts = response?.Data;
+        CurrentPage = 1;
+        PageCount = 0;
 
+        if (AdminProducts is { Count: 0 })
+        {
+            Message = "No products found";
+        }
+    }
 }

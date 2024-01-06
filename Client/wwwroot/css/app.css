@@ -114,3 +114,8 @@ a, .btn-link {
 .media-body{
     flex: 1;
 }
+
+.section-header{
+    border-bottom: 1px solid grey;
+    width: 100%;
+}

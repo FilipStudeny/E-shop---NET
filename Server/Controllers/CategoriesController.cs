@@ -1,5 +1,6 @@
 ﻿using Eshop.Server.Services.CategoryService;
 using Eshop.Shared.Models;
+using Eshop.Shared.Models.ProductModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Eshop.Shared.Models;
+namespace Eshop.Shared.Models.ProductModels;
 
 public class Category
 {
