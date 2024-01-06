@@ -25,8 +25,6 @@ public class PaymentService : IPaymentService
         var key = _configuration.GetSection("AppSettings:Stripe").Value;
         StripeConfiguration.ApiKey = key;
 
-        Console.WriteLine(key);
-
         var products = (await _cartService.GetDbCartProducts()).Data;
         var lineItems = new List<SessionLineItemOptions>();
         
@@ -50,7 +48,7 @@ public class PaymentService : IPaymentService
             CustomerEmail = _authenticationService.GetUserEmail(),
             ShippingAddressCollection = new SessionShippingAddressCollectionOptions()
             {
-                AllowedCountries = new List<string>{ "US", "CZ"}
+                AllowedCountries = new List<string>{ "US", "CZ"},
             },
             PaymentMethodTypes = new List<string>
             {

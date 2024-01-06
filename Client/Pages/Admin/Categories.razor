@@ -1,0 +1,111 @@
+﻿@page "/admin/categories"
+@inject ICategoryService CategoryService
+@implements IDisposable
+@attribute [Authorize(Roles = "Admin")]
+
+<div class="section-header">
+    <h2 class="text-center">Categories</h2>
+</div>
+
+<div class="header">
+    <div class="col">Name</div>
+    <div class="col">Url</div>
+    <div class="col">Visible</div>
+    <div class="col"></div>
+</div>
+
+@foreach (var category in CategoryService.AdminCategories)
+{
+    @if (category.Editing)
+    {
+        <EditForm Model="_editingCategory" OnSubmit="UpdateCategory">
+            <div class="row">
+                <div class="col">
+                    <InputText @bind-Value="_editingCategory.Name" class="form-control"/>
+                </div>
+                <div class="col">
+                    <InputText @bind-Value="_editingCategory.Url" class="form-control"/>
+                </div>
+                <div class="col">
+                    <InputCheckbox @bind-Value="_editingCategory.Visible" style="transform: scale(1,5);"/>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="oi oi-cloud-upload"></i>
+                    </button>
+                    <button class="btn btn-primary" @onclick="CancelEditing">
+                        <i class="oi oi-circle-x"></i>
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">@category.Name</div>
+            <div class="col">@category.Url</div>
+            <div class="col col-visible"><span>@(category.Visible ? "\u2714\ufe0f" : "\u274c")</span></div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary" @onclick="(() => EditCategory(category))">
+                    <i class="oi oi-pencil"></i>
+                </button>
+                <button class="btn btn-primary" @onclick="(() => DeleteCategory(category.Id))">
+                    <i class="oi oi-trash"></i>
+                </button>
+            </div>
+        </div>
+    }
+}
+
+<button class="btn btn-primary" @onclick="CreateNewCategory">
+    <i class="oi oi-plus"></i>Add new category
+</button>
+
+@code {
+
+    Category? _editingCategory = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CategoryService.GetAdminCategories();
+        CategoryService.OnChange += StateHasChanged;
+    }
+
+    private void CreateNewCategory()
+    {
+        _editingCategory = CategoryService.CreateNewCategory();
+    }
+
+    private async Task UpdateCategory()
+    {
+        if (_editingCategory.IsNew)
+            await CategoryService.AddCategory(_editingCategory);
+        else
+            await CategoryService.UpdateCategory(_editingCategory);
+        _editingCategory = new Category();
+    }
+    
+    private async Task CancelEditing()
+    {
+        _editingCategory = new Category();
+        await CategoryService.GetAdminCategories();
+    }
+    
+    private async Task DeleteCategory(int id)
+    {
+        await CategoryService.DeleteCategory(id);
+    }
+    
+    private void EditCategory(Category category)
+    {
+        category.Editing = true;
+        _editingCategory = category;
+    }
+    
+    public void Dispose()
+    {
+        CategoryService.OnChange -= StateHasChanged;
+    }
+
+}

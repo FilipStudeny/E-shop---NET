@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Eshop.Server.Database;
 using Eshop.Shared.Models;
+using Eshop.Shared.Models.UserModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -118,10 +119,11 @@ public class AuthenticationService : IAuthenticationService
 
         private string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Email)
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
@@ -154,5 +156,13 @@ public class AuthenticationService : IAuthenticationService
         public async Task<User> GetUserByEmail(string email)
         {
             return await _dataContext.Users.FirstOrDefaultAsync(user => user.Email.Equals(email));
+        }
+
+        public async Task<Address> GetShippingAddress()
+        {
+            var userId = GetUserId();
+            var address = await _dataContext.Addresses.FirstOrDefaultAsync(address => address.UserId == userId);
+            
+            return address!;
         }
 }

@@ -10,4 +10,5 @@ public class User
     public byte[] PasswordSalt { get; set; }
     public DateTime RegistrationDate { get; set; } = DateTime.Now;
     public Address Address { get; set; }
+    public string Role { get; set; } = "Customer";
 }

@@ -1,4 +1,5 @@
 ﻿using Eshop.Shared.Models;
+using Eshop.Shared.Models.UserModels;
 
 namespace Eshop.Server.Services.Authentication;
 
@@ -13,4 +14,5 @@ public interface IAuthenticationService
     int GetUserId();
     string GetUserEmail();
     Task<User> GetUserByEmail(string email);
+    Task<Address> GetShippingAddress();
 }
