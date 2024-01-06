@@ -1,6 +1,7 @@
 ﻿using Eshop.Shared.Models;
 using Eshop.Shared.Models.Cart;
 using Eshop.Shared.Models.Order;
+using Eshop.Shared.Models.UserModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eshop.Server.Database;
@@ -292,5 +293,6 @@ public class DataContext : DbContext
     public DbSet<CartItem> CartItems { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<Address> Addresses { get; set; }
 
 }

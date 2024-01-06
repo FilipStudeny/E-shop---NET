@@ -1,5 +1,6 @@
 ﻿@page "/profile"
 @inject IAuthenticationService AuthenticationService
+@using Eshop.Client.Shared.User
 @attribute [Authorize]
 
 <h2 class="text-center">Profile</h2>
@@ -8,6 +9,10 @@
     <h2>Logged with an email address: <i>@context.User.Identity?.Name</i></h2>
     <hr/>
 </AuthorizeView>
+
+<h3>Shipping address</h3>
+<AddressForm/>
+<hr/>
 
 <h3>Change password</h3>
 <EditForm Model="_userPasswordChange" OnValidSubmit="ChangePassword">

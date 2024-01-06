@@ -2,6 +2,7 @@ global using Eshop.Shared;
 using Blazored.LocalStorage;
 using Eshop.Client;
 using Eshop.Client.Security;
+using Eshop.Client.Services.AddressService;
 using Eshop.Client.Services.AuthenticationService;
 using Eshop.Client.Services.CartService;
 using Eshop.Client.Services.CategoryService;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 
 //auth stuff
 builder.Services.AddOptions();

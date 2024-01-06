@@ -28,8 +28,16 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
             try
             {
                 identity = new ClaimsIdentity(ParseClaimsFromToken(authToken), "jwt");
-                _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
+                if (await NotExpiredToken(identity))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
+                }
+                else
+                {
+                    throw new Exception();
+                }
+                
             }
             catch
             {
@@ -65,5 +73,17 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 
         var claims = keyPair.Select(kv => new Claim(kv.Key, kv.Value.ToString()!));
         return claims;
+    }
+    
+    public async Task<bool> NotExpiredToken(ClaimsIdentity? identity)
+    {
+        if (identity == null) return false;
+        
+        var user = new ClaimsPrincipal(identity);
+        var exp = user.FindFirst("exp");
+        
+        if (exp == null) return false;
+        var expDateTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(exp.Value));
+        return DateTime.Now <= expDateTime;
     }
 }
