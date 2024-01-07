@@ -1,7 +1,6 @@
 ﻿@page "/admin/products"
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
-@implements IDisposable
 @attribute [Authorize(Roles = "Admin")]
 
 <div class="section-header">
@@ -67,7 +66,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         await ProductService.GetAdminProducts();
-        Console.Write(ProductService.AdminProducts);
     }
 
     private void EditProduct(int id)
@@ -80,9 +78,6 @@ else
         NavigationManager.NavigateTo($"admin/product");
     }
 
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
+
 
 }

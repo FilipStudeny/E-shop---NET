@@ -9,10 +9,12 @@ namespace Eshop.Server.Services.ProductService;
 public class ProductService : IProductService
 {
     private readonly DataContext _dataContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ProductService(DataContext dataContext)
+    public ProductService(DataContext dataContext, IHttpContextAccessor httpContextAccessor)
     {
         _dataContext = dataContext;
+        _httpContextAccessor = httpContextAccessor;
     }
     public async Task<ServiceResponse<List<Product>>> GetProducts()
     {
@@ -30,10 +32,22 @@ public class ProductService : IProductService
     public async Task<ServiceResponse<Product>> GetProduct(int id)
     {
         var response = new ServiceResponse<Product>();
-        var product  = await _dataContext.Products
-            .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
-            .ThenInclude(variant => variant.ProductType)
-            .FirstOrDefaultAsync(p => p.Id == id && p.Visible && !p.Deleted);
+        Product? product = null;
+
+        if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+        {
+             product  = await _dataContext.Products
+                .Include(p => p.Variants.Where(v => !v.Deleted))
+                .ThenInclude(variant => variant.ProductType)
+                .FirstOrDefaultAsync(p => p.Id == id && !p.Deleted);
+        }
+        else
+        {
+            product  = await _dataContext.Products
+                .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
+                .ThenInclude(variant => variant.ProductType)
+                .FirstOrDefaultAsync(p => p.Id == id && p.Visible && !p.Deleted);
+        }
         
         if (product is null)
         {
@@ -157,6 +171,78 @@ public class ProductService : IProductService
         };
 
         return response;
+    }
+
+    public async Task<ServiceResponse<Product>> CreateProduct(Product product)
+    {
+        foreach (var variant in product.Variants)
+        {
+            variant.ProductType = null;
+        }
+
+        _dataContext.Products.Add(product);
+        await _dataContext.SaveChangesAsync();
+        return new ServiceResponse<Product> { Data = product };
+    }
+
+    public async Task<ServiceResponse<Product>> UpdateProduct(Product product)
+    {
+        var dbProduct = await _dataContext.Products.FindAsync(product.Id);
+        if (dbProduct == null)
+        {
+            return new ServiceResponse<Product>
+            {
+                Success = false,
+                Message = "Product not found."
+            };
+        }
+
+        dbProduct.Title = product.Title;
+        dbProduct.Description = product.Description;
+        dbProduct.Image = product.Image;
+        dbProduct.CategoryId = product.CategoryId;
+        dbProduct.Visible = product.Visible;
+        dbProduct.FeaturedProduct = product.FeaturedProduct;
+
+        foreach (var variant in product.Variants)
+        {
+            var dbVariant = await _dataContext.ProductVariants
+                .SingleOrDefaultAsync(v => v.ProductId == variant.ProductId && v.ProductTypeId == variant.ProductTypeId);
+            if (dbVariant == null)
+            {
+                variant.ProductType = null;
+                _dataContext.ProductVariants.Add(variant);
+            }
+            else
+            {
+                dbVariant.ProductTypeId = variant.ProductTypeId;
+                dbVariant.Price = variant.Price;
+                dbVariant.OriginalPrice = variant.OriginalPrice;
+                dbVariant.Visible = variant.Visible;
+                dbVariant.Deleted = variant.Deleted;
+            }
+        }
+
+        await _dataContext.SaveChangesAsync();
+        return new ServiceResponse<Product> { Data = product };
+    }
+
+    public async Task<ServiceResponse<bool>> DeleteProduct(int id)
+    {
+        var dbProduct = await _dataContext.Products.FindAsync(id);
+        if (dbProduct == null)
+        {
+            return new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = "Product not found."
+            };
+        }
+
+        dbProduct.Deleted = true;
+        await _dataContext.SaveChangesAsync();
+        return new ServiceResponse<bool> { Data = true };
     }
 }
 
