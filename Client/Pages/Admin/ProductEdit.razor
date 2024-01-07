@@ -1,5 +1,6 @@
 ﻿@page "/admin/product"
 @page "/admin/product/{Id:int}"
+@using Microsoft.AspNetCore.WebUtilities
 
 @inject IProductService ProductService
 @inject IProductTypeService ProductTypeService
@@ -36,8 +37,35 @@ else
             <label for="imageUrl">Image Url</label>
             <InputText id="imageUrl" @bind-Value="_product.Image" class="form-control"></InputText>
         </div>
+        <div class="mb-0" style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: center">
+            @if (!string.IsNullOrEmpty(_product.Image))
+            {
+                <img src="@_product.Image"/>
+            }
+            else
+            {
+                foreach (var image in _product.Images)
+                {
+                    <MudCard Class="m-2"> 
+                        <MudCardContent>
+                            <MudImage Src="@image.Data"></MudImage>
+                        </MudCardContent>
+                        <MudCardActions Style="justify-content: center; box-shadow: none">
+                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveImage(image.Id))">Remove</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                    @*  
+                    <img src="@image.Data"/>
+                    <button type="button" @onclick="(() => RemoveImage(image.Id))">
+                        Remove
+                    </button>
+                    *@
+                }   
+            }
+        </div>
         <div class="mb-0">
-            <img src="@_product.Image" />
+              <label for="images">Images</label>
+              <InputFile id="images" multiple OnChange="OnFileChange" class="form-control"></InputFile>
         </div>
         <div class="mb-0">
             <label for="description">Description</label>
@@ -155,6 +183,22 @@ else
         _loading = false;
     }
 
+    private async Task OnFileChange(InputFileChangeEventArgs e)
+    {
+        var format = "image/png";
+        foreach (var image in e.GetMultipleFiles(10))
+        {
+            var resizeImage = await image.RequestImageFileAsync(format, 200, 200);
+            var buffer = new byte[resizeImage.Size];
+            await resizeImage.OpenReadStream().ReadAsync(buffer);
+            var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            _product.Images.Add(new Image
+            {
+                Data = imageData
+            });
+        }
+    }
+
     private void RemoveVariant(int productTypeId)
     {
         var variant = _product.Variants.Find(v => v.ProductTypeId == productTypeId);
@@ -200,6 +244,15 @@ else
         if (!confirm) return;
         await ProductService.DeleteProduct(_product);
         NavigationManager.NavigateTo("/admin/products");
+    }
+
+    void RemoveImage(int id)
+    {
+        var image = _product.Images.FirstOrDefault(i => i.Id == id);
+        if (image != null)
+        {
+            _product.Images.Remove(image);
+        }
     }
     
 }

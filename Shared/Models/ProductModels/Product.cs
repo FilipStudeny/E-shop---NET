@@ -11,6 +11,7 @@ public class Product
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
+    public List<Image> Images { get; set; } = new();
 
     public List<ProductVariant> Variants { get; set; } = new (); //for ex. book - hard copy or ebook
     

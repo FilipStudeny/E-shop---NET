@@ -31,27 +31,34 @@ else
         </tr>
         </thead>
         <tbody>
-        <Virtualize Items="@ProductService.AdminProducts"  Context="product" ItemSize="10">
+        <Virtualize Items="@ProductService.AdminProducts"  Context="_product" ItemSize="10">
             <tr>
                 <td>
-                    <img src="@product.Image" alt="@product.Title"/>
+                    @if (!string.IsNullOrEmpty(_product.Image))
+                    {
+                        <img class="media-img" src="@_product.Image" alt="@_product.Title"/>
+                    }
+                    else if(_product.Images.Count > 0)
+                    {
+                        <img class="media-img" src="@_product.Images[0].Data" alt="@_product.Title"/>
+                    }                
                 </td>
-                <td>@product.Title</td>
+                <td>@_product.Title</td>
                 <td>
-                    @foreach (var variant in product.Variants)
+                    @foreach (var variant in _product.Variants)
                     {
                         <span>@variant.ProductType.Name</span><br/>
                     }
                 </td>
                 <td>
-                    @foreach (var variant in product.Variants)
+                    @foreach (var variant in _product.Variants)
                     {
                         <span>@variant.Price</span><br/>
                     }
                 </td>
-                <td><span>@(product.Visible ? "\u2714\ufe0f" : "\u274c")</span></td>
+                <td><span>@(_product.Visible ? "\u2714\ufe0f" : "\u274c")</span></td>
                 <td>
-                    <button class="btn btn-primary" @onclick="(() => EditProduct(product.Id))">
+                    <button class="btn btn-primary" @onclick="(() => EditProduct(_product.Id))">
                         <i class="oi oi-pencil"></i>
                     </button>
                 </td>

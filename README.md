@@ -1,14 +1,21 @@
 # E-shop---NET
 E-shop app created using .NET, Blazor, WebAssembly using MySQL database.
+Using Stripe for payments
 
 ## Stack
-- .NET
-- Blazor
-- Blazor Webassembly
-- MySQL
+
+| Frontend           | BackEND | Rest        |
+|--------------------|---------|-------------|
+| Blazor webassembly | .NET    | Stripe      |
+|                    | MySQL   | Bootstrap   |
+|                    |         | JWT tokens  |
+|                    |         | MudBlazor   |
 
 
 ### Planned features
-- stuff
+- Total redesign
+- Performance and bugfixes
+- PayPal integration
+- Embeded Stripe intergration (Checkout option will still be available)
 
 
