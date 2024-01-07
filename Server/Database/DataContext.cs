@@ -1,4 +1,5 @@
 ﻿using Eshop.Shared.Models;
+using Eshop.Shared.Models.Books;
 using Eshop.Shared.Models.Cart;
 using Eshop.Shared.Models.Order;
 using Eshop.Shared.Models.ProductModels;
@@ -9,8 +10,11 @@ namespace Eshop.Server.Database;
 
 public class DataContext : DbContext
 {
-
-
+    //Books
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<BookType> BookTypes { get; set; }
+    public DbSet<BookVariant> BookVariants { get; set; }
 
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -18,6 +22,13 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<BookVariant>().HasKey(book => new
+        {
+            book.BookId,
+            book.BookTypeId
+        });
+        
         //Composite key setup
         modelBuilder.Entity<CartItem>().HasKey(cart => new
         {
@@ -296,5 +307,7 @@ public class DataContext : DbContext
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Image> Images { get; set; }
+    
+
 
 }

@@ -2,6 +2,9 @@ global using Eshop.Shared;
 using System.Text;
 using Eshop.Server.Database;
 using Eshop.Server.Services.Authentication;
+using Eshop.Server.Services.AuthorService;
+using Eshop.Server.Services.BookService;
+using Eshop.Server.Services.BookTypeService;
 using Eshop.Server.Services.CartService;
 using Eshop.Server.Services.CategoryService;
 using Eshop.Server.Services.Ordering;
@@ -39,6 +42,13 @@ builder.Services.AddScoped<IOrderingService, OrderingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+
+//Books
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBookTypeService, BookTypeService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+
+
 
 //middleware
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
