@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Eshop.Shared.DTOs;
+using Eshop.Shared.DTOs.Books;
 using Eshop.Shared.Models.Books;
 
 namespace Eshop.Client.Services.BookService;
@@ -12,19 +13,18 @@ public class BookService : IBookService
     public int CurrentPage { get; set; }
     public int PageCount { get; set; }
     public string LastSearch { get; set; }
-    public List<Book> Books { get; set; }
-    public List<Book> AdminBooks { get; set; }
+    public List<Book> Books { get; set; } = new();
+    public List<FeaturedBookDto> FeaturedBooks { get; set; } = new();
+    public List<Book> AdminBooks { get; set; } = new();
 
     public BookService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
     
-    public async Task GetBooks(string? category = null)
+    public async Task GetBooksByCategory(string category)
     {
-        var byFeaturedUrl = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Book>>>("api/book/featured");
-        var byCategoryUrl = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Book>>>($"api/book/category/{category}");
-        var response = category == null ? byFeaturedUrl : byCategoryUrl;
+        var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Book>>>($"api/book/category/{category}");;
 
         if (response is { Data: not null })
         {
@@ -35,7 +35,22 @@ public class BookService : IBookService
         PageCount = 0;
         if (Books.Count == 0)
         {
-            Message = "No products found.";
+            Message = "No books found.";
+        }
+        OnChange?.Invoke();
+    }
+
+    public async Task GetFeaturedBooks()
+    {
+        var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<FeaturedBookDto>>>("api/book/featured");
+        if (response is { Data: not null })
+        {
+            FeaturedBooks = response.Data;
+        }
+        
+        if (FeaturedBooks is { Count: 0 })
+        {
+            Message = "No featured books found.";
         }
         OnChange?.Invoke();
     }
@@ -43,7 +58,7 @@ public class BookService : IBookService
     public async Task<ServiceResponse<Book>?> GetBook(int id)
     {
         var response = await _httpClient.GetFromJsonAsync<ServiceResponse<Book>>($"api/book/{id}");
-        return response ?? null;
+        return response;
     }
 
     public async Task SearchForBooks(string search, int page)

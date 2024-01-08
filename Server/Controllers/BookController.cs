@@ -1,5 +1,6 @@
 ﻿using Eshop.Server.Services.BookService;
 using Eshop.Shared.DTOs;
+using Eshop.Shared.DTOs.Books;
 using Eshop.Shared.Models.Books;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,7 @@ public class BookController : ControllerBase
     
     [HttpGet]
     [Route("featured")]
-    public async Task<ActionResult<ServiceResponse<Book>>> GetFeaturedBooks()
+    public async Task<ActionResult<ServiceResponse<List<FeaturedBookDto>>>> GetFeaturedBooks()
     {
         var response = await _bookService.GetFeaturedBooks();
         return Ok(response);

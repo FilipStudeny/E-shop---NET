@@ -1,6 +1,7 @@
 ﻿using Eshop.Server.Database;
 using Eshop.Server.Services.Authentication;
 using Eshop.Shared.DTOs;
+using Eshop.Shared.DTOs.Books;
 using Eshop.Shared.Models.Books;
 using Microsoft.EntityFrameworkCore;
 
@@ -145,18 +146,30 @@ public class BookService : IBookService
         };    
     }
 
-    public async Task<ServiceResponse<List<Book>>> GetFeaturedBooks()
+    public async Task<ServiceResponse<List<FeaturedBookDto>>> GetFeaturedBooks()
     {
-        var books = new ServiceResponse<List<Book>>
-        {
-            Data = await _dataContext.Books
-                .Where(p => p.Featured && p.Visible && !p.Deleted)
-                .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
-                .Include(p => p.Images)
-                .ToListAsync()
-        };
+        var books = await _dataContext.Books
+            .Where(p => p.Featured && p.Visible && !p.Deleted)
+            .Include(p => p.Variants.Where(v => v.Visible && !v.Deleted))
+            .Include(p => p.Images).Include(book => book.Author)
+            .ToListAsync();
 
-        return books;    
+        var featuredBooks = books.Select(book => new FeaturedBookDto
+            {
+                Id = book.Id,
+                ShortDescription = book.ShortDescription,
+                Author = book.Author,
+                Title = book.Title,
+                Variants = book.Variants,
+                DefaultImage = book.DefaultImage,
+                Images = book.Images
+            })
+            .ToList();
+
+        return new ServiceResponse<List<FeaturedBookDto>>
+        {
+            Data = featuredBooks
+        };
     }
 
     public async Task<ServiceResponse<List<Book>>> GetAdminBooks()

@@ -1,4 +1,5 @@
-﻿using Eshop.Shared.Models.Books;
+﻿using Eshop.Shared.DTOs.Books;
+using Eshop.Shared.Models.Books;
 
 namespace Eshop.Client.Services.BookService;
 
@@ -11,9 +12,11 @@ public interface IBookService
     string LastSearch { get; set; }
     
     List<Book> Books { get; set; }
+    List<FeaturedBookDto> FeaturedBooks { get; set; }
     List<Book> AdminBooks { get; set; }
 
-    Task GetBooks(string? category = null);
+    Task GetBooksByCategory(string category);
+    Task GetFeaturedBooks();
     Task<ServiceResponse<Book>?> GetBook(int id);
     Task SearchForBooks(string search, int page);
     Task<List<string>> GetBookSearchSuggestion(string search);

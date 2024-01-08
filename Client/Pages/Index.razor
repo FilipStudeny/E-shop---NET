@@ -3,12 +3,13 @@
 @page "/search/{search}/{page:int}"
 
 @inject IProductService ProductService
+@inject IBookService BookService
 
 <PageTitle>E-shop</PageTitle>
 
-@if (category == null && Search == null)
+@if (Category == null && Search == null)
 {
-    <FeaturedProduct/>
+    <FeaturedBooks/>
 }
 else
 {
@@ -19,7 +20,7 @@ else
 @code
 {
     //Lifecycle methods
-    [Parameter] public string category { get; set; } = string.Empty;
+    [Parameter] public string Category { get; set; } = string.Empty;
     [Parameter] public string Search { get; set; } = string.Empty;
     [Parameter] public int Page { get; set; } = 1;
 
@@ -30,10 +31,12 @@ else
         if (Search != null)
         {
             await ProductService.SearchProducts(Search, Page);
+            await BookService.SearchForBooks(Search, Page);
         }
         else
         {
-            await ProductService.GetProducts(category);
+            await ProductService.GetProducts(Category);
+            await BookService.GetFeaturedBooks();
         }
     }
 }
