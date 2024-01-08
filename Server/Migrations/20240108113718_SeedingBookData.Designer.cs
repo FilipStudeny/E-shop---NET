@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eshop.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240106140143_ModifyCategory")]
-    partial class ModifyCategory
+    [Migration("20240108113718_SeedingBookData")]
+    partial class SeedingBookData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,334 @@ namespace Eshop.Server.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Eshop.Shared.Models.Books.Author", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("BiographyText")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BiographyText = "Joanne Rowling, better known by her pen name J.K. Rowling, is a British author, best known for writing the Harry Potter series.",
+                            Name = "J.K. Rowling"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BiographyText = "George Raymond Richard Martin, often referred to as GRRM, is an American novelist and short story writer, known for his series A Song of Ice and Fire.",
+                            Name = "George R.R. Martin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BiographyText = "John Ronald Reuel Tolkien was an English writer, poet, and university professor. He is best known as the author of the classic high-fantasy works The Hobbit, The Lord of the Rings, and The Silmarillion.",
+                            Name = "J.R.R. Tolkien"
+                        });
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.Books.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CopiesInStore")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DefaultImage")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("Featured")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Isbn")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PageCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SeriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeriesOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            CategoryId = 1,
+                            CopiesInStore = 100,
+                            DateAdded = new DateTime(2024, 1, 8, 12, 37, 18, 74, DateTimeKind.Local).AddTicks(2160),
+                            DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/h/harry-potter-7-a-dary-smrti-9788055143132.jpg",
+                            Deleted = false,
+                            Description = "The first book in the Harry Potter series.",
+                            Featured = true,
+                            Isbn = "9780590353427",
+                            PageCount = 320,
+                            ReleaseDate = new DateTime(1997, 6, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SeriesId = 1,
+                            SeriesOrder = 1,
+                            ShortDescription = "A young wizard's journey begins.",
+                            Title = "Harry Potter and the Philosopher's Stone"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AuthorId = 2,
+                            CategoryId = 2,
+                            CopiesInStore = 150,
+                            DateAdded = new DateTime(2024, 1, 8, 12, 37, 18, 74, DateTimeKind.Local).AddTicks(2229),
+                            DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/h/hra-o-truny-9788025722824.jpg",
+                            Deleted = false,
+                            Description = "The first book in A Song of Ice and Fire series.",
+                            Featured = true,
+                            Isbn = "9780553103540",
+                            PageCount = 694,
+                            ReleaseDate = new DateTime(1996, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SeriesId = 2,
+                            SeriesOrder = 1,
+                            ShortDescription = "Power struggles in the Seven Kingdoms.",
+                            Title = "A Game of Thrones"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AuthorId = 3,
+                            CategoryId = 1,
+                            CopiesInStore = 80,
+                            DateAdded = new DateTime(2024, 1, 8, 12, 37, 18, 74, DateTimeKind.Local).AddTicks(2235),
+                            DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/387191598/10.jpg",
+                            Deleted = false,
+                            Description = "A fantasy novel by J.R.R. Tolkien.",
+                            Featured = true,
+                            Isbn = "9780345534835",
+                            PageCount = 310,
+                            ReleaseDate = new DateTime(1937, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SeriesId = 3,
+                            SeriesOrder = 1,
+                            ShortDescription = "Bilbo Baggins' unexpected journey.",
+                            Title = "The Hobbit"
+                        });
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.Books.BookType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BookTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Paperback"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Ebook"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Audiobook"
+                        });
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.Books.BookVariant", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<decimal>("OriginalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("Visible")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("BookId", "BookTypeId");
+
+                    b.HasIndex("BookTypeId");
+
+                    b.ToTable("BookVariants");
+
+                    b.HasData(
+                        new
+                        {
+                            BookId = 1,
+                            BookTypeId = 1,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 1,
+                            BookTypeId = 2,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 25.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 2,
+                            BookTypeId = 2,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 2,
+                            BookTypeId = 3,
+                            Deleted = false,
+                            OriginalPrice = 25.99m,
+                            Price = 19.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 2,
+                            BookTypeId = 1,
+                            Deleted = false,
+                            OriginalPrice = 30.99m,
+                            Price = 25.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 3,
+                            BookTypeId = 2,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 3,
+                            BookTypeId = 1,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        });
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.Books.Series", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Series");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Harry potter series about wierd hobo magic castle",
+                            Name = "Harry Potter"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Hobo wars betwean kingdoms",
+                            Name = "Song of Ice and Fire"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Hobo goes on adventures with strange ring",
+                            Name = "Hobbit"
+                        });
+                });
 
             modelBuilder.Entity("Eshop.Shared.Models.Cart.CartItem", b =>
                 {
@@ -41,7 +369,53 @@ namespace Eshop.Server.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.Category", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.Order.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.Order.OrderItem", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("OrderId", "ProductId", "ProductTypeId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,53 +474,32 @@ namespace Eshop.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.Order.Order", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.Image", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Eshop.Shared.Models.Order.OrderItem", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("OrderId", "ProductId", "ProductTypeId");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductTypeId");
-
-                    b.ToTable("OrderItems");
+                    b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.Product", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -154,6 +507,9 @@ namespace Eshop.Server.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -170,6 +526,9 @@ namespace Eshop.Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("Visible")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -181,104 +540,126 @@ namespace Eshop.Server.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
+                            Deleted = false,
                             Description = "The Hitchhiker's Guide to the Galaxy[note 1] (sometimes referred to as HG2G,[1] HHGTTG,[2] H2G2,[3] or tHGttG) is a comedy science fiction franchise created by Douglas Adams. Originally a 1978 radio comedy broadcast on BBC Radio 4, it was later adapted to other formats, including stage shows, novels, comic books, a 1981 TV series, a 1984 text-based computer game, and 2005 feature film.",
                             FeaturedProduct = true,
                             Image = "https://upload.wikimedia.org/wikipedia/en/b/bd/H2G2_UK_front_cover.jpg",
-                            Title = "The Hitchhiker's Guide to the Galaxy"
+                            Title = "The Hitchhiker's Guide to the Galaxy",
+                            Visible = true
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 1,
+                            Deleted = false,
                             Description = "Ready Player One is a 2011 science fiction novel, and the debut novel of American author Ernest Cline. The story, set in a dystopia in 2045, follows protagonist Wade Watts on his search for an Easter egg in a worldwide virtual reality game, the discovery of which would lead him to inherit the game creator's fortune. Cline sold the rights to publish the novel in June 2010, in a bidding war to the Crown Publishing Group (a division of Random House).[1] The book was published on August 16, 2011.[2] An audiobook was released the same day; it was narrated by Wil Wheaton, who was mentioned briefly in one of the chapters.[3][4]Ch. 20 In 2012, the book received an Alex Award from the Young Adult Library Services Association division of the American Library Association[5] and won the 2011 Prometheus Award.[6]",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/en/a/a4/Ready_Player_One_cover.jpg",
-                            Title = "Ready Player One"
+                            Title = "Ready Player One",
+                            Visible = true
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 1,
+                            Deleted = false,
                             Description = "Nineteen Eighty-Four (also stylised as 1984) is a dystopian social science fiction novel and cautionary tale written by English writer George Orwell. It was published on 8 June 1949 by Secker & Warburg as Orwell's ninth and final book completed in his lifetime. Thematically, it centres on the consequences of totalitarianism, mass surveillance and repressive regimentation of people and behaviours within society.[2][3] Orwell, a democratic socialist, modelled the totalitarian government in the novel after Stalinist Russia and Nazi Germany.[2][3][4] More broadly, the novel examines the role of truth and facts within politics and the ways in which they are manipulated.",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/commons/c/c3/1984first.jpg",
-                            Title = "Nineteen Eighty-Four"
+                            Title = "Nineteen Eighty-Four",
+                            Visible = true
                         },
                         new
                         {
                             Id = 4,
                             CategoryId = 2,
+                            Deleted = false,
                             Description = "The Matrix is a 1999 science fiction action film written and directed by the Wachowskis, and produced by Joel Silver. Starring Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving, and Joe Pantoliano, and as the first installment in the Matrix franchise, it depicts a dystopian future in which humanity is unknowingly trapped inside a simulated reality, the Matrix, which intelligent machines have created to distract humans while using their bodies as an energy source. When computer programmer Thomas Anderson, under the hacker alias \"Neo\", uncovers the truth, he \"is drawn into a rebellion against the machines\" along with other people who have been freed from the Matrix.",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg",
-                            Title = "The Matrix"
+                            Title = "The Matrix",
+                            Visible = true
                         },
                         new
                         {
                             Id = 5,
                             CategoryId = 2,
+                            Deleted = false,
                             Description = "Back to the Future is a 1985 American science fiction film directed by Robert Zemeckis. Written by Zemeckis and Bob Gale, it stars Michael J. Fox, Christopher Lloyd, Lea Thompson, Crispin Glover, and Thomas F. Wilson. Set in 1985, the story follows Marty McFly (Fox), a teenager accidentally sent back to 1955 in a time-traveling DeLorean automobile built by his eccentric scientist friend Doctor Emmett \"Doc\" Brown (Lloyd). Trapped in the past, Marty inadvertently prevents his future parents' meeting—threatening his very existence—and is forced to reconcile the pair and somehow get back to the future.",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/en/d/d2/Back_to_the_Future.jpg",
-                            Title = "Back to the Future"
+                            Title = "Back to the Future",
+                            Visible = true
                         },
                         new
                         {
                             Id = 6,
                             CategoryId = 2,
+                            Deleted = false,
                             Description = "Toy Story is a 1995 American computer-animated comedy film produced by Pixar Animation Studios and released by Walt Disney Pictures. The first installment in the Toy Story franchise, it was the first entirely computer-animated feature film, as well as the first feature film from Pixar. The film was directed by John Lasseter (in his feature directorial debut), and written by Joss Whedon, Andrew Stanton, Joel Cohen, and Alec Sokolow from a story by Lasseter, Stanton, Pete Docter, and Joe Ranft. The film features music by Randy Newman, was produced by Bonnie Arnold and Ralph Guggenheim, and was executive-produced by Steve Jobs and Edwin Catmull. The film features the voices of Tom Hanks, Tim Allen, Don Rickles, Wallace Shawn, John Ratzenberger, Jim Varney, Annie Potts, R. Lee Ermey, John Morris, Laurie Metcalf, and Erik von Detten. Taking place in a world where anthropomorphic toys come to life when humans are not present, the plot focuses on the relationship between an old-fashioned pull-string cowboy doll named Woody and an astronaut action figure, Buzz Lightyear, as they evolve from rivals competing for the affections of their owner, Andy Davis, to friends who work together to be reunited with Andy after being separated from him.",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/en/1/13/Toy_Story.jpg",
-                            Title = "Toy Story"
+                            Title = "Toy Story",
+                            Visible = true
                         },
                         new
                         {
                             Id = 7,
                             CategoryId = 3,
+                            Deleted = false,
                             Description = "Half-Life 2 is a 2004 first-person shooter game developed and published by Valve. Like the original Half-Life, it combines shooting, puzzles, and storytelling, and adds features such as vehicles and physics-based gameplay.",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/en/2/25/Half-Life_2_cover.jpg",
-                            Title = "Half-Life 2"
+                            Title = "Half-Life 2",
+                            Visible = true
                         },
                         new
                         {
                             Id = 8,
                             CategoryId = 3,
+                            Deleted = false,
                             Description = "Diablo II is an action role-playing hack-and-slash computer video game developed by Blizzard North and published by Blizzard Entertainment in 2000 for Microsoft Windows, Classic Mac OS, and macOS.",
                             FeaturedProduct = true,
                             Image = "https://upload.wikimedia.org/wikipedia/en/d/d5/Diablo_II_Coverart.png",
-                            Title = "Diablo II"
+                            Title = "Diablo II",
+                            Visible = true
                         },
                         new
                         {
                             Id = 9,
                             CategoryId = 3,
+                            Deleted = false,
                             Description = "Day of the Tentacle, also known as Maniac Mansion II: Day of the Tentacle, is a 1993 graphic adventure game developed and published by LucasArts. It is the sequel to the 1987 game Maniac Mansion.",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/en/7/79/Day_of_the_Tentacle_artwork.jpg",
-                            Title = "Day of the Tentacle"
+                            Title = "Day of the Tentacle",
+                            Visible = true
                         },
                         new
                         {
                             Id = 10,
                             CategoryId = 3,
+                            Deleted = false,
                             Description = "The Xbox is a home video game console and the first installment in the Xbox series of video game consoles manufactured by Microsoft.",
                             FeaturedProduct = true,
                             Image = "https://upload.wikimedia.org/wikipedia/commons/4/43/Xbox-console.jpg",
-                            Title = "Xbox"
+                            Title = "Xbox",
+                            Visible = true
                         },
                         new
                         {
                             Id = 11,
                             CategoryId = 3,
+                            Deleted = false,
                             Description = "The Super Nintendo Entertainment System (SNES), also known as the Super NES or Super Nintendo, is a 16-bit home video game console developed by Nintendo that was released in 1990 in Japan and South Korea.",
                             FeaturedProduct = false,
                             Image = "https://upload.wikimedia.org/wikipedia/commons/e/ee/Nintendo-Super-Famicom-Set-FL.jpg",
-                            Title = "Super Nintendo Entertainment System"
+                            Title = "Super Nintendo Entertainment System",
+                            Visible = true
                         });
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.ProductType", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.ProductType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -345,7 +726,7 @@ namespace Eshop.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.ProductVariant", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.ProductVariant", b =>
                 {
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -353,13 +734,24 @@ namespace Eshop.Server.Migrations
                     b.Property<int>("ProductTypeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<decimal>("OriginalPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("Visible")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("ProductId", "ProductTypeId");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("ProductTypeId");
 
@@ -370,120 +762,154 @@ namespace Eshop.Server.Migrations
                         {
                             ProductId = 1,
                             ProductTypeId = 2,
+                            Deleted = false,
                             OriginalPrice = 19.99m,
-                            Price = 9.99m
+                            Price = 9.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 1,
                             ProductTypeId = 3,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 7.99m
+                            Price = 7.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 1,
                             ProductTypeId = 4,
+                            Deleted = false,
                             OriginalPrice = 29.99m,
-                            Price = 19.99m
+                            Price = 19.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 2,
                             ProductTypeId = 2,
+                            Deleted = false,
                             OriginalPrice = 14.99m,
-                            Price = 7.99m
+                            Price = 7.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 3,
                             ProductTypeId = 2,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 6.99m
+                            Price = 6.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 4,
                             ProductTypeId = 5,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 3.99m
+                            Price = 3.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 4,
                             ProductTypeId = 6,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 9.99m
+                            Price = 9.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 4,
                             ProductTypeId = 7,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 19.99m
+                            Price = 19.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 5,
                             ProductTypeId = 5,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 3.99m
+                            Price = 3.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 6,
                             ProductTypeId = 5,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 2.99m
+                            Price = 2.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 7,
                             ProductTypeId = 8,
+                            Deleted = false,
                             OriginalPrice = 29.99m,
-                            Price = 19.99m
+                            Price = 19.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 7,
                             ProductTypeId = 9,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 69.99m
+                            Price = 69.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 7,
                             ProductTypeId = 10,
+                            Deleted = false,
                             OriginalPrice = 59.99m,
-                            Price = 49.99m
+                            Price = 49.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 8,
                             ProductTypeId = 8,
+                            Deleted = false,
                             OriginalPrice = 24.99m,
-                            Price = 9.99m
+                            Price = 9.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 9,
                             ProductTypeId = 8,
+                            Deleted = false,
                             OriginalPrice = 0m,
-                            Price = 14.99m
+                            Price = 14.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 10,
                             ProductTypeId = 1,
+                            Deleted = false,
                             OriginalPrice = 299m,
-                            Price = 159.99m
+                            Price = 159.99m,
+                            Visible = true
                         },
                         new
                         {
                             ProductId = 11,
                             ProductTypeId = 1,
+                            Deleted = false,
                             OriginalPrice = 399m,
-                            Price = 79.99m
+                            Price = 79.99m,
+                            Visible = true
                         });
                 });
 
@@ -558,6 +984,52 @@ namespace Eshop.Server.Migrations
                     b.ToTable("Addresses");
                 });
 
+            modelBuilder.Entity("Eshop.Shared.Models.Books.Book", b =>
+                {
+                    b.HasOne("Eshop.Shared.Models.Books.Author", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Eshop.Shared.Models.ProductModels.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Eshop.Shared.Models.Books.Series", "Series")
+                        .WithMany()
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Series");
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.Books.BookVariant", b =>
+                {
+                    b.HasOne("Eshop.Shared.Models.Books.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Eshop.Shared.Models.Books.BookType", "BookType")
+                        .WithMany()
+                        .HasForeignKey("BookTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("BookType");
+                });
+
             modelBuilder.Entity("Eshop.Shared.Models.Order.OrderItem", b =>
                 {
                     b.HasOne("Eshop.Shared.Models.Order.Order", "Order")
@@ -566,13 +1038,13 @@ namespace Eshop.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eshop.Shared.Models.Product", "Product")
+                    b.HasOne("Eshop.Shared.Models.ProductModels.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eshop.Shared.Models.ProductType", "ProductType")
+                    b.HasOne("Eshop.Shared.Models.ProductModels.ProductType", "ProductType")
                         .WithMany()
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -585,9 +1057,20 @@ namespace Eshop.Server.Migrations
                     b.Navigation("ProductType");
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.Product", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.Image", b =>
                 {
-                    b.HasOne("Eshop.Shared.Models.Category", "Category")
+                    b.HasOne("Eshop.Shared.Models.Books.Book", null)
+                        .WithMany("Images")
+                        .HasForeignKey("BookId");
+
+                    b.HasOne("Eshop.Shared.Models.ProductModels.Product", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.Product", b =>
+                {
+                    b.HasOne("Eshop.Shared.Models.ProductModels.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -596,15 +1079,19 @@ namespace Eshop.Server.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.ProductVariant", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.ProductVariant", b =>
                 {
-                    b.HasOne("Eshop.Shared.Models.Product", "Product")
+                    b.HasOne("Eshop.Shared.Models.Books.Book", null)
+                        .WithMany("Variants")
+                        .HasForeignKey("BookId");
+
+                    b.HasOne("Eshop.Shared.Models.ProductModels.Product", "Product")
                         .WithMany("Variants")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eshop.Shared.Models.ProductType", "ProductType")
+                    b.HasOne("Eshop.Shared.Models.ProductModels.ProductType", "ProductType")
                         .WithMany()
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -624,13 +1111,22 @@ namespace Eshop.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Eshop.Shared.Models.Books.Book", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Variants");
+                });
+
             modelBuilder.Entity("Eshop.Shared.Models.Order.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("Eshop.Shared.Models.Product", b =>
+            modelBuilder.Entity("Eshop.Shared.Models.ProductModels.Product", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Variants");
                 });
 

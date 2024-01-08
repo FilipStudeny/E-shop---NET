@@ -28,6 +28,169 @@ public class DataContext : DbContext
             book.BookId,
             book.BookTypeId
         });
+
+        modelBuilder.Entity<BookType>().HasData(
+            new BookType { Id = 1, Name = "Paperback" },
+            new BookType { Id = 2, Name = "Ebook" },
+            new BookType { Id = 3, Name = "Audiobook" }
+        );
+
+        modelBuilder.Entity<Author>().HasData(
+            new Author
+            {
+                Id = 1,
+                Name = "J.K. Rowling",
+                BiographyText =
+                    "Joanne Rowling, better known by her pen name J.K. Rowling, is a British author, best known for writing the Harry Potter series."
+            },
+            new Author
+            {
+                Id = 2,
+                Name = "George R.R. Martin",
+                BiographyText =
+                    "George Raymond Richard Martin, often referred to as GRRM, is an American novelist and short story writer, known for his series A Song of Ice and Fire."
+            },
+            new Author
+            {
+                Id = 3,
+                Name = "J.R.R. Tolkien",
+                BiographyText =
+                    "John Ronald Reuel Tolkien was an English writer, poet, and university professor. He is best known as the author of the classic high-fantasy works The Hobbit, The Lord of the Rings, and The Silmarillion."
+            }
+        );
+        modelBuilder.Entity<Series>().HasData(
+            new Series
+            {
+                Id = 1,
+                Name = "Harry Potter",
+                Description = "Harry potter series about wierd hobo magic castle"
+            },
+            new Series
+            {
+                Id = 2,
+                Name = "Song of Ice and Fire",
+                Description = "Hobo wars betwean kingdoms"
+            },
+            new Series
+            {
+                Id = 3,
+                Name = "Hobbit",
+                Description = "Hobo goes on adventures with strange ring"
+            }
+        );
+
+        modelBuilder.Entity<Book>().HasData(
+                new Book
+                {
+                    Id = 1,
+                    Title = "Harry Potter and the Philosopher's Stone",
+                    Description = "The first book in the Harry Potter series.",
+                    ShortDescription = "A young wizard's journey begins.",
+                    AuthorId = 1, // Corresponds to J.K. Rowling
+                    CategoryId = 1, // Assuming you have categories with IDs
+                    SeriesId = 1, // Assuming you have series with IDs
+                    SeriesOrder = 1,
+                    PageCount = 320,
+                    DateAdded = DateTime.Now,
+                    DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/h/harry-potter-7-a-dary-smrti-9788055143132.jpg",
+                    ReleaseDate = new DateTime(1997, 6, 26),
+                    Isbn = "9780590353427",
+                    Featured = true,
+                    Deleted = false,
+                    CopiesInStore = 100,
+                },
+                new Book
+                {
+                    Id = 2,
+                    Title = "A Game of Thrones",
+                    Description = "The first book in A Song of Ice and Fire series.",
+                    ShortDescription = "Power struggles in the Seven Kingdoms.",
+                    AuthorId = 2, // Corresponds to George R.R. Martin
+                    CategoryId = 2, // Assuming different category ID
+                    SeriesId = 2,
+                    SeriesOrder = 1,
+                    PageCount = 694,
+                    DateAdded = DateTime.Now,
+                    DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/h/hra-o-truny-9788025722824.jpg",
+                    ReleaseDate = new DateTime(1996, 8, 6),
+                    Isbn = "9780553103540",
+                    Featured = true,
+                    Deleted = false,
+                    CopiesInStore = 150,
+                },
+                new Book
+                {
+                    Id = 3,
+                    Title = "The Hobbit",
+                    Description = "A fantasy novel by J.R.R. Tolkien.",
+                    ShortDescription = "Bilbo Baggins' unexpected journey.",
+                    AuthorId = 3, // Corresponds to J.R.R. Tolkien
+                    CategoryId = 1, // Assuming different category ID
+                    SeriesId = 3, // Assuming different series ID
+                    SeriesOrder = 1,
+                    PageCount = 310,
+                    DateAdded = DateTime.Now,
+                    DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/387191598/10.jpg",
+                    ReleaseDate = new DateTime(1937, 9, 21),
+                    Isbn = "9780345534835",
+                    Featured = true,
+                    Deleted = false,
+                    CopiesInStore = 80,
+                }
+        );
+
+        modelBuilder.Entity<BookVariant>().HasData(
+            new BookVariant()
+            {
+                BookId = 1,
+                BookTypeId = 1,
+                Price = 9.99m,
+                OriginalPrice = 19.99m
+            },
+            new BookVariant()
+            {
+                BookId = 1,
+                BookTypeId = 2,
+                Price = 25.99m,
+                OriginalPrice = 19.99m
+            },
+            new BookVariant()
+            {
+                BookId = 2,
+                BookTypeId = 2,
+                Price = 9.99m,
+                OriginalPrice = 19.99m
+            },
+            new BookVariant()
+            {
+                BookId = 2,
+                BookTypeId = 3,
+                Price = 19.99m,
+                OriginalPrice = 25.99m
+            },
+            new BookVariant()
+            {
+                BookId = 2,
+                BookTypeId = 1,
+                Price = 25.99m,
+                OriginalPrice = 30.99m
+            },
+            new BookVariant()
+            {
+                BookId = 3,
+                BookTypeId = 2,
+                Price = 9.99m,
+                OriginalPrice = 19.99m
+            },
+            new BookVariant()
+            {
+                BookId = 3,
+                BookTypeId = 1,
+                Price = 9.99m,
+                OriginalPrice = 19.99m
+            }
+        );
+
         
         //Composite key setup
         modelBuilder.Entity<CartItem>().HasKey(cart => new

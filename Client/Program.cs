@@ -4,6 +4,8 @@ using Eshop.Client;
 using Eshop.Client.Security;
 using Eshop.Client.Services.AddressService;
 using Eshop.Client.Services.AuthenticationService;
+using Eshop.Client.Services.BookService;
+using Eshop.Client.Services.BookTypeService;
 using Eshop.Client.Services.CartService;
 using Eshop.Client.Services.CategoryService;
 using Eshop.Client.Services.OrderService;
@@ -29,6 +31,8 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBookTypeService, BookTypeService>();
 
 //auth stuff
 builder.Services.AddOptions();

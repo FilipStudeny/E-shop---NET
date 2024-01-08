@@ -36,6 +36,26 @@ namespace Eshop.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BiographyText = "Joanne Rowling, better known by her pen name J.K. Rowling, is a British author, best known for writing the Harry Potter series.",
+                            Name = "J.K. Rowling"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BiographyText = "George Raymond Richard Martin, often referred to as GRRM, is an American novelist and short story writer, known for his series A Song of Ice and Fire.",
+                            Name = "George R.R. Martin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BiographyText = "John Ronald Reuel Tolkien was an English writer, poet, and university professor. He is best known as the author of the classic high-fantasy works The Hobbit, The Lord of the Rings, and The Silmarillion.",
+                            Name = "J.R.R. Tolkien"
+                        });
                 });
 
             modelBuilder.Entity("Eshop.Shared.Models.Books.Book", b =>
@@ -56,8 +76,9 @@ namespace Eshop.Server.Migrations
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("DefaultImageId")
-                        .HasColumnType("int");
+                    b.Property<string>("DefaultImage")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
@@ -93,17 +114,80 @@ namespace Eshop.Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("Visible")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("DefaultImageId");
-
                     b.HasIndex("SeriesId");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            CategoryId = 1,
+                            CopiesInStore = 100,
+                            DateAdded = new DateTime(2024, 1, 8, 12, 51, 25, 137, DateTimeKind.Local).AddTicks(7506),
+                            DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/h/harry-potter-7-a-dary-smrti-9788055143132.jpg",
+                            Deleted = false,
+                            Description = "The first book in the Harry Potter series.",
+                            Featured = true,
+                            Isbn = "9780590353427",
+                            PageCount = 320,
+                            ReleaseDate = new DateTime(1997, 6, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SeriesId = 1,
+                            SeriesOrder = 1,
+                            ShortDescription = "A young wizard's journey begins.",
+                            Title = "Harry Potter and the Philosopher's Stone",
+                            Visible = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AuthorId = 2,
+                            CategoryId = 2,
+                            CopiesInStore = 150,
+                            DateAdded = new DateTime(2024, 1, 8, 12, 51, 25, 137, DateTimeKind.Local).AddTicks(7589),
+                            DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/h/hra-o-truny-9788025722824.jpg",
+                            Deleted = false,
+                            Description = "The first book in A Song of Ice and Fire series.",
+                            Featured = true,
+                            Isbn = "9780553103540",
+                            PageCount = 694,
+                            ReleaseDate = new DateTime(1996, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SeriesId = 2,
+                            SeriesOrder = 1,
+                            ShortDescription = "Power struggles in the Seven Kingdoms.",
+                            Title = "A Game of Thrones",
+                            Visible = true
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AuthorId = 3,
+                            CategoryId = 1,
+                            CopiesInStore = 80,
+                            DateAdded = new DateTime(2024, 1, 8, 12, 51, 25, 137, DateTimeKind.Local).AddTicks(7596),
+                            DefaultImage = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/387191598/10.jpg",
+                            Deleted = false,
+                            Description = "A fantasy novel by J.R.R. Tolkien.",
+                            Featured = true,
+                            Isbn = "9780345534835",
+                            PageCount = 310,
+                            ReleaseDate = new DateTime(1937, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SeriesId = 3,
+                            SeriesOrder = 1,
+                            ShortDescription = "Bilbo Baggins' unexpected journey.",
+                            Title = "The Hobbit",
+                            Visible = true
+                        });
                 });
 
             modelBuilder.Entity("Eshop.Shared.Models.Books.BookType", b =>
@@ -119,6 +203,23 @@ namespace Eshop.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BookTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Paperback"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Ebook"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Audiobook"
+                        });
                 });
 
             modelBuilder.Entity("Eshop.Shared.Models.Books.BookVariant", b =>
@@ -146,6 +247,71 @@ namespace Eshop.Server.Migrations
                     b.HasIndex("BookTypeId");
 
                     b.ToTable("BookVariants");
+
+                    b.HasData(
+                        new
+                        {
+                            BookId = 1,
+                            BookTypeId = 1,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 1,
+                            BookTypeId = 2,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 25.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 2,
+                            BookTypeId = 2,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 2,
+                            BookTypeId = 3,
+                            Deleted = false,
+                            OriginalPrice = 25.99m,
+                            Price = 19.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 2,
+                            BookTypeId = 1,
+                            Deleted = false,
+                            OriginalPrice = 30.99m,
+                            Price = 25.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 3,
+                            BookTypeId = 2,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        },
+                        new
+                        {
+                            BookId = 3,
+                            BookTypeId = 1,
+                            Deleted = false,
+                            OriginalPrice = 19.99m,
+                            Price = 9.99m,
+                            Visible = true
+                        });
                 });
 
             modelBuilder.Entity("Eshop.Shared.Models.Books.Series", b =>
@@ -165,6 +331,26 @@ namespace Eshop.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Series");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Harry potter series about wierd hobo magic castle",
+                            Name = "Harry Potter"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Hobo wars betwean kingdoms",
+                            Name = "Song of Ice and Fire"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Hobo goes on adventures with strange ring",
+                            Name = "Hobbit"
+                        });
                 });
 
             modelBuilder.Entity("Eshop.Shared.Models.Cart.CartItem", b =>
@@ -551,9 +737,6 @@ namespace Eshop.Server.Migrations
                     b.Property<int>("ProductTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
 
@@ -567,8 +750,6 @@ namespace Eshop.Server.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.HasKey("ProductId", "ProductTypeId");
-
-                    b.HasIndex("BookId");
 
                     b.HasIndex("ProductTypeId");
 
@@ -815,12 +996,6 @@ namespace Eshop.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eshop.Shared.Models.ProductModels.Image", "DefaultImage")
-                        .WithMany()
-                        .HasForeignKey("DefaultImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Eshop.Shared.Models.Books.Series", "Series")
                         .WithMany()
                         .HasForeignKey("SeriesId")
@@ -831,15 +1006,13 @@ namespace Eshop.Server.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("DefaultImage");
-
                     b.Navigation("Series");
                 });
 
             modelBuilder.Entity("Eshop.Shared.Models.Books.BookVariant", b =>
                 {
                     b.HasOne("Eshop.Shared.Models.Books.Book", "Book")
-                        .WithMany()
+                        .WithMany("Variants")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -906,10 +1079,6 @@ namespace Eshop.Server.Migrations
 
             modelBuilder.Entity("Eshop.Shared.Models.ProductModels.ProductVariant", b =>
                 {
-                    b.HasOne("Eshop.Shared.Models.Books.Book", null)
-                        .WithMany("Variants")
-                        .HasForeignKey("BookId");
-
                     b.HasOne("Eshop.Shared.Models.ProductModels.Product", "Product")
                         .WithMany("Variants")
                         .HasForeignKey("ProductId")
