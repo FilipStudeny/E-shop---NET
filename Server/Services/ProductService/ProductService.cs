@@ -119,7 +119,7 @@ public class ProductService : IProductService
                 productTitles.Add(product.Title);
             }
 
-            if (product?.Description != null)
+            if (product.Description != null)
             {
                 //search from description
                 var punctuation = product.Description.Where(char.IsPunctuation).Distinct().ToArray(); //remove !.?,;. ....

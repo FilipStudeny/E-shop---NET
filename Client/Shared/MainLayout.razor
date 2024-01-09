@@ -1,6 +1,27 @@
 ﻿@using  Eshop.Client.Shared.Cart
 @inherits LayoutComponentBase
 
+
+<MudLayout>
+    <MudAppBar Elevation="1" Style="@($"background:{Colors.LightBlue.Darken4}")">
+        <MudButton Href="/" Variant="Variant.Filled" Color="Color.Primary">E-Shop</MudButton>
+        <Searchfield/>
+        <UserButton/>
+        <CartCounter/>
+
+    </MudAppBar>
+    <MudMainContent>
+        <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+                @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+@*
 <div class="page">
     <main>
         <div class="top-row px-2">
@@ -18,7 +39,4 @@
         </article>
     </main>
 </div>
-
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+*@

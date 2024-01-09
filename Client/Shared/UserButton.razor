@@ -3,7 +3,26 @@
 @inject NavigationManager NavigationManager
 @inject ICartService CartService
 
+<MudMenu Class="p-3" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Style="max-width: 150px">
+    <ActivatorContent>
+        <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Primary">Dashboard</MudChip>
+    </ActivatorContent>
+    <ChildContent>
+        <Authorized>
+            <MudMenuItem Href="/profile">Profile</MudMenuItem>
+            <MudMenuItem Href="/orders"> Profile</MudMenuItem>
+            <hr/>
+            <MudButton Variant="Variant.Text" OnClick="@Logout">Sign out</MudButton>
+        </Authorized>
+        <NotAuthorized>
+            <MudMenuItem Href=@("login?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)")>Login</MudMenuItem>
+            <MudMenuItem Href="/register">Register</MudMenuItem>
+        </NotAuthorized>
+    </ChildContent>
+</MudMenu>
 
+
+@*
 <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle user-button" @onclick="ToggleMenu" @onfocusout="HideMenu">
         <i class="oi oi-person"></i>
@@ -25,7 +44,7 @@
         </AuthorizeView>
     </div>
 </div>
-
+*@
 
 
 @code {
