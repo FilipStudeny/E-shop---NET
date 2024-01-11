@@ -1,8 +1,18 @@
-﻿namespace Eshop.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class ServiceResponse<T>
+namespace Ecommerce.Shared
 {
-    public T? Data { get; set; }
-    public bool Success { get; set; } = true;
-    public string Message { get; set; } = string.Empty;
+    public class ServiceResponse<T>
+    {
+        public T? Data { get; set; }
+        public bool Success { get; set; } = true;
+        public string Message { get; set; } = string.Empty;
+
+        public int NumberOfPages { get; set; } = 1;
+        public int CurrentPage { get; set; } = 1;
+    }
 }

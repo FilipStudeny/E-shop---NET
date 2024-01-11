@@ -1,0 +1,11 @@
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\bin\Debug\net7.0\Ecommerce.Shared.deps.json
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\bin\Debug\net7.0\Ecommerce.Shared.dll
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\bin\Debug\net7.0\Ecommerce.Shared.pdb
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.AssemblyInfoInputs.cache
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.AssemblyInfo.cs
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.csproj.CoreCompileInputs.cache
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.dll
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\refint\Ecommerce.Shared.dll
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.pdb
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\ref\Ecommerce.Shared.dll

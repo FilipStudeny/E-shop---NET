@@ -1,42 +1,20 @@
-﻿@using  Eshop.Client.Shared.Cart
-@inherits LayoutComponentBase
-
-
-<MudLayout>
-    <MudAppBar Elevation="1" Style="@($"background:{Colors.LightBlue.Darken4}")">
-        <MudButton Href="/" Variant="Variant.Filled" Color="Color.Primary">E-Shop</MudButton>
-        <Searchfield/>
-        <UserButton/>
-        <CartCounter/>
-
-    </MudAppBar>
-    <MudMainContent>
-        <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-                @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+﻿@inherits LayoutComponentBase
 
 <MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
-@*
-<div class="page">
-    <main>
-        <div class="top-row px-2">
-            <HomeButton/>
-            <Searchfield/>
-            <UserButton/>
-            <CartCounter/>
-        </div>
+<MudLayout>
+    <MudAppBar Class="shadow-none">
+        <MudIconButton Href="/" Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Inherit"/>
+        <SearchBar/>
+        <CartButton/>
+    </MudAppBar>
+    <NavMenu />
 
-        <div class="nav-menu">
-            <NavigationHeader/>
-        </div>
-        <article class="content px-2">
+    <MudMainContent Style="margin-top: 64px;">
+        <MudContainer MaxWidth="MaxWidth.Large">
             @Body
-        </article>
-    </main>
-</div>
-*@
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>

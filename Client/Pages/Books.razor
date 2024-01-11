@@ -1,0 +1,27 @@
+﻿@page "/books/{page:int}"
+@inject IBookService BookService
+@inject NavigationManager NavigationManager
+
+<PageTitle>E-Shop | Books</PageTitle>
+
+<BooksList/>
+
+<div class="d-flex flex-column align-center mt-5">
+	<MudPagination BoundaryCount="1" MiddleCount="3" Count="BookService.PageCount-1" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
+</div>
+
+@code {
+	[Parameter] public int Page { get; set; }
+
+
+	protected override async Task OnParametersSetAsync()
+	{
+		await BookService.GetBooks(Page);
+	}
+
+	private void GoToPage(int page)
+	{
+		Page = page;
+		NavigationManager.NavigateTo($"/books/{page}");
+	}
+}

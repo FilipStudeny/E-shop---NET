@@ -1,0 +1,25 @@
+﻿
+
+<MudPaper Height="50px" Width="100%" Class="fixed-top d-flex flex-row align-items-center" Style="margin-top: 64px;">
+    <MudContainer Class="w-100 d-flex flex-row align-items-center">
+        <MudButton Href="/books/1" Class="p-2 m-2" StartIcon="@Icons.Material.Filled.Book">Books</MudButton>
+        <MudButton Href="/authors" Class="p-2 m-2" StartIcon="@Icons.Material.Filled.Person">Authors</MudButton>
+        <MudButton Href="/series" Class="p-2 m-2" StartIcon="@Icons.Material.Filled.LibraryBooks">Series</MudButton>
+
+        <MudSpacer/>
+        <MudButton Href="/authors" Class="p-2 m-2" StartIcon="@Icons.Material.Filled.VerifiedUser">User</MudButton>
+    </MudContainer>
+
+</MudPaper>
+
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

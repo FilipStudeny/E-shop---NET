@@ -1,0 +1,46 @@
+﻿@inject IBookService BookService
+@implements IDisposable
+
+
+
+<MudText Typo="Typo.h4">Featured books</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+
+@if(BookService.FeaturedBooks.Count == 0)
+{
+	<MudContainer Class="d-flex flex-row justify-content-evenly align-items-center">
+		<MudText Typo="Typo.h2" Class="mb-2">@BookService.Message</MudText>
+		<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+	</MudContainer>
+
+}
+else
+{
+	<MudStack Row="true" Justify="Justify.Center" Style="flex-wrap: wrap;">
+		@foreach(var book in BookService.FeaturedBooks)
+		{
+			<MudPaper MaxWidth="100" Height="auto" Width="100" Class="p-0 d-flex flex-column" Style="max-width: 200px;">
+				<MudImage ObjectFit="ObjectFit.Contain" Src="@book.UrlImage" Width="200" Height="200"/>
+				<MudDivider DividerType="DividerType.Middle" Class="mt-1 mb-1" Style="border-color:#212121; border-width: 2px;" />
+				<MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start" Class="px-1 m-0" Style="height: 100%;">
+					<MudLink Typo="Typo.h6" Style="word-wrap: break-word;" Href="@($"/book/{book.Id}")">@book.Title</MudLink>
+					<MudLink Typo="Typo.subtitle2" Style="word-wrap: break-word;" Href="@($"/author/{book.AuthorUrl}")">@book.Author</MudLink>
+				</MudStack>
+			</MudPaper>
+		}
+	</MudStack>
+}
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		BookService.OnChange += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		BookService.OnChange -= StateHasChanged;
+	}
+
+}

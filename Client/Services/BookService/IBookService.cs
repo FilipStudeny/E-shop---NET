@@ -1,28 +1,22 @@
-﻿using Eshop.Shared.DTOs.Books;
-using Eshop.Shared.Models.Books;
+﻿using Ecommerce.Shared;
+using Ecommerce.Shared.Books;
+using Ecommerce.Shared.DTOs;
 
-namespace Eshop.Client.Services.BookService;
-
-public interface IBookService
+namespace Ecommerce.Client.Services.BookService
 {
-    event Action OnChange;
-    string Message { get; set; }
-    int CurrentPage { get; set; }
-    int PageCount { get; set; }
-    string LastSearch { get; set; }
-    
-    List<Book> Books { get; set; }
-    List<FeaturedBookDto> FeaturedBooks { get; set; }
-    List<Book> AdminBooks { get; set; }
+    public interface IBookService
+    {
+        event Action? OnChange;
+        List<Book> Books { get; set; }
+        List<FeaturedBook> FeaturedBooks { get; set; }
 
-    Task GetBooksByCategory(string category);
-    Task GetFeaturedBooks();
-    Task<ServiceResponse<Book>?> GetBook(int id);
-    Task SearchForBooks(string search, int page);
-    Task<List<string>> GetBookSearchSuggestion(string search);
-    Task GetAdminBooks();
+        int CurrentPage { get; set; }
+        int PageCount { get; set; } 
+        string Message { get; set; }
 
-    Task<Book?> CreatBooks(Book product);
-    Task<Book?> UpdateBook(Book product);
-    Task DeleteBook(Book product);
+        Task GetBooks(int page);
+        Task<ServiceResponse<Book>> GetBook(int id);
+        Task GetFeaturedBooks();
+        Task<List<string>> GetSuggestedBooks(string search);
+    }
 }
