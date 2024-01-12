@@ -92,3 +92,4 @@ C:\Users\Filda\Desktop\.NET\Ecommerce\Server\obj\Debug\net7.0\ref\Ecommerce.Serv
 C:\Users\Filda\Desktop\.NET\Ecommerce\Server\bin\Debug\net7.0\Microsoft.Extensions.Localization.dll
 C:\Users\Filda\Desktop\.NET\Ecommerce\Server\bin\Debug\net7.0\Microsoft.Extensions.Localization.Abstractions.dll
 C:\Users\Filda\Desktop\.NET\Ecommerce\Server\bin\Debug\net7.0\MudBlazor.dll
+C:\Users\Filda\Desktop\.NET\Ecommerce\Server\obj\Debug\net7.0\Ecommerce.Server.sourcelink.json

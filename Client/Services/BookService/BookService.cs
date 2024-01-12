@@ -1,4 +1,5 @@
-﻿using Ecommerce.Shared;
+﻿using Ecommerce.Client.Services.CategoryService;
+using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using System.Net.Http.Json;
@@ -34,13 +35,31 @@ namespace Ecommerce.Client.Services.BookService
 
             if (Books.Count == 0)
             {
-                Message = "No products found.";
+                Message = "No books found.";
             }
 
             OnChange?.Invoke();
         }
 
-        public async Task GetFeaturedBooks()
+		public async Task GetBooksByCategory(int page, int category)
+		{
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<Book>>>($"api/books/category/{category}/page/{page}");
+			if (response is { Data: not null })
+			{
+				Books = response.Data;
+				CurrentPage = response.CurrentPage;
+				PageCount = response.NumberOfPages;
+			}
+
+			if (Books.Count == 0)
+			{
+				Message = "No products found.";
+			}
+
+			OnChange?.Invoke();
+		}
+
+		public async Task GetFeaturedBooks()
         {
             var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<FeaturedBook>>>("api/books/featured");
             if(response is { Data: not null })
@@ -56,10 +75,12 @@ namespace Ecommerce.Client.Services.BookService
             OnChange?.Invoke();
         }
 
-        public Task<ServiceResponse<Book>> GetBook(int id)
+        public async Task<ServiceResponse<Book>> GetBook(int id)
         {
-            throw new NotImplementedException();
-        }
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<Book>>($"api/books/book/{id}");
+            return response!;
+
+		}
 
         public async Task<List<string>> GetSuggestedBooks(string search)
         {
@@ -67,5 +88,7 @@ namespace Ecommerce.Client.Services.BookService
             return response!.Data!;
             
         }
-    }
+
+		
+	}
 }

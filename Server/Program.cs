@@ -1,5 +1,7 @@
 using Ecommerce.Server.Database;
 using Ecommerce.Server.Services.BookService;
+using Ecommerce.Server.Services.CategoryService;
+using Ecommerce.Server.Services.SeriesService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,8 @@ builder.Services.AddSwaggerGen();
 
 //** SERVICES **//
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISeriesService, SeriesService>();
 
 var app = builder.Build();
 app.UseSwaggerUI();

@@ -15,7 +15,9 @@ namespace Ecommerce.Client.Services.BookService
         string Message { get; set; }
 
         Task GetBooks(int page);
-        Task<ServiceResponse<Book>> GetBook(int id);
+		Task GetBooksByCategory(int page, int category);
+
+		Task<ServiceResponse<Book>> GetBook(int id);
         Task GetFeaturedBooks();
         Task<List<string>> GetSuggestedBooks(string search);
     }

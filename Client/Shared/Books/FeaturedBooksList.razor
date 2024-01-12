@@ -1,6 +1,6 @@
 ﻿@inject IBookService BookService
+@inject NavigationManager NavigationManager
 @implements IDisposable
-
 
 
 <MudText Typo="Typo.h4">Featured books</MudText>
@@ -20,10 +20,10 @@ else
 		@foreach(var book in BookService.FeaturedBooks)
 		{
 			<MudPaper MaxWidth="100" Height="auto" Width="100" Class="p-0 d-flex flex-column" Style="max-width: 200px;">
-				<MudImage ObjectFit="ObjectFit.Contain" Src="@book.UrlImage" Width="200" Height="200"/>
+				<MudImage onclick="@(() => RedirectToBook(book.Id))" ObjectFit="ObjectFit.Contain" Src="@book.UrlImage" Width="200" Height="200" />
 				<MudDivider DividerType="DividerType.Middle" Class="mt-1 mb-1" Style="border-color:#212121; border-width: 2px;" />
 				<MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start" Class="px-1 m-0" Style="height: 100%;">
-					<MudLink Typo="Typo.h6" Style="word-wrap: break-word;" Href="@($"/book/{book.Id}")">@book.Title</MudLink>
+					<MudLink Typo="Typo.h6" Style="word-wrap: break-word;" Href="@($"/books/{book.Id}")">@book.Title</MudLink>
 					<MudLink Typo="Typo.subtitle2" Style="word-wrap: break-word;" Href="@($"/author/{book.AuthorUrl}")">@book.Author</MudLink>
 				</MudStack>
 			</MudPaper>
@@ -32,6 +32,11 @@ else
 }
 
 @code {
+
+	private void RedirectToBook(int id)
+	{
+		NavigationManager.NavigateTo($"/books/book/{id}");
+	}
 
 	protected override void OnInitialized()
 	{

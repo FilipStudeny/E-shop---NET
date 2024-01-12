@@ -9,3 +9,4 @@ C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.d
 C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\refint\Ecommerce.Shared.dll
 C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.pdb
 C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\ref\Ecommerce.Shared.dll
+C:\Users\Filda\Desktop\.NET\Ecommerce\Shared\obj\Debug\net7.0\Ecommerce.Shared.sourcelink.json

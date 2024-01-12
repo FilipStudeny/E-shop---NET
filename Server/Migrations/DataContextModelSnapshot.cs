@@ -180,7 +180,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 3,
                             CategoryId = 2,
                             CopiesInStore = 150,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8282),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3167),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/h/hra-o-truny-9788025722824.jpg",
                             Deleted = false,
                             Description = "Winter is coming. A classic world that best describes George R. R. Martin's epic saga A Song of Ice and Fire. The kingdoms of Westeros have a long summer, which must be followed by a harsh winter. But before that, and before the Others return, the game of thrones is being played out, and there are far fewer contenders than contenders. Perhaps the only one who doesn't want the Iron Throne is Lord Eddard Stark, guardian of the north. Therefore, he must become the mover of events that will change everything.",
@@ -200,7 +200,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 3,
                             CategoryId = 2,
                             CopiesInStore = 120,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8353),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3256),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/kniha/stret-kralu-39500927",
                             Deleted = false,
                             Description = "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.",
@@ -220,7 +220,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 3,
                             CategoryId = 2,
                             CopiesInStore = 100,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8361),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3270),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/b/boure-mecu-9788025724187_17.jpg",
                             Deleted = false,
                             Description = "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.",
@@ -240,7 +240,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 4,
                             CategoryId = 2,
                             CopiesInStore = 130,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8367),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3282),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/p/pan-prstenu-spolecenstvo-prstenu-ilustrovane-vydani-9788072038299_26.jpg",
                             Deleted = false,
                             Description = "The first part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. The story begins with the hobbit Frodo Baggins inheriting the Ring from his uncle Bilbo. Together with his fellowship, he embarks on a dangerous journey to destroy the Ring and defeat the Dark Lord Sauron.",
@@ -260,7 +260,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 7,
                             CategoryId = 3,
                             CopiesInStore = 110,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8374),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3293),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/n/nadace-9788025728802_4.jpg",
                             Deleted = false,
                             Description = "Foundation is the first novel in Isaac Asimov's Foundation series. The story follows mathematician Hari Seldon, who predicts the fall of the Galactic Empire. To shorten the impending dark age, he establishes a plan to preserve knowledge and guide humanity's future.",
@@ -280,7 +280,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 4,
                             CategoryId = 2,
                             CopiesInStore = 125,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8382),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3310),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/p/pan-prstenu-dve-veze-9788072038305_20.jpg",
                             Deleted = false,
                             Description = "The second part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. Frodo and the fellowship face new challenges as they continue their quest to destroy the Ring, while war threatens to engulf Middle-earth.",
@@ -300,7 +300,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 7,
                             CategoryId = 3,
                             CopiesInStore = 105,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8389),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3322),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/n/nadace-a-rise-9788075539182-17.",
                             Deleted = false,
                             Description = "Foundation and Empire is the second book in Isaac Asimov's Foundation series. The story follows the rise of a new empire and a confrontation between two powerful forces: the Foundation and the Empire.",
@@ -320,7 +320,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 5,
                             CategoryId = 5,
                             CopiesInStore = 90,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8396),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3335),
                             DefaultImageUrl = "https://www.knihydobrovsky.cz/thumbs/book-detail-fancy-box/mod_eshop/produkty/v/vrazda-v-orient-expresu-9788024277349_10.jpg",
                             Deleted = false,
                             Description = "Hercule Poirot investigates a murder on the luxurious Orient Express train. A classic murder mystery novel by Agatha Christie.",
@@ -340,7 +340,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 6,
                             CategoryId = 4,
                             CopiesInStore = 85,
-                            DateAdded = new DateTime(2024, 1, 9, 23, 14, 56, 542, DateTimeKind.Local).AddTicks(8402),
+                            DateAdded = new DateTime(2024, 1, 12, 10, 57, 50, 855, DateTimeKind.Local).AddTicks(3344),
                             DefaultImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/The_Stand_%281978%29_front_cover%2C_first_edition.png/220px-The_Stand_%281978%29_front_cover%2C_first_edition.png",
                             Deleted = false,
                             Description = "A post-apocalyptic horror novel by Stephen King. After a deadly plague kills most of the world's population, survivors are drawn to two charismatic leaders, leading to a final stand between good and evil.",
@@ -650,6 +650,9 @@ namespace Ecommerce.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -662,6 +665,9 @@ namespace Ecommerce.Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("Visible")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Series");
@@ -670,51 +676,65 @@ namespace Ecommerce.Server.Migrations
                         new
                         {
                             Id = 1,
+                            Deleted = false,
                             Description = "Books that are not part of any series",
                             Name = "Stand alone",
-                            Url = "stand-alone"
+                            Url = "stand-alone",
+                            Visible = true
                         },
                         new
                         {
                             Id = 2,
+                            Deleted = false,
                             Description = "The magical adventures of Harry Potter",
                             Name = "Harry Potter",
-                            Url = "harry-potter"
+                            Url = "harry-potter",
+                            Visible = true
                         },
                         new
                         {
                             Id = 3,
+                            Deleted = false,
                             Description = "Epic fantasy series by George R.R. Martin",
                             Name = "A Song of Ice and Fire",
-                            Url = "a-song-of-ice-and-fire"
+                            Url = "a-song-of-ice-and-fire",
+                            Visible = true
                         },
                         new
                         {
                             Id = 4,
+                            Deleted = false,
                             Description = "Classic high-fantasy series by J.R.R. Tolkien",
                             Name = "The Lord of the Rings",
-                            Url = "the-lord-of-the-rings"
+                            Url = "the-lord-of-the-rings",
+                            Visible = true
                         },
                         new
                         {
                             Id = 5,
+                            Deleted = false,
                             Description = "Detective series by Agatha Christie",
                             Name = "Hercule Poirot",
-                            Url = "hercule-poirot"
+                            Url = "hercule-poirot",
+                            Visible = true
                         },
                         new
                         {
                             Id = 6,
+                            Deleted = false,
                             Description = "Horror novels by Stephen King",
                             Name = "Stephen King Horror Novels",
-                            Url = "stephen-king-horror-novels"
+                            Url = "stephen-king-horror-novels",
+                            Visible = true
                         },
                         new
                         {
                             Id = 7,
+                            Deleted = false,
                             Description = "Sci-fi series by Isaac Asimov",
                             Name = "Foundation",
-                            Url = "foundation"
+                            Url = "foundation",
+                            Visible = true
                         });
                 });
 

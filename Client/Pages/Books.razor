@@ -1,27 +1,75 @@
 ﻿@page "/books/{page:int}"
+@page "/books/{category}/{page:int}"
+
 @inject IBookService BookService
+@inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
 
 <PageTitle>E-Shop | Books</PageTitle>
 
-<BooksList/>
+@if (showAlert)
+{
+	<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@Message</MudAlert>
+	<MudText Typo="Typo.h4" Class="mt-5 text-center">
+		Go back to <MudLink Typo="Typo.h4" Href="/">front page</MudLink>
+	</MudText>
 
-<div class="d-flex flex-column align-center mt-5">
-	<MudPagination BoundaryCount="1" MiddleCount="3" Count="BookService.PageCount-1" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
-</div>
+}
+else
+{
+	<CategoryList />
+	<BooksList />
+
+	@if(BookService.Books.Count != 0)
+	{
+		<div class="d-flex flex-column align-center mt-5">
+			<MudPagination Count="BookService.PageCount" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
+		</div>
+	}
+}
+
+
+
 
 @code {
 	[Parameter] public int Page { get; set; }
-
+	[Parameter] public string Category { get; set; } = string.Empty;
+	private string Message { get; set; } = string.Empty;
+	private bool showAlert = false;
 
 	protected override async Task OnParametersSetAsync()
 	{
-		await BookService.GetBooks(Page);
+		if(Category == null || Category == "")
+		{
+			await BookService.GetBooks(Page);
+		}
+		else
+		{
+			var category = CategoryService.Categories.FirstOrDefault(c => c.Url == Category);
+			if(category != null)
+			{
+				var categoryId = category.Id;
+				await BookService.GetBooksByCategory(Page, categoryId);
+			}
+			else
+			{
+				Message = "Book category doesn't exist.";
+				showAlert = true;
+			}
+		}
+		await CategoryService.GetCategories();
 	}
 
 	private void GoToPage(int page)
 	{
 		Page = page;
-		NavigationManager.NavigateTo($"/books/{page}");
+		if(Category == null || Category == "")
+		{
+			NavigationManager.NavigateTo($"/books/{page}");
+		}
+		else
+		{
+			NavigationManager.NavigateTo($"/books/{Category}/{page}");
+		}
 	}
 }

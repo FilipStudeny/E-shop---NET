@@ -1,0 +1,39 @@
+﻿@inject ICategoryService CategoryService
+@implements IDisposable
+
+
+@if (CategoryService.Categories.Count == 0)
+{
+	<MudContainer Class="d-flex flex-row justify-content-evenly align-items-center">
+		<MudText Typo="Typo.h2" Class="mb-2">@CategoryService.Message</MudText>
+		<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+	</MudContainer>
+}
+else
+{
+	<MudStack Row="true" Justify="Justify.Center" Style="flex-wrap: wrap;">
+		@foreach (var category in CategoryService.Categories)
+		{
+			@if (category.Name.Equals("Default"))
+			{
+				<MudButton Href=@($"/books/1")>@category.Name</MudButton>
+			}else{
+				<MudButton Href=@($"/books/{category.Url}/1")>@category.Name</MudButton>
+			}
+		}
+	</MudStack>
+}
+
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		CategoryService.OnChange += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		CategoryService.OnChange -= StateHasChanged;
+	}
+}

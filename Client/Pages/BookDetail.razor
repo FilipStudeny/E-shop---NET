@@ -1,0 +1,77 @@
+﻿@page "/books/book/{id:int}"
+@inject IBookService BookService
+
+
+@if (showAlert)
+{
+	<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@Message</MudAlert>
+	<MudText Typo="Typo.h4" Class="mt-5 text-center">
+		Go back to <MudLink Typo="Typo.h4" Href="/">front page</MudLink>
+	</MudText>
+}else{
+
+	<MudText Typo="Typo.h4">@book?.Title</MudText>
+	<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+
+	<MudContainer MaxWidth="MaxWidth.Large">
+		<MudContainer Class="d-flex flex-row justify-content-between mud-elevation-4 p-4">
+			<MudImage ObjectFit="ObjectFit.Contain" Src="@book?.DefaultImageUrl" Width="300" Height="300"/>
+			<MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex flex-column justify-content-between">
+				<MudStack>
+					<MudText Typo="Typo.h2">@book?.Title</MudText>
+						<MudLink Href="@($"/authors/{book?.Author?.Name}")">@book?.Author?.Name</MudLink>
+						<MudStack Row="true" Class="d-flex flex-row justify-content-between">
+							<MudText Typo="Typo.h6">Part of series: <MudLink Href="@($"/series/{book?.Series?.Name}")">@book?.Series?.Name</MudLink></MudText>
+							<MudText Typo="Typo.h6">Book number: @book?.SeriesOrder</MudText>
+						</MudStack>
+				</MudStack>
+				<MudStack>
+					<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; flex: 0;" />
+					<MudText Typo="Typo.body1" Class="mb-2">@book?.ShortDescription</MudText>
+				</MudStack>
+			</MudContainer>
+		</MudContainer>
+	</MudContainer>
+
+	<MudContainer MaxWidth="MaxWidth.Large" Class="mt-5">
+		<MudContainer Class="d-flex flex-row justify-content-between mud-elevation-4 p-4">
+			<MudText Class="w-50">@book?.Description</MudText>
+			<MudContainer Class="w-50">
+				<MudStack Row="true" Justify="Justify.SpaceBetween">
+					<MudText>Number of pages: @book?.PageCount</MudText>
+					<MudText>ISBN @book?.Isbn</MudText>
+				</MudStack>
+				<MudStack Row="true" Justify="Justify.SpaceBetween">
+					<MudText>Release date: @book?.ReleaseDate</MudText>
+					<MudText>Copies in store: @book?.CopiesInStore</MudText>
+				</MudStack>
+			</MudContainer>
+		</MudContainer>
+	</MudContainer>
+}
+
+
+
+
+
+@code {
+	[Parameter] public int Id { get; set; }
+
+	private Book? book = new();
+	private bool showAlert = false;
+	private string Message = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var response = await BookService.GetBook(Id);
+		if (!response.Success)
+		{
+			showAlert = true;
+			Message = response.Message;
+		}
+		else
+		{
+			book = response.Data;
+		}
+	}
+}
