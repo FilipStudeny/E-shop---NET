@@ -23,7 +23,7 @@ else
 				<MudImage onclick="@(() => RedirectToBook(book.Id))" ObjectFit="ObjectFit.Contain" Src="@book.UrlImage" Width="200" Height="200" />
 				<MudDivider DividerType="DividerType.Middle" Class="mt-1 mb-1" Style="border-color:#212121; border-width: 2px;" />
 				<MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start" Class="px-1 m-0" Style="height: 100%;">
-					<MudLink Typo="Typo.h6" Style="word-wrap: break-word;" Href="@($"/books/{book.Id}")">@book.Title</MudLink>
+					<MudLink Typo="Typo.h6" Style="word-wrap: break-word;" Href="@($"/books/book/{book.Id}")">@book.Title</MudLink>
 					<MudLink Typo="Typo.subtitle2" Style="word-wrap: break-word;" Href="@($"/author/{book.AuthorUrl}")">@book.Author</MudLink>
 				</MudStack>
 			</MudPaper>

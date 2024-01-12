@@ -26,10 +26,6 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Pages/BookDetail.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQm9va0RldGFpbC5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Pages/Books.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQm9va3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -73,6 +69,10 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/Filda/Desktop/.NET/Ecommerce/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Pages/BookDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQm9va0RldGFpbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-y7zwjpycmo
 
 [C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=

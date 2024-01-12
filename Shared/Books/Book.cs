@@ -26,7 +26,7 @@ namespace Ecommerce.Shared.Books
         public int SeriesId { get; set; }
         public int SeriesOrder { get; set; }
 
-        public List<BookVariant> Variants { get; set; } = new();
+        public List<BookVariant>? Variants { get; set; } = new();
 
         //Book data
         public int PageCount { get; set; }

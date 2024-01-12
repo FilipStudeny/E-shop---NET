@@ -10,10 +10,12 @@
         <SearchBar/>
         <CartButton/>
     </MudAppBar>
-    <NavMenu />
+    
 
-    <MudMainContent Style="margin-top: 64px;">
-        <MudContainer MaxWidth="MaxWidth.Large">
+    <MudMainContent>
+        <NavMenu />
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-5">
+           
             @Body
         </MudContainer>
     </MudMainContent>
