@@ -1,0 +1,36 @@
+﻿@page "/authors/author/{name}"
+@inject IAuthorsService AuthorsService
+
+@if (showAlert)
+{
+    <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@Message</MudAlert>
+    <MudText Typo="Typo.h4" Class="mt-5 text-center">
+        Go back to <MudLink Typo="Typo.h4" Href="/">front page</MudLink>
+    </MudText>
+}
+else
+{
+    
+}
+
+@code {
+    [Parameter] public string Name { get; set; } = string.Empty;
+
+    private Author? Author = new();
+    private bool showAlert = false;
+    private string Message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await AuthorsService.GetAuthor(Name);
+        if (!response.Success)
+        {
+            showAlert = true;
+            Message = response.Message;
+        }
+        else
+        {
+            Author = response.Data;
+        }
+    }
+}

@@ -1,4 +1,5 @@
 using Ecommerce.Server.Database;
+using Ecommerce.Server.Services.AuthorsService;
 using Ecommerce.Server.Services.BookService;
 using Ecommerce.Server.Services.CategoryService;
 using Ecommerce.Server.Services.SeriesService;
@@ -28,6 +29,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
+builder.Services.AddScoped<IAuthorsService, AuthorService>();
 
 var app = builder.Build();
 app.UseSwaggerUI();

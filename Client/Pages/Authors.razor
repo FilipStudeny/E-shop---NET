@@ -1,0 +1,53 @@
+﻿@page "/authors/{page:int}"
+
+@inject IAuthorsService AuthorsService
+@inject NavigationManager NavigationManager
+
+<PageTitle>E-Shop | Authors</PageTitle>
+
+@if (showAlert)
+{
+	<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@Message</MudAlert>
+	<MudText Typo="Typo.h4" Class="mt-5 text-center">
+		Go back to <MudLink Typo="Typo.h4" Href="/">front page</MudLink>
+	</MudText>
+
+}
+else
+{
+	<AuthorsList/>
+
+	@if (AuthorsService.Authors.Count != 0)
+	{
+		<div class="d-flex flex-column align-center mt-5">
+			<MudPagination Count="AuthorsService.PageCount" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
+		</div>
+	}
+}
+
+
+
+
+@code {
+
+	[Parameter] public int Page { get; set; }
+	private string Message { get; set; } = string.Empty;
+	private bool showAlert = false;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		var success = await AuthorsService.GetAuthors(Page);
+		if (!success)
+		{
+			showAlert = true;
+			Message = AuthorsService.Message;
+		}
+
+	}
+
+	private void GoToPage(int page)
+	{
+		Page = page;
+		NavigationManager.NavigateTo($"/authors/{page}");
+	}
+}

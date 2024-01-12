@@ -1,4 +1,5 @@
 using Ecommerce.Client;
+using Ecommerce.Client.Services.AuthorsService;
 using Ecommerce.Client.Services.BookService;
 using Ecommerce.Client.Services.CategoryService;
 using Ecommerce.Client.Services.SeriesService;
@@ -19,6 +20,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
+builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 
 
 await builder.Build().RunAsync();
