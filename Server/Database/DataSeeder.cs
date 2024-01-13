@@ -119,13 +119,13 @@ namespace Ecommerce.Server.Database
         {
             return new List<Series>
             {
-                new Series { Id = 1 ,Name = "Stand alone", Description = "Books that are not part of any series", Url = "stand-alone" },
-                new Series { Id = 2 ,Name = "Harry Potter", Description = "The magical adventures of Harry Potter", Url = "harry-potter" },
-                new Series { Id = 3 ,Name = "A Song of Ice and Fire", Description = "Epic fantasy series by George R.R. Martin", Url = "a-song-of-ice-and-fire" },
-                new Series { Id = 4 ,Name = "The Lord of the Rings", Description = "Classic high-fantasy series by J.R.R. Tolkien", Url = "the-lord-of-the-rings" },
-                new Series { Id = 5 ,Name = "Hercule Poirot", Description = "Detective series by Agatha Christie", Url = "hercule-poirot" },
-                new Series { Id = 6 ,Name = "Stephen King Horror Novels", Description = "Horror novels by Stephen King", Url = "stephen-king-horror-novels" },
-                new Series { Id = 7 ,Name = "Foundation", Description = "Sci-fi series by Isaac Asimov", Url = "foundation" },
+                new Series { Id = 1 ,Name = "Stand alone", Description = "Books that are not part of any series", Url = "stand-alone", AuthorId = 1 },
+                new Series { Id = 2 ,Name = "Harry Potter", Description = "The magical adventures of Harry Potter", Url = "harry-potter", AuthorId = 2 },
+                new Series { Id = 3 ,Name = "A Song of Ice and Fire", Description = "Epic fantasy series by George R.R. Martin", Url = "a-song-of-ice-and-fire", AuthorId = 3 },
+                new Series { Id = 4 ,Name = "The Lord of the Rings", Description = "Classic high-fantasy series by J.R.R. Tolkien", Url = "the-lord-of-the-rings", AuthorId = 4 },
+                new Series { Id = 5 ,Name = "Hercule Poirot", Description = "Detective series by Agatha Christie", Url = "hercule-poirot", AuthorId = 5 },
+                new Series { Id = 6 ,Name = "Stephen King Horror Novels", Description = "Horror novels by Stephen King", Url = "stephen-king-horror-novels", AuthorId = 6 },
+                new Series { Id = 7 ,Name = "Foundation", Description = "Sci-fi series by Isaac Asimov", Url = "foundation", AuthorId = 7 },
             };
         }
         public List<Book> SeedBooks()

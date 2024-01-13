@@ -18,9 +18,18 @@ namespace Ecommerce.Server.Controllers
 		}
 
         [HttpGet]
-		public async Task<ActionResult<ServiceResponse<List<Series>>>> GetSeries()
+		[Route("{page}")]
+		public async Task<ActionResult<ServiceResponse<List<Series>>>> GetSeries(int page)
 		{
-			var response = await seriesService.GetSeries();
+			var response = await seriesService.GetSeries(page);
+			return Ok(response);
+		}
+
+		[HttpGet]
+		[Route("series/{name}")]
+		public async Task<ActionResult<ServiceResponse<List<Series>>>> GetSeries(string name)
+		{
+			var response = await seriesService.GetSingleSeries(name);
 			return Ok(response);
 		}
 	}

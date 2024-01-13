@@ -14,5 +14,7 @@ namespace Ecommerce.Client.Services.SeriesService
 		string Message { get; set; }
 
 		Task GetSeries(int page);
+		Task<ServiceResponse<SeriesDTO>> GetSingleSeries(string name);
+
 	}
 }

@@ -1,5 +1,9 @@
 ﻿@page "/authors/author/{name}"
 @inject IAuthorsService AuthorsService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>E-Shop | @Author?.Name</PageTitle>
 
 @if (showAlert)
 {
@@ -10,13 +14,80 @@
 }
 else
 {
-    
+
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudContainer Class="d-flex flex-column flex-md-row align-items-center align-items-md-start">
+            <MudImage ObjectFit="ObjectFit.Contain" Src="@Author?.Image" Width="400" Height="400" />
+            <MudContainer MaxWidth="MaxWidth.Medium">
+                <MudStack Spacing="2" AlignItems="AlignItems.Start">
+                    <MudText Typo="Typo.h2">@Author?.Name</MudText>
+                    <MudText Typo="Typo.body1">@Author?.BiographyText</MudText>
+                </MudStack>
+                <MudDivider DividerType="DividerType.FullWidth"/>
+            </MudContainer>
+        </MudContainer>
+    </MudContainer>
+
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 mb-5">
+        <MudText Typo="Typo.h4">Series</MudText>
+        <MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color: #212121; border-width: 2px;" />
+        @if (Series == null || Series.Count() == 0)
+        {
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Left">Author has no series</MudAlert>
+        }
+        else
+        {
+            <MudStack Row="true" Class="flex-wrap">
+                @foreach (var series in Series)
+                {
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="m-2 p-2" Href="@($"/series/{series.Url}")">@series.Name</MudButton>
+                }
+            </MudStack>
+        }
+    </MudContainer>
+
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 mb-5">
+        <MudText Typo="Typo.h4">Books</MudText>
+        <MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color: #212121; border-width: 2px;" />
+        @if (Books == null || Books.Count() == 0)
+        {
+            <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Left">Author has no books</MudAlert>
+        }
+        else
+        {
+            <MudStack Row="true" Class="d-flex flex-wrap justify-content-center justify-content-md-start">
+                @foreach (var book in Books)
+                {
+                <MudCard Style="max-width: 250px;" Elevation="4" Class="hover cursor-pointer" onclick="@(() => NavigationManager.NavigateTo($"/books/book/{book.Id}"))">
+                    <MudCardHeader>
+                        <MudImage ObjectFit="ObjectFit.Contain" Src="@book?.DefaultImageUrl" Width="200" Height="200" />
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudLink Typo="Typo.h6" Href="@($"/books/book/{book.Id}")">@book.Title</MudLink>
+                    </MudCardContent>
+                </MudCard>
+                }
+            </MudStack>
+        }
+    </MudContainer>
 }
+
+<style>
+    .hover{
+        transition: transform .2s;
+    }
+
+    .hover:hover {
+        transform: scale(1.1);
+    }
+</style>
 
 @code {
     [Parameter] public string Name { get; set; } = string.Empty;
 
     private Author? Author = new();
+    private List<Series>? Series = new();
+    private List<Book>? Books = new();
     private bool showAlert = false;
     private string Message = string.Empty;
 
@@ -30,7 +101,9 @@ else
         }
         else
         {
-            Author = response.Data;
+            Author = response?.Data?.Author;
+            Books = response?.Data?.Books;
+            Series = response?.Data?.Series;
         }
     }
 }

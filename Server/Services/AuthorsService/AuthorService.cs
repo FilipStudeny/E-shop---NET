@@ -1,18 +1,24 @@
 ﻿using Ecommerce.Server.Database;
+using Ecommerce.Server.Services.BookService;
+using Ecommerce.Server.Services.SeriesService;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
+using Ecommerce.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace Ecommerce.Server.Services.AuthorsService
 {
 	public class AuthorService : IAuthorsService
 	{
 		private readonly DataContext dataContext;
+        private readonly ISeriesService seriesService;
 
-		public AuthorService(DataContext dataContext)
+        public AuthorService(DataContext dataContext, ISeriesService seriesService)
         {
 			this.dataContext = dataContext;
-		}
+            this.seriesService = seriesService;
+        }
 
 
 		public async Task<ServiceResponse<List<Author>>> GetAuthors(int page)
@@ -43,12 +49,12 @@ namespace Ecommerce.Server.Services.AuthorsService
 			};
 		}
 
-		public async Task<ServiceResponse<Author>> GetAuthor(string name)
+		public async Task<ServiceResponse<AuthorDTO>> GetAuthor(string name)
 		{
 			var author = await dataContext.Authors.FirstOrDefaultAsync(author => author.Url == name && author.Visible && !author.Deleted);
 			if (author == null)
 			{
-				return new ServiceResponse<Author>
+				return new ServiceResponse<AuthorDTO>
 				{
 					Data = null,
 					Success = false,
@@ -56,7 +62,19 @@ namespace Ecommerce.Server.Services.AuthorsService
 				};
 			}
 
-			return new ServiceResponse<Author> { Data = author };
+            var authorId = author.Id;
+			var series = await seriesService.GetSeriesByAuthor(authorId);
+			var books = await dataContext.Books.Where(book => book.AuthorId == authorId && book.Visible && !book.Deleted).ToListAsync();
+
+
+            var data = new AuthorDTO
+			{
+				Author = author,
+				Series = series,
+				Books = books
+			};
+
+            return new ServiceResponse<AuthorDTO> { Data = data };
 		}
 
 		public Task<ServiceResponse<bool>> UpdateAuthor(Author author)
@@ -73,5 +91,6 @@ namespace Ecommerce.Server.Services.AuthorsService
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 }

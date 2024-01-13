@@ -1,0 +1,93 @@
+﻿@page "/series/{name}"
+@inject ISeriesService SeriesService
+
+<PageTitle>E-Shop | @Series?.Name</PageTitle>
+
+<MudStack Row="true" Justify="Justify.SpaceBetween">
+    <MudText Typo="Typo.h4">@Series?.Name</MudText>
+    <MudLink Typo="Typo.h4" Href="@($"/authors/author/{Author?.Url}")">@Author?.Name</MudLink>
+</MudStack>
+<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+
+
+@if (showAlert)
+{
+    <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@Message</MudAlert>
+    <MudText Typo="Typo.h4" Class="mt-5 text-center">
+        Go back to <MudLink Typo="Typo.h4" Href="/">front page</MudLink>
+    </MudText>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudText Typo="Typo.body1" Class="mt-2 mb-2">@Series?.Description</MudText>
+    </MudContainer>
+
+
+    @if (LoadingBooks)
+    {
+        <MudContainer Class="d-flex flex-row justify-content-evenly align-items-center">
+            <MudText Typo="Typo.h2" Class="mb-2">Loading books ...</MudText>
+            <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+        </MudContainer>
+    }
+
+    @if(Books?.Count == 0 && !LoadingBooks)
+    {
+        <MudAlert Severity="Severity.Normal" Variant="Variant.Filled" Square="true" Class="my-5">Series doesn't have any books.</MudAlert>
+    }
+    else
+    {
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-5 mb-5">
+            <MudTable Elevation="4" Items="@Books" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info" Virtualize="true">
+                <HeaderContent>
+                    <MudTh Style="width: 150px;">Book cover</MudTh>
+                    <MudTh>Book title</MudTh>
+                    <MudTh Style="width: 120px;">Page count</MudTh>
+                    <MudTh Style="width: 120px;">Book order</MudTh>
+                    <MudTh Style="width: 150px;"></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Book cover"><MudImage ObjectFit="ObjectFit.Contain" Src="@context.DefaultImageUrl" Width="100" Height="100" /></MudTd>
+                    <MudTd DataLabel="Book title"><MudText Typo="Typo.h6">@context.Title</MudText></MudTd>
+                    <MudTd DataLabel="Page count"><MudText Align="Align.Center" Typo="Typo.body1">@context.PageCount</MudText></MudTd>
+                    <MudTd DataLabel="Book order"><MudText Align="Align.Center" Typo="Typo.body1">@context.SeriesOrder</MudText></MudTd>
+                    <MudTd DataLabel=""><MudButton Variant="Variant.Text" Color="Color.Primary" Href="@($"/books/book/{context.Id}")">Show more</MudButton></MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudContainer>
+    }
+
+
+}
+
+@code {
+    [Parameter] public string Name { get; set; } = string.Empty;
+
+    private bool _loading;
+    private bool LoadingBooks = true;
+
+    private Author? Author = new();
+    private Series Series = new();
+    private List<Book>? Books = new();
+    private bool showAlert = false;
+    private string Message = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoadingBooks = true;
+        var response = await SeriesService.GetSingleSeries(Name);
+        if (!response.Success)
+        {
+            showAlert = true;
+            Message = response.Message;
+        }
+        else
+        {
+            Author = response?.Data?.Author;
+            Books = response?.Data?.Books;
+            Series = response?.Data?.Series!;
+        }
+        LoadingBooks = false;
+    }
+}

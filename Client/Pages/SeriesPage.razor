@@ -1,0 +1,49 @@
+﻿@page "/series/{page:int}"
+
+
+@inject ISeriesService SeriesService
+@inject NavigationManager NavigationManager
+
+<PageTitle>E-Shop | Series</PageTitle>
+
+@if (showAlert)
+{
+	<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@Message</MudAlert>
+	<MudText Typo="Typo.h4" Class="mt-5 text-center">
+		Go back to <MudLink Typo="Typo.h4" Href="/">front page</MudLink>
+	</MudText>
+
+}
+else
+{
+	<SeriesList/>
+
+	@if (SeriesService.Series.Count != 0 && SeriesService.PageCount != 1)
+	{
+		<div class="d-flex flex-column align-center mt-5 mb-5">
+			<MudPagination Count="SeriesService.PageCount" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
+		</div>
+	}
+}
+
+
+
+
+@code {
+	[Parameter] public int Page { get; set; }
+	[Parameter] public string Category { get; set; } = string.Empty;
+	private string Message { get; set; } = string.Empty;
+	private bool showAlert = false;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		
+		await SeriesService.GetSeries(Page);
+	}
+
+	private void GoToPage(int page)
+	{
+		Page = page;
+		NavigationManager.NavigateTo($"/series/{page}");
+	}
+}

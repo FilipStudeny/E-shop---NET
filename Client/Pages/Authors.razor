@@ -17,9 +17,9 @@ else
 {
 	<AuthorsList/>
 
-	@if (AuthorsService.Authors.Count != 0)
+	@if (AuthorsService.Authors.Count != 0 && AuthorsService.PageCount != 1)
 	{
-		<div class="d-flex flex-column align-center mt-5">
+		<div class="d-flex flex-column align-center mt-5 mb-5">
 			<MudPagination Count="AuthorsService.PageCount" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
 		</div>
 	}

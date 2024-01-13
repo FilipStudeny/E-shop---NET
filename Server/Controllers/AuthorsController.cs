@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Server.Services.AuthorsService;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
+using Ecommerce.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Server.Controllers
@@ -27,7 +28,7 @@ namespace Ecommerce.Server.Controllers
 
 		[HttpGet]
 		[Route("author/{name}")]
-		public async Task<ActionResult<ServiceResponse<Author>>> GetAuthor(string name)
+		public async Task<ActionResult<ServiceResponse<AuthorDTO>>> GetAuthor(string name)
 		{
 			var response = await authorsService.GetAuthor(name);
 			return Ok(response);

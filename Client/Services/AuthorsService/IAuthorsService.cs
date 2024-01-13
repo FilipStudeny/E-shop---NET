@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Shared.Books;
 using Ecommerce.Shared;
+using Ecommerce.Shared.DTOs;
 
 namespace Ecommerce.Client.Services.AuthorsService
 {
@@ -13,6 +14,6 @@ namespace Ecommerce.Client.Services.AuthorsService
 		string Message { get; set; }
 
 		Task<bool> GetAuthors(int Page);
-		Task<ServiceResponse<Author>> GetAuthor(string Name);
+		Task<ServiceResponse<AuthorDTO>> GetAuthor(string Name);
 	}
 }

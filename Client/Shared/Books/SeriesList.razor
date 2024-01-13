@@ -1,0 +1,36 @@
+﻿@inject ISeriesService SeriesService
+@implements IDisposable
+
+<MudText Typo="Typo.h4">Series</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+
+@if (SeriesService.Series.Count == 0)
+{
+	<MudContainer Class="d-flex flex-row justify-content-evenly align-items-center">
+		<MudText Typo="Typo.h2" Class="mb-2">@SeriesService.Message</MudText>
+		<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+	</MudContainer>
+}
+else
+{
+	<MudStack Row="true" Spacing="2" Justify="Justify.FlexStart" Class="flex-wrap">
+		@foreach (var series in SeriesService.Series)
+		{
+			<MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="@($"/series/{series.Url}")">@series.Name</MudButton>
+		}
+	</MudStack>
+}
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		SeriesService.OnChange += StateHasChanged;
+	}
+
+	public void Dispose()
+	{
+		SeriesService.OnChange -= StateHasChanged;
+	}
+
+}

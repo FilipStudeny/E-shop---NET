@@ -28,7 +28,7 @@ else
 				<MudDivider DividerType="DividerType.Middle" Class="mt-1 mb-1" Style="border-color:#212121; border-width: 2px;" />
 				<MudStack Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start" Class="px-1 m-0" Style="height: 100%;">
 					<MudLink Typo="Typo.h6" Style="word-wrap: break-word;" Href="@($"/books/book/{book.Id}")">@book.Title</MudLink>
-					<MudLink Typo="Typo.subtitle2" Style="word-wrap: break-word;" Href="@($"/autors/author/{book.Author.Url}")">@book.Author.Name</MudLink>
+					<MudLink Typo="Typo.subtitle2" Style="word-wrap: break-word;" Href="@($"/authors/author/{book?.Author?.Url}")">@book?.Author?.Name</MudLink>
 				</MudStack>
 					<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 1px;" />
 					<MudText Typo="Typo.subtitle1" Color="Color.Success" Align="Align.Right" Class="mx-2"><b>$@GetBookPrice(book)</b></MudText>

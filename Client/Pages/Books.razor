@@ -20,9 +20,9 @@ else
 	<CategoryList />
 	<BooksList />
 
-	@if(BookService.Books.Count != 0)
+	@if (BookService.Books.Count != 0 && BookService.PageCount != 1)
 	{
-		<div class="d-flex flex-column align-center mt-5">
+		<div class="d-flex flex-column align-center mt-5 mb-5">
 			<MudPagination Count="BookService.PageCount" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
 		</div>
 	}

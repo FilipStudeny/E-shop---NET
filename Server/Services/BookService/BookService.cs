@@ -11,13 +11,11 @@ namespace Ecommerce.Server.Services.BookService
     public class BookService : IBookService
     {
         private readonly DataContext dataContext;
-        private readonly ICategoryService categoryService;
         private readonly ISeriesService seriesService;
 
-        public BookService(DataContext dataContext, ICategoryService categoryService, ISeriesService seriesService)
+        public BookService(DataContext dataContext, ISeriesService seriesService)
         {
             this.dataContext = dataContext;
-            this.categoryService = categoryService;
             this.seriesService = seriesService;
         }
 
@@ -277,5 +275,22 @@ namespace Ecommerce.Server.Services.BookService
                 };
             }
         }
-    }
+
+        public async Task<List<Book>> GetBooksByAuthor(int authorId)
+        {
+            var books = await dataContext.Books.Where(book => book.AuthorId == authorId && book.Visible && !book.Deleted).ToListAsync();
+            if(books == null)
+            {
+                return new();
+            }
+
+            return books;
+        }
+
+		public async Task<List<Book>> GetBooksInSeries(int seriesId)
+		{
+            var books = await dataContext.Books.Where(book => book.SeriesId == seriesId && book.Visible && !book.Deleted).ToListAsync();
+            return books;
+		}
+	}
 }

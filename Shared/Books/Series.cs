@@ -14,7 +14,10 @@ namespace Ecommerce.Shared.Books
         public string Description { get; set; } = string.Empty;
         public string Url { get; set; } = string.Empty;
 
-		public bool Visible { get; set; } = true;
+        public Author? Author { get; set; }
+        public int AuthorId { get; set; }
+
+        public bool Visible { get; set; } = true;
 		public bool Deleted { get; set; } = false;
 
 		[NotMapped]

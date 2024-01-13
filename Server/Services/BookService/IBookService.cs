@@ -13,5 +13,10 @@ namespace Ecommerce.Server.Services.BookService
 		Task<ServiceResponse<List<Book>>> GetBooksByCategory(int id, int page);
 		Task<ServiceResponse<List<Book>>> GetBooksBySeries(int seriesId, int page);
 
-	}
+
+		Task<List<Book>> GetBooksInSeries(int seriesId);
+		Task<List<Book>> GetBooksByAuthor(int authorId);
+
+
+    }
 }

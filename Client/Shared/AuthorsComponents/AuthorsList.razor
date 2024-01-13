@@ -19,14 +19,7 @@ else
 		{
 			<MudCard Elevation="4" Class="cursor-pointer hover-border" onclick="@(() => NavigationManager.NavigateTo($"/authors/author/{author.Url}"))">
 				<MudCardHeader>
-					@if(author.Image == null)
-					{
-						<MudImage ObjectFit="ObjectFit.Contain" Src="@(author.Image)" Width="300" Height="300" />
-					}
-					else
-					{
-						<MudImage ObjectFit="ObjectFit.Contain" Src="https://dummyimage.com/300x300/000/ffffff.jpg" Width="300" Height="300"/>
-					}
+					<MudImage ObjectFit="ObjectFit.Contain" Src="@(author.Image)" Width="300" Height="300" />
 				</MudCardHeader>
 				<MudCardContent>
 					<MudLink Typo="Typo.h6" Href="@($"/authors/author/{author.Url}")">@author.Name</MudLink>

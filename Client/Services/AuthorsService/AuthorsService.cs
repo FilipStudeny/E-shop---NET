@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Client.Pages;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
+using Ecommerce.Shared.DTOs;
 using MudBlazor;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -44,9 +45,9 @@ namespace Ecommerce.Client.Services.AuthorsService
 
 		}
 
-		public async Task<ServiceResponse<Author>> GetAuthor(string Name)
+		public async Task<ServiceResponse<AuthorDTO>> GetAuthor(string Name)
 		{
-			var response = await httpClient.GetFromJsonAsync<ServiceResponse<Author>>($"api/authors/author/{Name}");
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<AuthorDTO>>($"api/authors/author/{Name}");
 			return response!;
 		}
 	}

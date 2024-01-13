@@ -1,6 +1,9 @@
 ﻿using Ecommerce.Server.Database;
+using Ecommerce.Server.Services.AuthorsService;
+using Ecommerce.Server.Services.BookService;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
+using Ecommerce.Shared.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Services.SeriesService
@@ -13,9 +16,19 @@ namespace Ecommerce.Server.Services.SeriesService
         {
 			this.dataContext = dataContext;
 		}
-		public async Task<ServiceResponse<List<Series>>> GetSeries()
+
+		public async Task<ServiceResponse<List<Series>>> GetSeries(int page)
 		{
-			var series = await dataContext.Series.Where(series => series.Visible && !series.Deleted).ToListAsync();
+			var seriesOnPage = 20;
+			var seriesCount = await dataContext.Series.CountAsync(series => !series.Deleted && series.Visible);
+			var pageCount = (int)Math.Ceiling((double)seriesCount / seriesOnPage);
+
+			var series = await dataContext.Series
+					.Where(series => series.Visible && !series.Deleted)
+					.Skip((page - 1) * seriesOnPage)
+					.Take(seriesOnPage)
+					.ToListAsync();
+
 			if(series == null)
 			{
 				return new ServiceResponse<List<Series>>
@@ -25,10 +38,41 @@ namespace Ecommerce.Server.Services.SeriesService
 				};
 			}
 
-			return new ServiceResponse<List<Series>> { Data = series };
+			return new ServiceResponse<List<Series>> { 
+				Data = series,
+				CurrentPage = page,
+				NumberOfPages = pageCount
+			};
 		}
-		
-		public Task<ServiceResponse<Series>> AddSeries(Series category)
+
+		public async Task<ServiceResponse<SeriesDTO>> GetSingleSeries(string name)
+		{
+			var series = await dataContext.Series.FirstOrDefaultAsync(series => series.Url == name && series.Visible && !series.Deleted);
+			if(series == null)
+			{
+				return new ServiceResponse<SeriesDTO>
+				{
+					Data = null,
+					Success = false,
+					Message = "No series found."
+				};
+			}
+
+			var books = await dataContext.Books.Where(book => book.SeriesId == series.Id && book.Visible && !book.Deleted).ToListAsync();
+            var author = await dataContext.Authors.FirstOrDefaultAsync(author => author.Id == series.AuthorId && author.Visible && !author.Deleted);
+
+            return new ServiceResponse<SeriesDTO>
+			{
+				Data = new SeriesDTO
+				{
+					Series = series,
+					Author = author,
+					Books = books
+				}
+			}; 
+		}
+
+        public Task<ServiceResponse<Series>> AddSeries(Series category)
 		{
 			throw new NotImplementedException();
 		}
@@ -78,5 +122,18 @@ namespace Ecommerce.Server.Services.SeriesService
 			return await dataContext.Series.CountAsync(series => !series.Deleted && series.Visible);
 
 		}
+
+        public async Task<List<Series>> GetSeriesByAuthor(int authorId)
+        {
+			var series = await dataContext.Series.Where(series => series.AuthorId == authorId && series.Visible && !series.Deleted).ToListAsync();
+			if(series == null)
+			{
+				return new();
+			}
+
+			return series;
+        }
+
+		
 	}
 }
