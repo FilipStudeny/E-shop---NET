@@ -1,0 +1,67 @@
+﻿@page "/login"
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorageService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [AllowAnonymous]
+
+<PageTitle>E-Shop | Sign in</PageTitle>
+
+<MudText Typo="Typo.h4">Sign in to your profile</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex flex-column justify-content-between">
+	<EditForm Model="@LoginModel" OnValidSubmit="OnValidSubmit" class="mt-5">
+		<DataAnnotationsValidator />
+		<MudStack>
+			<MudTextField Label="Email address" @bind-Value="LoginModel.Email" For="(() => LoginModel.Email)" />
+			<MudTextField Label="Password" @bind-Value="LoginModel.Password" For="(() => LoginModel.Password)" InputType="InputType.Password" />
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				@if (Success)
+				{
+					<MudText Color="Color.Success">@Message</MudText>
+				}
+				else
+				{
+					<MudText Color="Color.Error">@Message</MudText>
+				}
+				<MudSpacer/>
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Sign in</MudButton>
+			</MudStack>
+		</MudStack>
+
+
+	</EditForm>
+
+	<MudStack Style="margin-top: 50px;" Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+		<MudText>Don't have an account yet ?</MudText>
+		<MudButton Href="/register" StartIcon="@Icons.Material.Outlined.AppRegistration" Variant="Variant.Outlined" Color="Color.Primary">
+			Create an account
+		</MudButton>
+	</MudStack>
+</MudContainer>
+
+
+
+@code {
+
+	private LoginDTO LoginModel = new();
+	private bool Success = false;
+	private string Message = string.Empty;
+
+	private async Task OnValidSubmit(EditContext editorContext)
+	{
+		var response = await AuthenticationService.Login(LoginModel);
+		Message = response.Message;
+		Success = response.Success;
+
+		if (response.Success)
+		{
+			Message = response.Message;
+			Success = true;
+			var token = response.Data;
+			await LocalStorageService.SetItemAsync("token", token);
+			await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		}
+	}
+}

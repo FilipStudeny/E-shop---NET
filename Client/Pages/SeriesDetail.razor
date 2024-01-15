@@ -1,6 +1,6 @@
 ﻿@page "/series/{name}"
 @inject ISeriesService SeriesService
-
+@attribute [AllowAnonymous]
 <PageTitle>E-Shop | @Series?.Name</PageTitle>
 
 <MudStack Row="true" Justify="Justify.SpaceBetween">

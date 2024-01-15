@@ -2,7 +2,7 @@
 @inject IAuthorsService AuthorsService
 @inject NavigationManager NavigationManager
 
-
+@attribute [AllowAnonymous]
 <PageTitle>E-Shop | @Author?.Name</PageTitle>
 
 @if (showAlert)

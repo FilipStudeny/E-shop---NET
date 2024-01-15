@@ -1,4 +1,8 @@
-﻿
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+
+@attribute [AllowAnonymous]
 
 <MudPaper Height="50px" Width="100%" Class="d-flex flex-row align-items-center">
     <MudContainer Class="w-100 d-flex flex-row align-items-center">
@@ -6,8 +10,27 @@
         <MudButton Href="/authors/1" Class="p-2 m-2" StartIcon="@Icons.Material.Filled.Person">Authors</MudButton>
         <MudButton Href="/series/1" Class="p-2 m-2" StartIcon="@Icons.Material.Filled.LibraryBooks">Series</MudButton>
 
-        <MudSpacer/>
-        <MudButton Href="/authors/1" Class="p-2 m-2" StartIcon="@Icons.Material.Filled.VerifiedUser">User</MudButton>
+        <MudSpacer />
+
+        <MudMenu ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+            <ActivatorContent>
+                <MudChip Icon="@Icons.Material.Filled.VerifiedUser" Color="Color.Primary">User profile</MudChip>
+            </ActivatorContent>
+            <ChildContent>
+                <AuthorizeView>
+                    <Authorized>
+                        <MudMenuItem Href="/profile" Icon="@Icons.Material.Filled.Dashboard">Profile</MudMenuItem>
+                        <MudMenuItem Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudMenuItem>
+                        <MudDivider DividerType="DividerType.FullWidth" Style="border-width: 2px; border-color:#212121;" />
+                        <MudMenuItem OnClick="@Logout" Icon="@Icons.Material.Filled.Logout">Loggout</MudMenuItem>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudMenuItem Href="/login" Icon="@Icons.Material.Filled.Login">Login</MudMenuItem>
+                        <MudMenuItem Href="/register" Icon="@Icons.Material.Filled.AppRegistration">Register</MudMenuItem>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </ChildContent>
+        </MudMenu>
     </MudContainer>
 
 </MudPaper>
@@ -21,5 +44,13 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("token");
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        await Task.Delay(1);
+        NavigationManager.NavigateTo("/");
     }
 }

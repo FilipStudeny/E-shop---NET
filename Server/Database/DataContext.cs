@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Shared.Books;
+using Ecommerce.Shared.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Database
@@ -12,13 +13,14 @@ namespace Ecommerce.Server.Database
         public DbSet<Category> Category { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Series> Series { get; set; }
+		public DbSet<User> Users { get; set; }
+		public DbSet<Role> Roles { get; set; }
 
-        private DataSeeder dataSeeder = new DataSeeder();
+
+		private DataSeeder dataSeeder = new DataSeeder();
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         
-        
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BookVariant>().HasKey(book => new
@@ -27,15 +29,22 @@ namespace Ecommerce.Server.Database
                 book.BookTypeId
             });
 
-            //Seed data
-            modelBuilder.Entity<Category>().HasData(dataSeeder.SeedCategories());
+			modelBuilder.Entity<User>()
+			    .HasOne(u => u.Role)
+			    .WithMany()
+			    .HasForeignKey(u => u.RoleId)
+			    .IsRequired();
+
+			//Seed data
+			modelBuilder.Entity<Category>().HasData(dataSeeder.SeedCategories());
             modelBuilder.Entity<Author>().HasData(dataSeeder.SeedAuthors());
             modelBuilder.Entity<BookType>().HasData(dataSeeder.SeedBookTypes());
             modelBuilder.Entity<BookVariant>().HasData(dataSeeder.SeedBookVariants());
             modelBuilder.Entity<Series>().HasData(dataSeeder.SeedSeries());
             modelBuilder.Entity<Book>().HasData( dataSeeder.SeedBooks());
+			modelBuilder.Entity<Role>().HasData(dataSeeder.SeedRoles());
 
-        }
+		}
 
-    }
+	}
 }

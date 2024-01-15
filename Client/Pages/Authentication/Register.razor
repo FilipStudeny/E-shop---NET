@@ -1,0 +1,67 @@
+﻿@page "/register"
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorageService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [AllowAnonymous]
+<PageTitle>E-Shop | Create account</PageTitle>
+
+<MudText Typo="Typo.h4">Create new account</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex flex-column justify-content-between">
+	<EditForm Model="@RegisterModel" OnValidSubmit="OnValidSubmit" class="mt-5">
+		<DataAnnotationsValidator />
+		<MudStack>
+			<MudTextField Label="Email address" @bind-Value="RegisterModel.Email" For="(() => RegisterModel.Email)" />
+			<MudTextField Label="Password" HelperText="Choose a strong password" @bind-Value="RegisterModel.Password" For="(() => RegisterModel.Password)" InputType="InputType.Password" />
+			<MudTextField Label="Repeat password" HelperText="Repeat password" @bind-Value="RegisterModel.ConfirmPassword" For="(() => RegisterModel.ConfirmPassword)" InputType="InputType.Password" />
+
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				@if (Success)
+				{
+					<MudText Color="Color.Success">@Message</MudText>
+				}
+				else
+				{
+					<MudText Color="Color.Error">@Message</MudText>
+				}
+				<MudSpacer />
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Create new account</MudButton>
+			</MudStack>
+		</MudStack>
+
+		
+	</EditForm>
+
+	<MudStack Style="margin-top: 50px;" Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+		<MudText>Already have an account ?</MudText>
+		<MudButton Href="/register" StartIcon="@Icons.Material.Outlined.Login" Variant="Variant.Outlined" Color="Color.Primary">
+			Sign in
+		</MudButton>
+	</MudStack>
+</MudContainer>
+
+
+
+@code {
+
+	private RegisterDTO RegisterModel = new();
+	private bool Success = false;
+	private string Message = string.Empty;
+
+	private async Task OnValidSubmit(EditContext editorContext)
+	{
+		var response = await AuthenticationService.Register(RegisterModel);
+		Message = response.Message;
+		Success = response.Success;
+
+		if (response.Success)
+		{
+			Message = response.Message;
+			Success = true;
+			await LocalStorageService.SetItemAsync("token", response.Data);
+			await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		}
+	}
+}

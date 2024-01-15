@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "v67gq+OBwFOUhGnCd8pa8ynejiH6bwzZrWRV+vS6pp8=",
+  "Hash": "b3JAdr1abJMp+qCDzBmoG4c0NFpQjtbhHcdmLFMO+Vw=",
   "Source": "Ecommerce.Server",
   "BasePath": "_content/Ecommerce.Server",
   "Mode": "Default",
@@ -103,6 +103,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.components.webassembly\\7.0.13\\build\\net7.0\\blazor.webassembly.js"
+    },
+    {
+      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Blazored.LocalStorage.dll",
+      "SourceId": "Ecommerce.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Blazored.LocalStorage.dll",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "WasmResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\blazored.localstorage\\4.4.0\\lib\\net7.0\\Blazored.LocalStorage.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\dotnet.7.0.14.cqe6qdne5y.js",
@@ -311,7 +330,26 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.14\\lib\\net7.0\\Microsoft.AspNetCore.Authorization.dll"
+      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.15\\lib\\net7.0\\Microsoft.AspNetCore.Authorization.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Authorization.dll",
+      "SourceId": "Ecommerce.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Components.Authorization.dll",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "WasmResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.components.authorization\\7.0.15\\lib\\net7.0\\Microsoft.AspNetCore.Components.Authorization.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll",
@@ -330,7 +368,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.components\\7.0.14\\lib\\net7.0\\Microsoft.AspNetCore.Components.dll"
+      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.components\\7.0.15\\lib\\net7.0\\Microsoft.AspNetCore.Components.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Forms.dll",
@@ -406,7 +444,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.14\\lib\\net7.0\\Microsoft.AspNetCore.Metadata.dll"
+      "OriginalItemSpec": "C:\\Users\\Filda\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.15\\lib\\net7.0\\Microsoft.AspNetCore.Metadata.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.CSharp.dll",
@@ -4988,6 +5026,25 @@
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.Security.AccessControl.dll"
     },
     {
+      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\allafytfn6.gz",
+      "SourceId": "Ecommerce.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Components.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll"
+    },
+    {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\alxaiwyocv.gz",
       "SourceId": "Ecommerce.Client",
       "SourceType": "Project",
@@ -5843,25 +5900,6 @@
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\netstandard.dll"
     },
     {
-      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\imygq56moz.gz",
-      "SourceId": "Ecommerce.Client",
-      "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Metadata.dll.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll"
-    },
-    {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\ipph3jgg3a.gz",
       "SourceId": "Ecommerce.Client",
       "SourceType": "Project",
@@ -6147,25 +6185,6 @@
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.Runtime.Serialization.Xml.dll"
     },
     {
-      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\mrlt2tyvye.gz",
-      "SourceId": "Ecommerce.Client",
-      "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Authorization.dll.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll"
-    },
-    {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\ms8c9vdf32.gz",
       "SourceId": "Ecommerce.Client",
       "SourceType": "Project",
@@ -6183,6 +6202,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.Threading.Tasks.Dataflow.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\mxpgsdw4yc.gz",
+      "SourceId": "Ecommerce.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Blazored.LocalStorage.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Blazored.LocalStorage.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Blazored.LocalStorage.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\n6a3jyzygk.gz",
@@ -6221,6 +6259,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.Resources.ResourceManager.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\nde54igo6l.gz",
+      "SourceId": "Ecommerce.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Metadata.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\njuoo2dvsm.gz",
@@ -6468,6 +6525,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.Collections.NonGeneric.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\pa778z8g1f.gz",
+      "SourceId": "Ecommerce.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Authorization.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\pddpgbux4a.gz",
@@ -7135,25 +7211,6 @@
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.IO.FileSystem.DriveInfo.dll"
     },
     {
-      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\t9hvyvzrgt.gz",
-      "SourceId": "Ecommerce.Client",
-      "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Components.dll.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll"
-    },
-    {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\tf156qclf6.gz",
       "SourceId": "Ecommerce.Client",
       "SourceType": "Project",
@@ -7456,6 +7513,25 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.Memory.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\vvs8hds6v8.gz",
+      "SourceId": "Ecommerce.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Components.Authorization.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Authorization.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Authorization.dll"
     },
     {
       "Identity": "C:\\Users\\Filda\\Desktop\\.NET\\Ecommerce\\Client\\obj\\Debug\\net7.0\\compressed\\vwl13hzw7a.gz",
