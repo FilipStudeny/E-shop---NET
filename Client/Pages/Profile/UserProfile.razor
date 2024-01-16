@@ -1,9 +1,48 @@
 ﻿@page "/profile"
+@inject IUserService UserService
 
 @attribute [Authorize]
 
-<h3>UserProfile</h3>
+<PageTitle>E-Shop | Profile</PageTitle>
 
-@code {
+<MudText Typo="Typo.h4"></MudText>
+<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
 
+@if (Loading)
+{
+	<MudContainer Class="d-flex flex-row justify-content-evenly align-items-center">
+		<MudText Typo="Typo.h2" Class="mb-2">@Message</MudText>
+			<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+		</MudContainer>
+}
+
+
+	@code {
+
+	private AddressDTO address = new();
+	private bool Success = false;
+	private string Message = string.Empty;
+	private bool Loading = true;
+
+	protected override async Task OnInitializedAsync()
+	{
+		Loading = true;
+		var response = await UserService.GetAddress();
+		Success = response.Success;
+		Message = response.Message;
+		if (response.Success)
+		{
+			if(response.Data != null)
+			{
+				address = response.Data;
+			}
+		}
+		Loading = false;
+	}
+
+
+	private async Task OnValidSubmit(EditContext editorContext)
+	{
+		
+	}
 }

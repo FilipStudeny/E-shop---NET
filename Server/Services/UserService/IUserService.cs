@@ -8,11 +8,15 @@ namespace Ecommerce.Server.Services.UserService
 	{
 		Task<ServiceResponse<bool>> RegisterUser(RegisterDTO registerDTO);
 		Task<ServiceResponse<string>> Login(LoginDTO loginDTO);
-		Task<ServiceResponse<bool>> ChangePassword(string Email, string newPassword);
+        Task<ServiceResponse<AddressDTO>> GetUser();
 
-		int GetUserId();
+        Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO changePasswordDTO);
+        Task<ServiceResponse<bool>> ChangeEmail(ChangeEmailDTO changeEmailDTO);
+        Task<ServiceResponse<bool>> AddAddress(AddressDTO addressDTO);
+
+
+        int GetUserId();
 		string GetUserEmail();
-		Task<User> GetUserByEmail(string Email);
 		Task<bool> UserExists(string Email);
 
 

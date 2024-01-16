@@ -6,9 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="Pages\Profile\UserProfile.razor" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
@@ -22,20 +19,5 @@
     <ProjectReference Include="..\Shared\Ecommerce.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Admin\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Profile\UserProfile.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Profile\UserProfile.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\Profile\UserProfile.razor" />
-  </ItemGroup>
 
 </Project>

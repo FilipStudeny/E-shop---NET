@@ -24,20 +24,176 @@ namespace Ecommerce.Server.Services.UserService
 			this.httpContextAccessor = httpContextAccessor;
 		}
 
+        public async Task<ServiceResponse<string>> Login(LoginDTO loginDTO)
+        {
+            var user = await dataContext.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(user => user.Email.ToLower().Equals(loginDTO.Email.ToLower()));
 
-		public Task<ServiceResponse<bool>> ChangePassword(string Email, string newPassword)
-		{
-			throw new NotImplementedException();
-		}
+            if (user == null)
+            {
+                return new ServiceResponse<string>
+                {
+                    Success = false,
+                    Message = "User not found"
+                };
+            }
 
-		
+            if (!VerifyPasswordHash(loginDTO.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                return new ServiceResponse<string>
+                {
+                    Success = false,
+                    Message = "Wrong password or email address"
+                };
+            }
 
-		public Task<User> GetUserByEmail(string Email)
-		{
-			throw new NotImplementedException();
-		}
+            return new ServiceResponse<string> { Data = CreateToken(user) };
 
-		public string GetUserEmail()
+        }
+
+        public async Task<ServiceResponse<bool>> RegisterUser(RegisterDTO registerDTO)
+        {
+            if (await UserExists(registerDTO.Email))
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Email address already in use."
+                };
+            }
+
+            if (!registerDTO.Password.Equals(registerDTO.ConfirmPassword))
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Passwords do not match"
+                };
+            }
+
+            CreatePasswordHash(registerDTO.Password, out byte[] PasswordHash, out byte[] PasswordSalt);
+            var customerRole = await dataContext.Roles.FirstOrDefaultAsync(role => role.Id == 3);
+            if (customerRole == null)
+            {
+                // Handle the case where the "Customer" role is not found
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Role not found. Please check role configuration."
+                };
+            }
+
+            var user = new User
+            {
+                Email = registerDTO.Email,
+                PasswordHash = PasswordHash,
+                PasswordSalt = PasswordSalt,
+                Role = customerRole,
+                RoleId = customerRole.Id
+            };
+
+            dataContext.Users.Add(user);
+            await dataContext.SaveChangesAsync();
+
+            return new ServiceResponse<bool> { Data = true, Message = "Registration succesfull" };
+        }
+
+        public async Task<ServiceResponse<bool>> AddAddress(AddressDTO addressDTO)
+        {
+            var userId = GetUserId();
+            var user = await dataContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "Couldn't update address user not found"
+                };
+            }
+
+            user.Street = addressDTO.Street;
+            user.Zip = addressDTO.Zip;
+            user.City = addressDTO.City;
+            user.FirstName = addressDTO.FirstName;
+            user.LastName = addressDTO.LastName;
+            user.Country = addressDTO.Country;
+            await dataContext.SaveChangesAsync();
+
+            return new ServiceResponse<bool> { Data = true, Message = "Shipping address changed succesfully" };
+
+        }
+
+        public async Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+			var user = await dataContext.Users.FindAsync(changePasswordDTO.UserId);
+			if (user == null)
+			{
+				return new ServiceResponse<bool>
+				{
+					Success = false,
+					Message = "Couldn't update password user not found"
+				};
+			}
+
+			CreatePasswordHash(changePasswordDTO.Password, out var PasswordHash, out var PassworSalt);
+			user.PasswordSalt = PassworSalt;
+			user.PasswordHash = PasswordHash;
+			await dataContext.SaveChangesAsync();
+
+			return new ServiceResponse<bool> { Data = true, Message = "Password has been changed" };
+        }
+
+        public async Task<ServiceResponse<bool>> ChangeEmail(ChangeEmailDTO changeEmailDTO)
+        {
+            var user = await dataContext.Users.FindAsync(changeEmailDTO.UserId);
+            if (user == null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "Couldn't update password user not found"
+                };
+            }
+
+			user.Email = changeEmailDTO.Email;
+            await dataContext.SaveChangesAsync();
+
+            return new ServiceResponse<bool> { Data = true, Message = "Email has been changed" };
+        }
+
+        public async Task<ServiceResponse<AddressDTO>> GetUser()
+        {
+            var user = await dataContext.Users.FindAsync(GetUserId());
+            if (user == null)
+            {
+                return new ServiceResponse<AddressDTO>
+                {
+                    Success = false,
+                    Message = "Couldn't retrieve address, user not foud"
+                };
+            }
+
+            var address = new AddressDTO
+            {
+                City = user.City,
+                Street = user.Street,
+                Zip = user.Zip,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Country = user.Country,
+            };
+
+            return new ServiceResponse<AddressDTO> { Data = address };
+        }
+
+
+
+
+        public string GetUserEmail()
 		{
 			var userEmailString = httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
 			return userEmailString!;
@@ -49,83 +205,7 @@ namespace Ecommerce.Server.Services.UserService
 			return int.Parse(userId!);
 		}
 
-		public async Task<ServiceResponse<string>> Login(LoginDTO loginDTO)
-		{
-			var user = await dataContext.Users
-				.Include(u => u.Role)
-				.FirstOrDefaultAsync(user => user.Email.ToLower().Equals(loginDTO.Email.ToLower()));
-
-			if(user == null)
-			{
-				return new ServiceResponse<string>
-				{
-					Success = false,
-					Message = "User not found"
-				};
-			}
-
-			if(!VerifyPasswordHash(loginDTO.Password, user.PasswordHash, user.PasswordSalt))
-			{
-				return new ServiceResponse<string>
-				{
-					Success = false,
-					Message = "Wrong password or email address"
-				};
-			}
-
-			return new ServiceResponse<string> { Data = CreateToken(user) };
-
-		}
-
-		public async Task<ServiceResponse<bool>> RegisterUser(RegisterDTO registerDTO)
-		{
-			if(await UserExists(registerDTO.Email))
-			{
-				return new ServiceResponse<bool>
-				{
-					Data = false,
-					Success = false,
-					Message = "Email address already in use."
-				};
-			}
-
-			if (!registerDTO.Password.Equals(registerDTO.ConfirmPassword))
-			{
-				return new ServiceResponse<bool>
-				{
-					Data = false,
-					Success = false,
-					Message = "Passwords do not match"
-				};
-			}
-
-			CreatePasswordHash(registerDTO.Password, out byte[] PasswordHash, out byte[] PasswordSalt);
-			var customerRole = await dataContext.Roles.FirstOrDefaultAsync(role => role.Id == 3);
-			if (customerRole == null)
-			{
-				// Handle the case where the "Customer" role is not found
-				return new ServiceResponse<bool>
-				{
-					Data = false,
-					Success = false,
-					Message = "Role not found. Please check role configuration."
-				};
-			}
-
-			var user = new User
-			{
-				Email = registerDTO.Email,
-				PasswordHash = PasswordHash,
-				PasswordSalt = PasswordSalt,
-				Role = customerRole,
-				RoleId = customerRole.Id
-			};
-
-			dataContext.Users.Add(user);
-			await dataContext.SaveChangesAsync();
-
-			return new ServiceResponse<bool> { Data = true, Message = "Registration succesfull" };
-		}
+		
 
 		public async Task<bool> UserExists(string Email)
 		{
@@ -168,5 +248,7 @@ namespace Ecommerce.Server.Services.UserService
 			var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 			return jwt;
 		}
-	}
+
+
+    }
 }
