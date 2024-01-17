@@ -48,6 +48,7 @@ namespace Ecommerce.Server.Services.UserService
                 };
             }
 
+ 
             return new ServiceResponse<string> { Data = CreateToken(user) };
 
         }
@@ -123,13 +124,14 @@ namespace Ecommerce.Server.Services.UserService
             user.Country = addressDTO.Country;
             await dataContext.SaveChangesAsync();
 
-            return new ServiceResponse<bool> { Data = true, Message = "Shipping address changed succesfully" };
+            return new ServiceResponse<bool> { Data = true, Message = "Shipping address changed." };
 
         }
 
         public async Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO changePasswordDTO)
         {
-			var user = await dataContext.Users.FindAsync(changePasswordDTO.UserId);
+			var userId = GetUserId();
+			var user = await dataContext.Users.FindAsync(userId);
 			if (user == null)
 			{
 				return new ServiceResponse<bool>
@@ -149,13 +151,14 @@ namespace Ecommerce.Server.Services.UserService
 
         public async Task<ServiceResponse<bool>> ChangeEmail(ChangeEmailDTO changeEmailDTO)
         {
-            var user = await dataContext.Users.FindAsync(changeEmailDTO.UserId);
+            var userId = GetUserId();
+            var user = await dataContext.Users.FindAsync(userId);
             if (user == null)
             {
                 return new ServiceResponse<bool>
                 {
                     Success = false,
-                    Message = "Couldn't update password user not found"
+                    Message = "Couldn't update email address user not found"
                 };
             }
 
@@ -233,7 +236,7 @@ namespace Ecommerce.Server.Services.UserService
 			var claims = new List<Claim>
 			{
 				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-				new Claim(ClaimTypes.Email, user.Email),
+				new Claim(ClaimTypes.Name, user.Email),
 				new Claim(ClaimTypes.Role, user.Role.Name),
 			};
 

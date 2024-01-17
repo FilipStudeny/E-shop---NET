@@ -26,7 +26,9 @@ namespace Ecommerce.Server.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<bool>>> AddShippingAddress(AddressDTO addressDTO)
+		[Route("change/address")]
+
+		public async Task<ActionResult<ServiceResponse<bool>>> AddShippingAddress(AddressDTO addressDTO)
         {
             var response = await userService.AddAddress(addressDTO);
             return Ok(response);

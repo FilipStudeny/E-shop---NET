@@ -1,13 +1,18 @@
-﻿@inject IBookService BookService
+﻿@inject NavigationManager NavigationManager
+@inject IBookService BookService
 
 <div class="input-group mx-2">
-    <input @bind-value="searchString" @bind-value:event="oninput" type="search" list="books" @onkeyup="SearchForBooks"
+    <input @bind-value="searchString" @bind-value:event="oninput" type="search" list="books" @onkeyup="HandleSearch"
            class="form-control" placeholder="Search for books ..." @ref="inputSearch" />
     <datalist id="books">
-        @foreach (var suggestion in suggestions)
+        @if(suggestions != null && suggestions.Count != 0)
         {
-            <option>@suggestion</option>
+            foreach (var suggestion in suggestions)
+            {
+                <option>@suggestion</option>
+            }
         }
+        
     </datalist>
     <div class="input-group-append">
         <button class="btn btn-primary"><span class="oi oi-magnifying-glass"></span></button>
@@ -17,7 +22,7 @@
 
 @code {
     private string searchString = string.Empty;
-    private List<string> suggestions = new();
+    private List<string> suggestions;
     protected ElementReference inputSearch;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -28,11 +33,20 @@
         }
     }
 
-    private async Task SearchForBooks(KeyboardEventArgs args)
+    private void SearchForBooks()
     {
-        
-        suggestions = await BookService.GetSuggestedBooks(searchString);
-        
+        NavigationManager.NavigateTo($"/search/{searchString}/1");
+    }
+
+    public async Task HandleSearch(KeyboardEventArgs args)
+    {
+        if (args.Key is null or "Enter")
+        {
+            SearchForBooks();
+        }
+        else if (searchString.Length > 1)
+        {
+            suggestions = await BookService.GetSuggestedBooks(searchString);
+        }
     }
 }
-

@@ -23,20 +23,38 @@ namespace Ecommerce.Client.Services.UserService
             return response;
         }
 
-        public Task<ServiceResponse<bool>> UpdateAddress()
+        public async Task<ServiceResponse<bool>> UpdateAddress(AddressDTO addressDTO)
         {
-            throw new NotImplementedException();
-        }
+			var response = await httpClient.PutAsJsonAsync("api/user/change/address", addressDTO);
+			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to change shipping address, try again later" };
+			}
+			return responseData;
+		}
 
-        public Task<ServiceResponse<bool>> ChangeEmail(ChangeEmailDTO emailDTO)
+        public async Task<ServiceResponse<bool>> ChangeEmail(ChangeEmailDTO emailDTO)
         {
-            throw new NotImplementedException();
-        }
+			var response = await httpClient.PutAsJsonAsync("api/user/change/email", emailDTO);
+            var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to change email address, try again later" };
+			}
+			return responseData;
+		}
 
-        public Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO passwordDTO)
+        public async Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO passwordDTO)
         {
-            throw new NotImplementedException();
-        }
+			var response = await httpClient.PutAsJsonAsync("api/user/change/password", passwordDTO);
+			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Error changing password, try again later" };
+			}
+			return responseData;
+		}
 
         
     }

@@ -1,48 +1,176 @@
 ﻿@page "/profile"
 @inject IUserService UserService
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorageService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @attribute [Authorize]
 
 <PageTitle>E-Shop | Profile</PageTitle>
 
-<MudText Typo="Typo.h4"></MudText>
-<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+<AuthorizeView>
+	<Authorized>
+		<MudText Typo="Typo.h4">@context?.User?.Identity?.Name</MudText>
+		<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+	</Authorized>
+</AuthorizeView>
 
 @if (Loading)
 {
 	<MudContainer Class="d-flex flex-row justify-content-evenly align-items-center">
-		<MudText Typo="Typo.h2" Class="mb-2">@Message</MudText>
-			<MudProgressCircular Color="Color.Info" Indeterminate="true" />
-		</MudContainer>
+		<MudText Typo="Typo.h2" Class="mb-2">Loading ...</MudText>
+		<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+	</MudContainer>
 }
 
 
-	@code {
+<MudTabs Elevation="2" ApplyEffectsToContainer="true" PanelClass="pa-6">
+	<MudTabPanel Text="Orders" Icon="@Icons.Material.Filled.CreditCard" ToolTip="View your orders">
+		<MudText>Orders 1</MudText>
+	</MudTabPanel>
+	<MudTabPanel Text="Shipping address" Icon="@Icons.Material.Filled.House" ToolTip="Change your shipping address">
+		<MudText>Change Shipping address</MudText>
+		<EditForm Model="@addressModel" OnValidSubmit="SubmitAddress" class="mt-5">
+			<DataAnnotationsValidator />
+			<MudStack>
+				<MudStack Row="true" Class="flex-wrap">
+					<MudTextField Label="Firstname" @bind-Value="addressModel.FirstName" For="(() => addressModel.FirstName)" />
+					<MudTextField Label="Lastname" @bind-Value="addressModel.LastName" For="(() => addressModel.LastName)" />
+				</MudStack>
+				<MudTextField Label="Country" @bind-Value="addressModel.Country" For="(() => addressModel.Country)" />
+				<MudTextField Label="City" @bind-Value="addressModel.City" For="(() => addressModel.City)" />
+				<MudStack Row="true" Class="flex-wrap">
+					<MudTextField Label="Street" @bind-Value="addressModel.Street" For="(() => addressModel.Street)" />
+					<MudTextField Label="ZIP" @bind-Value="addressModel.Zip" For="(() => addressModel.Zip)" />
+				</MudStack>
 
-	private AddressDTO address = new();
-	private bool Success = false;
-	private string Message = string.Empty;
+				<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+					<MudSpacer />
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Change shipping address</MudButton>
+				</MudStack>
+			</MudStack>
+			@if (AddressSucces)
+			{
+				<MudText Color="Color.Success">@AddressMessage</MudText>
+			}
+			else
+			{
+				<MudText Color="Color.Error">@AddressMessage</MudText>
+			}
+		</EditForm>
+	</MudTabPanel>
+	<MudTabPanel Text="Settings" Icon="@Icons.Material.Filled.Settings" ToolTip="Change profile settings">
+		<MudText>Change Email address</MudText>
+		<EditForm Model="@changeEmailModel" OnValidSubmit="SubmitEmail" class="mt-5">
+			<DataAnnotationsValidator />
+			<MudStack>
+				<MudTextField Label="Email address" @bind-Value="changeEmailModel.Email" For="(() => changeEmailModel.Email)" />
+				<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="flex-wrap">
+					<MudAlert Severity="Severity.Warning">Please note: Changing your email address will require you to sign in again.</MudAlert>					
+					<MudSpacer />
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Change email address</MudButton>
+				</MudStack>
+			</MudStack>
+			@if (EmailSuccess)
+			{
+				<MudText Color="Color.Success">@EmailMessage</MudText>
+			}
+			else
+			{
+				<MudText Color="Color.Error">@EmailMessage</MudText>
+			}
+		</EditForm>
+
+		<MudDivider DividerType="DividerType.FullWidth" Class="mt-5 mb-5" Style="border-color:#212121; border-width: 1px;" />
+
+		<MudText>Change Password</MudText>
+		<EditForm Model="@changePasswordModel" OnValidSubmit="SubmitPassword" class="mt-5">
+			<DataAnnotationsValidator />
+			<MudStack>
+				<MudTextField Label="Password" @bind-Value="changePasswordModel.Password" InputType="InputType.Password" For="(() => changePasswordModel.Password)" />
+				<MudTextField Label="Confirm password" @bind-Value="changePasswordModel.ComparePassword" InputType="InputType.Password" For="(() => changePasswordModel.ComparePassword)" />
+				<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+					<MudSpacer />
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Update password</MudButton>
+				</MudStack>
+			</MudStack>
+			@if (PasswordSuccess)
+			{
+				<MudText Color="Color.Success">@PasswordMessage</MudText>
+			}
+			else
+			{
+				<MudText Color="Color.Error">@PasswordMessage</MudText>
+			}
+		</EditForm>
+	</MudTabPanel>
+</MudTabs>
+
+
+@code {
+
+	private ChangeEmailDTO changeEmailModel = new();
+	private ChangePasswordDTO changePasswordModel = new();
+	private AddressDTO addressModel = new();
+
+
+
 	private bool Loading = true;
+
+	private bool AddressSucces = false;
+	private string AddressMessage = string.Empty;
+
+	private bool EmailSuccess = false;
+	private string EmailMessage = string.Empty;
+
+	private bool PasswordSuccess = false;
+	private string PasswordMessage = string.Empty;
 
 	protected override async Task OnInitializedAsync()
 	{
 		Loading = true;
 		var response = await UserService.GetAddress();
-		Success = response.Success;
-		Message = response.Message;
+		AddressSucces = response.Success;
+		AddressMessage = response.Message;
 		if (response.Success)
 		{
 			if(response.Data != null)
 			{
-				address = response.Data;
+				addressModel = response.Data;
 			}
 		}
 		Loading = false;
 	}
 
-
-	private async Task OnValidSubmit(EditContext editorContext)
+	private async Task SubmitAddress()
 	{
-		
+		var response = await UserService.UpdateAddress(addressModel);
+		AddressMessage = response.Message;
+		AddressSucces = response.Success;
+	}
+
+
+	private async Task SubmitEmail()
+	{
+		var response = await UserService.ChangeEmail(changeEmailModel);
+		EmailMessage = response.Message;
+		EmailSuccess = response.Success;
+
+		if (response.Success)
+		{
+			EmailMessage = response.Message;
+			EmailSuccess = true;
+			await LocalStorageService.RemoveItemAsync("token");
+			await AuthenticationStateProvider.GetAuthenticationStateAsync();
+			NavigationManager.NavigateTo("/login");
+		}
+	}
+
+	private async Task SubmitPassword()
+	{
+		var response = await UserService.ChangePassword(changePasswordModel);
+		PasswordMessage = response.Message;
+		PasswordSuccess = response.Success;
 	}
 }

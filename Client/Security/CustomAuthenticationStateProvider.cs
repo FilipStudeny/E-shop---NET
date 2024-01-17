@@ -54,14 +54,7 @@ namespace Ecommerce.Client.Security
 			return state;
 		}
 
-		public async Task Loggout()
-		{
-			await localStorageService.RemoveItemAsync("token");
-
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal())));
-		}
-
-
+		
 		// Liberated code
 		private byte[] ParseBase64WithoutPadding(string base64)
 		{

@@ -200,8 +200,6 @@ namespace Ecommerce.Server.Services.BookService
             return await dataContext.Books
                 .Where(book =>
                 book.Title.ToLower().Contains(search.ToLower())
-                || book.Description.ToLower().Contains(search.ToLower())
-                || book.ShortDescription.ToLower().Contains(search.ToLower())
                 && book.Visible && !book.Deleted)
                 .ToListAsync();
 
