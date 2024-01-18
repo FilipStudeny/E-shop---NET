@@ -14,5 +14,6 @@ namespace Ecommerce.Shared
 
         public int NumberOfPages { get; set; } = 1;
         public int CurrentPage { get; set; } = 1;
+        public int ItemCount { get; set; } = 0;
     }
 }

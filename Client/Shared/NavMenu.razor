@@ -20,7 +20,9 @@
                 <AuthorizeView>
                     <Authorized>
                         <MudMenuItem Href="/profile" Icon="@Icons.Material.Filled.Dashboard">Profile</MudMenuItem>
-                        <MudMenuItem Href="/settings" Icon="@Icons.Material.Filled.Settings">Settings</MudMenuItem>
+                        <AuthorizeView Roles="Admin" Context="AdminContext">
+                            <MudMenuItem Href="/admin/1" Icon="@Icons.Material.Filled.AdminPanelSettings">Administration</MudMenuItem>
+                        </AuthorizeView>
                         <MudDivider DividerType="DividerType.FullWidth" Style="border-width: 2px; border-color:#212121;" />
                         <MudMenuItem OnClick="@Logout" Icon="@Icons.Material.Filled.Logout">Loggout</MudMenuItem>
                     </Authorized>

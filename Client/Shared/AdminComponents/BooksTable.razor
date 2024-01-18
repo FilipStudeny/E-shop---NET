@@ -1,0 +1,44 @@
+﻿@inject IBookService BookService
+
+<MudTable CurrentPage="1" ServerData="@(new Func<TableState, Task<TableData<Book>>>(LoadData))" @ref="table">
+	<HeaderContent>
+		<MudTh>Id</MudTh>
+		<MudTh>Image</MudTh>
+		<MudTh>Title</MudTh>
+		<MudTh>Author</MudTh>
+		<MudTh>Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Id">@context.Id</MudTd>
+		<MudTd DataLabel="Image">@context.DefaultImageUrl</MudTd>
+		<MudTd DataLabel="Title">@context.Title</MudTd>
+		<MudTd DataLabel="Author">@context.Author?.Name</MudTd>
+		<MudTd DataLabel="Actions"><MudButton>View book</MudButton></MudTd>
+	</RowTemplate>
+	<PagerContent>
+		<MudTablePager />
+	</PagerContent>
+</MudTable>
+
+	@code {
+	private IEnumerable<Book> pagedData;
+	private MudTable<Book> table;
+	private int totalItems;
+
+
+	private async Task<TableData<Book>> LoadData(TableState state)
+	{
+		var page = state.Page == 0 ? BookService.CurrentPage : 1;
+		await BookService.GetBooks(page, true);
+
+		pagedData = BookService.Books;
+		totalItems = BookService.BookCount;
+
+		return new TableData<Book>()
+		{
+				TotalItems = totalItems,
+				Items = pagedData
+		};
+	}
+    
+}

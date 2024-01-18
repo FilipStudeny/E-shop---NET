@@ -2,6 +2,7 @@
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Server.Controllers
@@ -24,6 +25,15 @@ namespace Ecommerce.Server.Controllers
             var response = await bookService.GetBooks(page);
             return Ok(response);
         }
+
+        [HttpGet]
+        [Route("admin/{page}"), Authorize]
+        public async Task<ActionResult<ServiceResponse<List<FeaturedBook>>>> GetAdminBooks(int page = 1)
+        {
+            var response = await bookService.GetBooks(page, true);
+            return Ok(response);
+        }
+
 
         [HttpGet]
         [Route("book/{id}")]

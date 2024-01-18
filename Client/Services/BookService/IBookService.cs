@@ -10,11 +10,12 @@ namespace Ecommerce.Client.Services.BookService
         List<Book> Books { get; set; }
         List<FeaturedBook> FeaturedBooks { get; set; }
 
+        int BookCount { get; set; }
         int CurrentPage { get; set; }
         int PageCount { get; set; } 
         string Message { get; set; }
 
-        Task GetBooks(int page);
+        Task GetBooks(int page, bool evenDeleted = false);
 		Task GetBooksByCategory(int page, int category);
 
 		Task<ServiceResponse<Book>> GetBook(int id);

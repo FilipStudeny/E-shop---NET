@@ -6,7 +6,7 @@ namespace Ecommerce.Server.Services.BookService
 {
     public interface IBookService
     {
-        Task<ServiceResponse<List<Book>>> GetBooks(int page);
+        Task<ServiceResponse<List<Book>>> GetBooks(int page, bool evenDeleted = false);
         Task<ServiceResponse<Book>> GetBook(int id);
         Task<ServiceResponse<List<FeaturedBook>>> GetFeaturedBooks();
         Task<ServiceResponse<List<string>>> GetBookSuggestions(string search);

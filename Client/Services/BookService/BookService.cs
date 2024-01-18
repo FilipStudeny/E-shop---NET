@@ -17,20 +17,26 @@ namespace Ecommerce.Client.Services.BookService
         public int CurrentPage { get; set; }
         public int PageCount { get; set; }
         public string Message { get; set; } = "Loading ...";
+		public int BookCount { get; set; }
 
-        public BookService(HttpClient httpClient)
+		public BookService(HttpClient httpClient)
         {
             this.httpClient = httpClient;
         }
 
-        public async Task GetBooks(int page)
+        public async Task GetBooks(int page, bool evenDeleted = false)
         {
-            var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<Book>>>($"api/books/{page}");
+
+            var response = evenDeleted == false ?
+                await httpClient.GetFromJsonAsync<ServiceResponse<List<Book>>>($"api/books/{page}") :
+                await httpClient.GetFromJsonAsync<ServiceResponse<List<Book>>>($"api/books/admin/{page}");
+
             if (response is { Data: not null })
             {
                 Books = response.Data;
                 CurrentPage = response.CurrentPage;
                 PageCount = response.NumberOfPages;
+                BookCount = response.ItemCount;
             }
 
             if (Books.Count == 0)

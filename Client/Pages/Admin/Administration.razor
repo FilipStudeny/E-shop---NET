@@ -1,0 +1,47 @@
+﻿@page "/admin/{page:int}"
+
+@inject IBookService BookService
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>E-Shop | Books - Administration</PageTitle>
+
+<MudText Typo="Typo.h4">Administration</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Class="my-2" Style="border-color:#212121; border-width: 2px;" />
+
+
+<MudTabs Elevation="2" ApplyEffectsToContainer="true" PanelClass="pa-6">
+	<MudTabPanel Text="Books" Icon="@Icons.Material.Filled.Book" ToolTip="Edit books">
+		<BooksTable/>
+	</MudTabPanel>
+	<MudTabPanel Text="Authors" Icon="@Icons.Material.Filled.Person" ToolTip="Edit authors">
+		<MudText>Authors</MudText>
+	</MudTabPanel>
+	<MudTabPanel Text="Series" Icon="@Icons.Material.Filled.LibraryBooks" ToolTip="Edit series">
+		<MudText>Series</MudText>
+	</MudTabPanel>
+	<MudTabPanel Text="Genres" Icon="@Icons.Material.Filled.Pages" ToolTip="Edit genres">
+		<MudText>Genres</MudText>
+	</MudTabPanel>
+	<MudTabPanel Text="Users" Icon="@Icons.Material.Filled.People" ToolTip="Edit users">
+		<MudText>Users</MudText>
+	</MudTabPanel>
+	<MudTabPanel Text="Orders" Icon="@Icons.Material.Filled.CreditCard" ToolTip="Edit orders">
+		<MudText>Orders</MudText>
+	</MudTabPanel>
+</MudTabs>
+
+
+
+@code {
+	[Parameter] public int Page { get; set; }
+	private string Message { get; set; } = string.Empty;
+	private bool showAlert = false;
+
+	protected override async Task OnInitializedAsync()
+	{
+		BookService.CurrentPage = Page;
+	}
+
+}
