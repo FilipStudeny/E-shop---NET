@@ -12,8 +12,9 @@ namespace Ecommerce.Client.Services.AuthorsService
 		int CurrentPage { get; set; }
 		int PageCount { get; set; }
 		string Message { get; set; }
+		int AuthorsCount { get; set; }
 
-		Task<bool> GetAuthors(int Page);
+		Task<bool> GetAuthors(int Page, bool getAll = false);
 		Task<ServiceResponse<AuthorDTO>> GetAuthor(string Name);
 	}
 }

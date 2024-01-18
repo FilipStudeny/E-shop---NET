@@ -25,6 +25,14 @@ namespace Ecommerce.Server.Controllers
 			return Ok(response);
 		}
 
+		[HttpGet]
+		[Route("admin/{page}")]
+		public async Task<ActionResult<ServiceResponse<List<Author>>>> GetAllAuthors(int page)
+		{
+			var response = await authorsService.GetAuthors(page, true);
+			return Ok(response);
+		}
+
 
 		[HttpGet]
 		[Route("author/{name}")]

@@ -1,5 +1,41 @@
-﻿<h3>AuthorsTable</h3>
+﻿@inject IAuthorsService AuthorsService
 
-@code {
+<MudTable RowsPerPage="7" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<Author>>>(LoadData))" @ref="table">
+	<HeaderContent>
+		<MudTh>Id</MudTh>
+		<MudTh>Image</MudTh>
+		<MudTh>Name</MudTh>
+		<MudTh>Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Id">@context.Id</MudTd>
+			<MudTd DataLabel="Image"><MudImage ObjectFit="ObjectFit.Contain" Alt="@context.Name" Width="100" Height="100" Src="@context.Image" /></MudTd>
+			<MudTd DataLabel="Name"><MudLink Typo="Typo.h6" Href="@($"/authors/author/{context.Url}")">@context.Name</MudLink></MudTd>
+			<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit Author</MudButton></MudTd>
+		</RowTemplate>
+		<PagerContent>
+			<MudTablePager HideRowsPerPage="true" />
+		</PagerContent>
+	</MudTable>
+
+	@code {
+	private IEnumerable<Author>? pagedData;
+	private MudTable<Author>? table;
+	private int totalItems;
+
+	private async Task<TableData<Author>> LoadData(TableState state)
+	{
+		var page = state.Page + 1;
+		await AuthorsService.GetAuthors(page, true);
+
+		pagedData = AuthorsService.Authors;
+		totalItems = AuthorsService.AuthorsCount;
+
+		return new TableData<Author>()
+			{
+				TotalItems = totalItems,
+				Items = pagedData
+			};
+	}
 
 }

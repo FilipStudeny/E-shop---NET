@@ -6,7 +6,7 @@ namespace Ecommerce.Server.Services.AuthorsService
 {
 	public interface IAuthorsService
 	{
-		Task<ServiceResponse<List<Author>>> GetAuthors(int page);
+		Task<ServiceResponse<List<Author>>> GetAuthors(int page, bool getAll = false);
 		Task<ServiceResponse<AuthorDTO>> GetAuthor(string name);
 		Task<ServiceResponse<bool>> AddAuthor(Author author);
 		Task<ServiceResponse<bool>> UpdateAuthor(Author author);

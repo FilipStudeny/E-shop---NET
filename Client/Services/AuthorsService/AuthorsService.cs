@@ -17,6 +17,8 @@ namespace Ecommerce.Client.Services.AuthorsService
 		public int PageCount { get; set; }
 		public string Message { get; set; } = string.Empty;
 
+		public int AuthorsCount { get; set; }
+
 		public event Action? OnChange;
 
         public AuthorsService(HttpClient httpClient)
@@ -24,14 +26,17 @@ namespace Ecommerce.Client.Services.AuthorsService
 			this.httpClient = httpClient;
 		}
 
-        public async Task<bool> GetAuthors(int Page)
+        public async Task<bool> GetAuthors(int Page, bool getAll = false)
 		{
-			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<Author>>>($"api/authors/{Page}");
+			var url = getAll == false ? $"api/authors/{Page}" : $"api/authors/admin/{Page}";
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<Author>>>(url);
+
 			if (response is { Data: not null })
 			{
 				Authors = response.Data;
 				CurrentPage = response.CurrentPage;
 				PageCount = response.NumberOfPages;
+				AuthorsCount = response.ItemCount;
 			}
 
 			if (response?.Success == false)

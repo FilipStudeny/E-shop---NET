@@ -21,18 +21,25 @@ namespace Ecommerce.Server.Services.AuthorsService
         }
 
 
-		public async Task<ServiceResponse<List<Author>>> GetAuthors(int page)
+		public async Task<ServiceResponse<List<Author>>> GetAuthors(int page, bool getAll = false)
 		{
 			var authorsOnPage = 9;
-			var authorCount = await dataContext.Authors.CountAsync(author => !author.Deleted && author.Visible);
+			var authorCount = getAll == false ?
+				await dataContext.Authors.CountAsync(author => !author.Deleted && author.Visible) :
+				await dataContext.Authors.CountAsync();
+
 			var pageCount = (int)Math.Ceiling((double)authorCount / authorsOnPage);
 
-			var authors = await dataContext.Authors
-				.Where(author => author.Visible && !author.Deleted)
-				.Skip((page - 1) * authorsOnPage)
-				.Take(authorsOnPage).ToListAsync();
+			var authors = getAll == false ?
+				await dataContext.Authors
+					.Where(author => author.Visible && !author.Deleted)
+					.Skip((page - 1) * authorsOnPage)
+					.Take(authorsOnPage).ToListAsync() :
+				await dataContext.Authors
+					.Skip((page - 1) * authorsOnPage)
+					.Take(authorsOnPage).ToListAsync();
 
-			if(authors == null)
+			if (authors == null)
 			{
 				return new ServiceResponse<List<Author>>
 				{
@@ -45,7 +52,8 @@ namespace Ecommerce.Server.Services.AuthorsService
 			return new ServiceResponse<List<Author>> { 
 				Data = authors,
 				NumberOfPages = pageCount,
-				CurrentPage = page
+				CurrentPage = page,
+				ItemCount = authorCount
 			};
 		}
 

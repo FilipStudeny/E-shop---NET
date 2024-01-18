@@ -19,7 +19,7 @@ namespace Ecommerce.Server.Services.BookService
             this.seriesService = seriesService;
         }
 
-        public async Task<ServiceResponse<List<Book>>> GetBooks(int page, bool evenDeleted = false)
+        public async Task<ServiceResponse<List<Book>>> GetBooks(int page, bool getAll = false)
         {
             var booksOnPage = 3;
             var bookCount = await dataContext.Books.CountAsync(book => !book.Deleted && book.Visible);
@@ -29,7 +29,7 @@ namespace Ecommerce.Server.Services.BookService
                .Where(book => !book.Deleted && book.Visible)
                .Include(book => book.Author)
                .Include(book => book.Images)
-               .Include(book => book.Variants.Where(variant => variant.Visible && variant.Deleted == evenDeleted))
+               .Include(book => book.Variants.Where(variant => variant.Visible && variant.Deleted == getAll))
                .Skip((page - 1) * booksOnPage)
                .Take(booksOnPage)
                .ToListAsync();
