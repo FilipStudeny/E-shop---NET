@@ -1,6 +1,6 @@
 ﻿@inject IBookService BookService
 
-<MudTable CurrentPage="1" ServerData="@(new Func<TableState, Task<TableData<Book>>>(LoadData))" @ref="table">
+<MudTable RowsPerPage="3" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<Book>>>(LoadData))" @ref="table">
 	<HeaderContent>
 		<MudTh>Id</MudTh>
 		<MudTh>Image</MudTh>
@@ -10,25 +10,24 @@
 	</HeaderContent>
 	<RowTemplate>
 		<MudTd DataLabel="Id">@context.Id</MudTd>
-		<MudTd DataLabel="Image">@context.DefaultImageUrl</MudTd>
-		<MudTd DataLabel="Title">@context.Title</MudTd>
-		<MudTd DataLabel="Author">@context.Author?.Name</MudTd>
-		<MudTd DataLabel="Actions"><MudButton>View book</MudButton></MudTd>
+		<MudTd DataLabel="Image"><MudImage ObjectFit="ObjectFit.Contain" Alt="@context.Title" Width="100" Height="100" Src="@context.DefaultImageUrl" /></MudTd>
+		<MudTd DataLabel="Title"><MudLink Typo="Typo.h6" Href="@($"/books/book/{context.Id}")">@context.Title</MudLink></MudTd>
+		<MudTd DataLabel="Author"><MudLink Typo="Typo.subtitle2" Href="@($"/authors/author/{context.Author?.Url}")">@context.Author?.Name</MudLink></MudTd>
+		<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit book</MudButton></MudTd>
 	</RowTemplate>
 	<PagerContent>
-		<MudTablePager />
+		<MudTablePager HideRowsPerPage="true"/>
 	</PagerContent>
 </MudTable>
 
 	@code {
-	private IEnumerable<Book> pagedData;
-	private MudTable<Book> table;
+	private IEnumerable<Book>? pagedData;
+	private MudTable<Book>? table;
 	private int totalItems;
-
 
 	private async Task<TableData<Book>> LoadData(TableState state)
 	{
-		var page = state.Page == 0 ? BookService.CurrentPage : 1;
+		var page = state.Page + 1;
 		await BookService.GetBooks(page, true);
 
 		pagedData = BookService.Books;
@@ -36,8 +35,8 @@
 
 		return new TableData<Book>()
 		{
-				TotalItems = totalItems,
-				Items = pagedData
+			TotalItems = totalItems,
+			Items = pagedData
 		};
 	}
     

@@ -66,8 +66,28 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VyaWVzUGFnZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/AdminComponents/AuthorsTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluQ29tcG9uZW50c1xBdXRob3JzVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/AdminComponents/BooksTable.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluQ29tcG9uZW50c1xCb29rc1RhYmxlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/AdminComponents/CategoriesTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluQ29tcG9uZW50c1xDYXRlZ29yaWVzVGFibGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/AdminComponents/OrdersTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluQ29tcG9uZW50c1xPcmRlcnNUYWJsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/AdminComponents/SeriesTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluQ29tcG9uZW50c1xTZXJpZXNUYWJsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/AdminComponents/UsersTable.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluQ29tcG9uZW50c1xVc2Vyc1RhYmxlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Shared/AuthorsComponents/AuthorsList.razor]
