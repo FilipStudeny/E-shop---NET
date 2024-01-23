@@ -1,18 +1,56 @@
 ﻿@page "/"
 @page "/{page:int}"
 @inject IBookService BookService
+@inject NavigationManager NavigationManager
 @attribute [AllowAnonymous]
 
 <PageTitle>E-Shop</PageTitle>
 
-<FeaturedBooksList/>
+
+@if (showAlert)
+{
+	<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@Message</MudAlert>
+	<MudText Typo="Typo.h4" Class="mt-5 text-center">
+		Go back to <MudLink Typo="Typo.h4" Href="/">front page</MudLink>
+	</MudText>
+
+}
+else
+{
+
+	<BooksList/>
+
+	@if (BookService.Books.Count > 0 && BookService.PageCount > 1)
+	{
+		<div class="d-flex flex-column align-center mt-5 mb-5">
+			<MudPagination Count="BookService.PageCount" Selected="Page" SelectedChanged="GoToPage" Class="mt-4" />
+		</div>
+	}
+}
 
 @code{
 
 	[Parameter] public int Page { get; set; } = 1;
+	private string Message { get; set; } = string.Empty;
+	private bool showAlert = false;
 
 	protected override async Task OnParametersSetAsync()
 	{
-		await BookService.GetFeaturedBooks();
+		if(Page == 0)
+		{
+			Page = 1;
+		}
+
+		await BookService.GetFeaturedBooks(Page);
+
+		showAlert = !BookService.Success;
+		Message = BookService.Message;
+	}
+
+	private void GoToPage(int page)
+	{
+		Page = page;
+		NavigationManager.NavigateTo($"/books/{page}");
+		
 	}
 }

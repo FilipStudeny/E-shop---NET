@@ -4,6 +4,7 @@ using Ecommerce.Server.Services.SeriesService;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Books;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Services.BookService
@@ -19,34 +20,55 @@ namespace Ecommerce.Server.Services.BookService
             this.seriesService = seriesService;
         }
 
-        public async Task<ServiceResponse<List<Book>>> GetBooks(int page, bool getAll = false)
+        public async Task<ServiceResponse<List<BookDTO>>> GetBooks(int page, bool getAll = false,int numberOfItems = 5)
         {
-            var booksOnPage = 3;
-            var bookCount = await dataContext.Books.CountAsync(book => !book.Deleted && book.Visible);
+            var booksOnPage = numberOfItems;
+            var bookCount = getAll == false ?
+                await dataContext.Books.CountAsync(book => !book.Deleted && book.Visible) :
+                await dataContext.Books.CountAsync();
+
             var pageCount = (int)Math.Ceiling((double)bookCount / booksOnPage);
+            var booksFromDb = getAll == false ?
+                await dataContext.Books
+                   .Where(book => !book.Deleted && book.Visible)
+                   .Include(book => book.Author)
+                   .Include(book => book.Images)
+                   .Include(book => book.Variants.Where(variant => variant.Visible && variant.Deleted == getAll))
+                   .Skip((page - 1) * booksOnPage)
+                   .Take(booksOnPage)
+                   .ToListAsync():
+				await dataContext.Books
+				   .Include(book => book.Author)
+				   .Include(book => book.Images)
+				   .Include(book => book.Variants.Where(variant => variant.Visible && variant.Deleted == getAll))
+				   .Skip((page - 1) * booksOnPage)
+				   .Take(booksOnPage)
+				   .ToListAsync();
 
-            var booksFromDb = await dataContext.Books
-               .Where(book => !book.Deleted && book.Visible)
-               .Include(book => book.Author)
-               .Include(book => book.Images)
-               .Include(book => book.Variants.Where(variant => variant.Visible && variant.Deleted == getAll))
-               .Skip((page - 1) * booksOnPage)
-               .Take(booksOnPage)
-               .ToListAsync();
-
-            if (booksFromDb == null)
+			if (booksFromDb == null)
             {
-                return new ServiceResponse<List<Book>>
+                return new ServiceResponse<List<BookDTO>>
                 {
                     Success = false,
                     Message = "No books found."
                 };
             }
 
-
-            return new ServiceResponse<List<Book>>
+            var books = booksFromDb.Select(book => new BookDTO
             {
-                Data = booksFromDb,
+                Id = book.Id,
+                Title = book.Title,
+                Image = book.DefaultImageUrl,
+                AuthorName = book?.Author?.Name!,
+                AuthorUrl = book?.Author?.Url!,
+                Price = book?.Variants?.FirstOrDefault()?.Price ?? 0.0m
+            }).ToList();
+
+
+
+			return new ServiceResponse<List<BookDTO>>
+            {
+                Data = books,
                 NumberOfPages = pageCount,
                 CurrentPage = page,
                 ItemCount = bookCount
@@ -78,51 +100,57 @@ namespace Ecommerce.Server.Services.BookService
         }
 
 
-        public async Task<ServiceResponse<List<FeaturedBook>>> GetFeaturedBooks()
+        public async Task<ServiceResponse<List<BookDTO>>> GetFeaturedBooks(int page, int numberOfItems = 5)
         {
-            var booksFromDb = await dataContext.Books
-                .Where(book => book.Featured)
+
+			var booksOnPage = numberOfItems;
+            var bookCount = await dataContext.Books.CountAsync(book => !book.Deleted && book.Visible && book.Featured); 
+			var pageCount = (int)Math.Ceiling((double)bookCount / booksOnPage);
+
+			var booksFromDb = await dataContext.Books
+                .Where(book => book.Featured && book.Visible && !book.Deleted)
                 .Include(book => book.Author)
                 .Include(book => book.Images) // Ensure Images are included
+				.Include(book => book.Variants.Where(variant => variant.Visible && !variant.Deleted))
+				.Skip((page - 1) * booksOnPage)
+				.Take(booksOnPage)
                 .ToListAsync();
 
-            if (booksFromDb == null)
-            {
-                return new ServiceResponse<List<FeaturedBook>>
-                {
-                    Success = false,
-                    Message = "No books found."
-                };
-            }
+			if (booksFromDb == null)
+			{
+				return new ServiceResponse<List<BookDTO>>
+				{
+					Success = false,
+					Message = "No books found."
+				};
+			}
 
-            var featuredBooks = new List<FeaturedBook>();
-            foreach (var book in booksFromDb)
-            {
+			var books = booksFromDb.Select(book => new BookDTO
+			{
+				Id = book.Id,
+				Title = book.Title,
+				Image = book.DefaultImageUrl,
+				AuthorName = book?.Author?.Name!,
+				AuthorUrl = book?.Author?.Url!,
+				Price = book?.Variants?.FirstOrDefault()?.Price ?? 0.0m
+			}).ToList();
 
-                featuredBooks.Add(new FeaturedBook
-                {
-                    Id = book.Id,
-                    Title = book.Title,
-                    UrlImage = book.DefaultImageUrl,
-                    Image = null,
-                    Author = book.Author.Name,
-                    AuthorUrl = book.Author.Url
-                });
-            }
-
-            if (featuredBooks == null)
+            if(books == null)
             {
-                return new ServiceResponse<List<FeaturedBook>>
-                {
-                    Success = false,
-                    Message = "No books found."
-                };
-            }
+				return new ServiceResponse<List<BookDTO>>
+				{
+					Success = false,
+					Message = "No books found."
+				};
+			}
 
-            return new ServiceResponse<List<FeaturedBook>>
+            return new ServiceResponse<List<BookDTO>>
             {
-                Data = featuredBooks
-            };
+                Data = books,
+				NumberOfPages = pageCount,
+				CurrentPage = page,
+				ItemCount = bookCount
+			};
 
         }
 
@@ -291,5 +319,7 @@ namespace Ecommerce.Server.Services.BookService
             var books = await dataContext.Books.Where(book => book.SeriesId == seriesId && book.Visible && !book.Deleted).ToListAsync();
             return books;
 		}
+
+
 	}
 }

@@ -2,6 +2,7 @@
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Books;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +21,17 @@ namespace Ecommerce.Server.Controllers
 
         [HttpGet]
         [Route("{page}")]
-        public async Task<ActionResult<ServiceResponse<List<FeaturedBook>>>> GetBooks(int page = 1)
+        public async Task<ActionResult<ServiceResponse<List<BookDTO>>>> GetBooks([FromQuery(Name = "count")] int count, int page = 1)
         {
-            var response = await bookService.GetBooks(page);
+            var response = await bookService.GetBooks(page, false ,count);
             return Ok(response);
         }
 
         [HttpGet]
         [Route("admin/{page}"), Authorize]
-        public async Task<ActionResult<ServiceResponse<List<FeaturedBook>>>> GetAdminBooks(int page = 1)
+        public async Task<ActionResult<ServiceResponse<List<BookDTO>>>> GetAdminBooks([FromQuery(Name = "count")] int count, int page = 1)
         {
-            var response = await bookService.GetBooks(page, true);
+            var response = await bookService.GetBooks(page, true, count);
             return Ok(response);
         }
 
@@ -45,10 +46,11 @@ namespace Ecommerce.Server.Controllers
 
 
         [HttpGet]
-        [Route("featured")]
-        public async Task<ActionResult<ServiceResponse<List<FeaturedBook>>>> GetFeaturedBooks()
+        [Route("featured/{page}")]
+
+		public async Task<ActionResult<ServiceResponse<List<BookDTO>>>> GetFeaturedBooks([FromQuery(Name = "count")] int count, int page)
         {
-            var response = await bookService.GetFeaturedBooks();
+            var response = await bookService.GetFeaturedBooks(page, count);
             return Ok(response);
         }
 
