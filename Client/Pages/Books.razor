@@ -18,7 +18,7 @@
 else
 {
 	<CategoryList />
-	<BooksList />
+	<BooksList Title="@ListTitle" />
 
 	@if (BookService.Books.Count != 0 && BookService.PageCount != 1)
 	{
@@ -34,12 +34,15 @@ else
 @code {
 	[Parameter] public int Page { get; set; }
 	[Parameter] public string Category { get; set; } = string.Empty;
+	private string ListTitle = string.Empty;
 	private string Message { get; set; } = string.Empty;
 	private bool showAlert = false;
 
 	protected override async Task OnParametersSetAsync()
 	{
-		if(Category == null || Category == "")
+		ListTitle = $"Books {CapitalizeFirstLetter(Category)}"; 
+
+		if (Category == null || Category == "")
 		{
 			await BookService.GetBooks(Page);
 		}
@@ -71,5 +74,15 @@ else
 		{
 			NavigationManager.NavigateTo($"/books/{Category}/{page}");
 		}
+	}
+
+	private string CapitalizeFirstLetter(string input)
+	{
+		if (string.IsNullOrEmpty(input))
+		{
+			return input;
+		}
+
+		return " - " + char.ToUpper(input[0]) + input.Substring(1);
 	}
 }

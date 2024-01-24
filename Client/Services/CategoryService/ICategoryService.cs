@@ -9,6 +9,6 @@ namespace Ecommerce.Client.Services.CategoryService
 		string Message { get; set; }
 
 
-		Task GetCategories();
+		Task GetCategories(bool getAll = false);
 	}
 }

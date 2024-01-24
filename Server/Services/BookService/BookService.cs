@@ -234,10 +234,10 @@ namespace Ecommerce.Server.Services.BookService
 
         }
 
-        public async Task<ServiceResponse<List<Book>>> GetBooksByCategory(int id, int page)
-        {
-			
-			var booksOnPage = 3;
+        public async Task<ServiceResponse<List<BookDTO>>> GetBooksByCategory(int id, int page, int numberOfItems = 5)
+		{
+
+			var booksOnPage = numberOfItems;
 			var bookCount = await dataContext.Books.CountAsync(book => book.CategoryId == id && !book.Deleted && book.Visible);
 			var pageCount = (int)Math.Ceiling((double)bookCount / booksOnPage);
 
@@ -250,23 +250,33 @@ namespace Ecommerce.Server.Services.BookService
                .Take(booksOnPage)
                .ToListAsync();
 
-            if (booksFromDb == null)
-            {
-                return new ServiceResponse<List<Book>>
-                {
-                    Success = false,
-                    Message = "No books found."
-                };
-            }
+			if (booksFromDb == null)
+			{
+				return new ServiceResponse<List<BookDTO>>
+				{
+					Success = false,
+					Message = "No books found."
+				};
+			}
 
+			var books = booksFromDb.Select(book => new BookDTO
+			{
+				Id = book.Id,
+				Title = book.Title,
+				Image = book.DefaultImageUrl,
+				AuthorName = book?.Author?.Name!,
+				AuthorUrl = book?.Author?.Url!,
+				Price = book?.Variants?.FirstOrDefault()?.Price ?? 0.0m
+			}).ToList();
 
-            return new ServiceResponse<List<Book>>
-            {
-                Data = booksFromDb,
-                NumberOfPages = pageCount,
-                CurrentPage = page
-            };
-        }
+			return new ServiceResponse<List<BookDTO>>
+			{
+				Data = books,
+				NumberOfPages = pageCount,
+				CurrentPage = page,
+				ItemCount = bookCount
+			};
+		}
 
         public async Task<ServiceResponse<List<Book>>> GetBooksBySeries(int seriesId, int page)
         {

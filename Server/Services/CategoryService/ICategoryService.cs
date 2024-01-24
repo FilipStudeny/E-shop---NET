@@ -6,7 +6,7 @@ namespace Ecommerce.Server.Services.CategoryService
 {
 	public interface ICategoryService
 	{
-		Task<ServiceResponse<List<Category>>> GetCategories();
+		Task<ServiceResponse<List<Category>>> GetCategories(bool getAll = false);
 		Task<ServiceResponse<Category>> AddCategory(CategoryDTO category);
 		Task<ServiceResponse<bool>> UpdateCategory(CategoryDTO categoryDTO);
 		Task<ServiceResponse<bool>> DeleteCategory(int categoryId);

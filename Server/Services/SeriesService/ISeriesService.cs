@@ -6,7 +6,7 @@ namespace Ecommerce.Server.Services.SeriesService
 {
 	public interface ISeriesService
 	{
-		Task<ServiceResponse<List<Series>>> GetSeries(int page);
+		Task<ServiceResponse<List<Series>>> GetSeries(int page, bool getAll);
 		Task<ServiceResponse<SeriesDTO>> GetSingleSeries(string name);
 
 		Task<ServiceResponse<Series>> AddSeries(Series category);

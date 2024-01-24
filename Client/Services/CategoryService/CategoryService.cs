@@ -19,9 +19,12 @@ namespace Ecommerce.Client.Services.CategoryService
 		}
 
 		
-		public async Task GetCategories()
+		public async Task GetCategories(bool getAll)
 		{
-			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<Category>>>($"api/category");
+			var response = getAll == false ?
+				await httpClient.GetFromJsonAsync<ServiceResponse<List<Category>>>($"api/category") :
+				await httpClient.GetFromJsonAsync<ServiceResponse<List<Category>>>($"api/category/admin");
+
 			if (response is { Data: not null })
 			{
 				Categories = response.Data;

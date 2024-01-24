@@ -17,10 +17,13 @@ namespace Ecommerce.Server.Services.SeriesService
 			this.dataContext = dataContext;
 		}
 
-		public async Task<ServiceResponse<List<Series>>> GetSeries(int page)
+		public async Task<ServiceResponse<List<Series>>> GetSeries(int page, bool getAll = false)
 		{
 			var seriesOnPage = 20;
-			var seriesCount = await dataContext.Series.CountAsync(series => !series.Deleted && series.Visible);
+			var seriesCount = getAll == false ?
+				await dataContext.Series.CountAsync(series => !series.Deleted && series.Visible) :
+				await dataContext.Series.CountAsync();
+
 			var pageCount = (int)Math.Ceiling((double)seriesCount / seriesOnPage);
 
 			var series = await dataContext.Series
@@ -41,7 +44,9 @@ namespace Ecommerce.Server.Services.SeriesService
 			return new ServiceResponse<List<Series>> { 
 				Data = series,
 				CurrentPage = page,
-				NumberOfPages = pageCount
+				NumberOfPages = pageCount,
+				ItemCount = seriesCount
+				
 			};
 		}
 

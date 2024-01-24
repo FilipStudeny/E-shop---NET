@@ -12,6 +12,8 @@ namespace Ecommerce.Client.Services.SeriesService
 		private readonly HttpClient httpClient;
 
 		public List<Series> Series { get; set; } = new();
+
+		public int SeriesCount { get; set; }
 		public int CurrentPage { get; set; }
 		public int PageCount { get; set; }
 		public string Message { get; set; }
@@ -23,9 +25,12 @@ namespace Ecommerce.Client.Services.SeriesService
 			this.httpClient = httpClient;
 		}
 
-        public async Task GetSeries(int page)
+        public async Task GetSeries(int page, bool getAll = false)
 		{
-			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<Series>>>($"api/series/{page}");
+			var response = getAll == false ?
+				await httpClient.GetFromJsonAsync<ServiceResponse<List<Series>>>($"api/series/{page}"):
+				await httpClient.GetFromJsonAsync<ServiceResponse<List<Series>>>($"api/series/admin/{page}");
+
 			if (response is { Data: not null })
 			{
 				Series = response.Data;

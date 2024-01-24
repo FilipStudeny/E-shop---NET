@@ -51,7 +51,7 @@ namespace Ecommerce.Client.Services.BookService
 
 		public async Task GetBooksByCategory(int page, int category)
 		{
-			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<BookDTO>>>($"api/books/category/{category}/page/{page}");
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<BookDTO>>>($"api/books/category/{category}/page/{page}?count=5");
 			if (response is { Data: not null })
 			{
 				Books = response.Data;
@@ -75,6 +75,8 @@ namespace Ecommerce.Client.Services.BookService
             {
 				Success = response.Success;
 				Message = response.Message;
+				CurrentPage = response.CurrentPage;
+				PageCount = response.NumberOfPages;
 
 				if (response is { Data: not null })
 				{

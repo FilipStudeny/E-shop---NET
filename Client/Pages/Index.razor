@@ -18,7 +18,7 @@
 else
 {
 
-	<BooksList/>
+	<BooksList Title="Featured books"/>
 
 	@if (BookService.Books.Count > 0 && BookService.PageCount > 1)
 	{
@@ -50,7 +50,7 @@ else
 	private void GoToPage(int page)
 	{
 		Page = page;
-		NavigationManager.NavigateTo($"/books/{page}");
+		NavigationManager.NavigateTo($"/{page}");
 		
 	}
 }

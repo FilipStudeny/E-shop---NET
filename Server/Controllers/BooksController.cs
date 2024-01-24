@@ -64,9 +64,9 @@ namespace Ecommerce.Server.Controllers
 
 		[HttpGet]
 		[Route("category/{category}/page/{page}")]
-		public async Task<ActionResult<ServiceResponse<List<Book>>>> GetBooksByCategory(int category, int page = 1)
+		public async Task<ActionResult<ServiceResponse<List<BookDTO>>>> GetBooksByCategory([FromQuery(Name = "count")] int count, int category, int page = 1)
 		{
-			var response = await bookService.GetBooksByCategory(category, page);
+			var response = await bookService.GetBooksByCategory(category, page, count);
 			return Ok(response);
 		}
 

@@ -1,5 +1,39 @@
-﻿<h3>SeriesTable</h3>
+﻿@inject ISeriesService SeriesService
+
+<MudTable RowsPerPage="10" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<Series>>>(LoadData))" @ref="table">
+	<HeaderContent>
+		<MudTh>Id</MudTh>
+		<MudTh Class="w-75">Name</MudTh>
+		<MudTh>Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Id">@context.Id</MudTd>
+		<MudTd DataLabel="Name"><MudLink Typo="Typo.h6" Href="@($"/series/{context.Url}")">@context.Name</MudLink></MudTd>
+		<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit Series</MudButton></MudTd>
+	</RowTemplate>
+	<PagerContent>
+		<MudTablePager HideRowsPerPage="true" />
+	</PagerContent>
+</MudTable>
 
 @code {
+	private IEnumerable<Series>? pagedData;
+	private MudTable<Series>? table;
+	private int totalItems;
+
+	private async Task<TableData<Series>> LoadData(TableState state)
+	{
+		var page = state.Page + 1;
+		await SeriesService.GetSeries(page, true);
+
+		pagedData = SeriesService.Series;
+		totalItems = SeriesService.SeriesCount;
+
+		return new TableData<Series>()
+			{
+				TotalItems = totalItems,
+				Items = pagedData
+			};
+	}
 
 }

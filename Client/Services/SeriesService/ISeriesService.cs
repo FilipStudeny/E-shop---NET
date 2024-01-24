@@ -8,12 +8,13 @@ namespace Ecommerce.Client.Services.SeriesService
 	{
 		event Action? OnChange;
 		List<Series> Series { get; set; }
+		int SeriesCount { get; set; }
 
 		int CurrentPage { get; set; }
 		int PageCount { get; set; }
 		string Message { get; set; }
 
-		Task GetSeries(int page);
+		Task GetSeries(int page, bool getAll = false);
 		Task<ServiceResponse<SeriesDTO>> GetSingleSeries(string name);
 
 	}

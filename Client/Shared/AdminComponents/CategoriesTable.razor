@@ -1,5 +1,23 @@
-﻿<h3>CategoriesTable</h3>
+﻿@inject ICategoryService CategoryService
 
-@code {
+<MudTable Items="@CategoryService.Categories" Loading="@_loading">
+	<HeaderContent>
+		<MudTh>Id</MudTh>
+		<MudTh Class="w-75">Name</MudTh>
+		<MudTh>Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Id">@context.Id</MudTd>
+			<MudTd DataLabel="Name"><MudText Typo="Typo.h6">@context.Name</MudText></MudTd>
+			<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit Category</MudButton></MudTd>
+		</RowTemplate>
+	</MudTable>
 
+	@code {
+	private bool _loading;
+	protected override async Task OnInitializedAsync()
+	{
+		await CategoryService.GetCategories(true);
+		_loading = false;
+	}
 }

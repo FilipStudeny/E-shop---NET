@@ -1,7 +1,7 @@
 ﻿@inject IBookService BookService
 @implements IDisposable
 
-<MudText Typo="Typo.h4">Books</MudText>
+<MudText Typo="Typo.h4">@Title</MudText>
 <MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
 
 @if (BookService.Books.Count == 0)
@@ -17,17 +17,19 @@ else
 
         @foreach (var book in BookService.Books)
         {
-			<MudItem xs="2" Class="mud-elevation-4 m-2" Style="display: flex; flex-direction: column; justify-content: space-between; align-items: center ;width: 250px; max-width: 250px; max-height: 400px;">
+			<MudItem Class="mud-elevation-4 m-2 hover" Style="display: flex; flex-direction: column; justify-content: space-between; width: 250px; height: 400px; max-width: 250px; max-height: 400px;">
 				<MudImage ObjectFit="ObjectFit.Contain" Src="@book.Image" Alt="@book.Title" Width="200" Height="200" Class="mb-2"/>
-				<MudStack>
-					<MudLink Typo="Typo.h6" Href="@($"/books/book/{book.Id}")">@book.Title</MudLink>
-					<MudLink Typo="Typo.subtitle1" Href="@($"/authors/author/{book.AuthorUrl}")">@book.AuthorName</MudLink>
-				</MudStack>
-				<MudStack Row="true" Justify="Justify.FlexEnd">
-					<MudText Typo="Typo.h5" Color="Color.Success">@book.Price</MudText>
+				<MudStack Justify="Justify.SpaceBetween">
+					<MudStack>
+						<MudLink Typo="Typo.h6" Href="@($"/books/book/{book.Id}")">@book.Title</MudLink>
+							<MudSpacer />
+							<MudLink Typo="Typo.subtitle1" Href="@($"/authors/author/{book.AuthorUrl}")">@book.AuthorName</MudLink>
+						</MudStack>
+						<MudStack Row="true" Justify="Justify.FlexEnd">
+							<MudText Typo="Typo.h5" Color="Color.Success">@book.Price Kč</MudText>
+					</MudStack>
 				</MudStack>
 		   </MudItem>
-                        
         }
 	</MudGrid>
 
@@ -35,6 +37,8 @@ else
 
 
 @code {
+
+	[Parameter] public string Title { get; set; } = string.Empty;
 
 	protected override void OnInitialized()
 	{

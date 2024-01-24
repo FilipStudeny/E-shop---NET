@@ -1,6 +1,6 @@
 ﻿@inject IBookService BookService
 
-<MudTable RowsPerPage="3" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<BookDTO>>>(LoadData))" @ref="table">
+<MudTable RowsPerPage="10" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<BookDTO>>>(LoadData))" @ref="table">
 	<HeaderContent>
 		<MudTh>Id</MudTh>
 		<MudTh>Image</MudTh>

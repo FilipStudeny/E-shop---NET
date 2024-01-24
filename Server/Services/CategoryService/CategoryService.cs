@@ -15,10 +15,13 @@ namespace Ecommerce.Server.Services.CategoryService
 			this.dataContext = dataContext;
 		}
 
-		public async Task<ServiceResponse<List<Category>>> GetCategories()
+		public async Task<ServiceResponse<List<Category>>> GetCategories(bool getAll = false)
 		{
-			var categories = await dataContext.Category.Where(category => category.Visible && !category.Deleted).ToListAsync();
-			if(categories == null)
+			var categories = getAll == false ?
+				await dataContext.Category.Where(category => category.Visible && !category.Deleted).ToListAsync() :
+				await dataContext.Category.ToListAsync();
+
+			if (categories == null)
 			{
 				return new ServiceResponse<List<Category>>
 				{

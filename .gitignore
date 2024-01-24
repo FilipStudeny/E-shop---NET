@@ -7,3 +7,8 @@ riderModule.iml
 Server/appsettings.json
 .vs
 .github
+/*/obj
+/*/bin
+
+/Server/obj
+./Server/obj
