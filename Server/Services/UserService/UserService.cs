@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Server.Database;
 using Ecommerce.Shared;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Books;
 using Ecommerce.Shared.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -128,7 +129,46 @@ namespace Ecommerce.Server.Services.UserService
 
         }
 
-        public async Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO changePasswordDTO)
+		public async Task<ServiceResponse<List<UserDTO>>> GetUsers(int page)
+		{
+            var usersOnPage = 20;
+            var usersCount = await dataContext.Users.CountAsync();
+			var pageCount = (int)Math.Ceiling((double)usersCount / usersOnPage);
+			var usersFromDb = await dataContext.Users
+                   .Include(user => user.Role)
+				   .Skip((page - 1) * usersOnPage)
+				   .Take(usersOnPage)
+				   .ToListAsync();
+
+			if (usersFromDb == null)
+			{
+				return new ServiceResponse<List<UserDTO>>
+				{
+					Success = false,
+					Message = "No users found."
+				};
+			}
+
+			var users = usersFromDb.Select(user => new UserDTO
+			{
+				Id = user.Id,
+                Email = user.Email,
+                Role = user.Role,
+                RegisterDate = user.RegistrationDate
+			}).ToList();
+
+
+
+			return new ServiceResponse<List<UserDTO>>
+			{
+				Data = users,
+				NumberOfPages = pageCount,
+				CurrentPage = page,
+				ItemCount = usersCount
+			};
+		}
+
+		public async Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO changePasswordDTO)
         {
 			var userId = GetUserId();
 			var user = await dataContext.Users.FindAsync(userId);
@@ -253,5 +293,5 @@ namespace Ecommerce.Server.Services.UserService
 		}
 
 
-    }
+	}
 }

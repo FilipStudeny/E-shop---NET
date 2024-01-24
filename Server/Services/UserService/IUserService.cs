@@ -9,7 +9,8 @@ namespace Ecommerce.Server.Services.UserService
 		Task<ServiceResponse<bool>> RegisterUser(RegisterDTO registerDTO);
 		Task<ServiceResponse<string>> Login(LoginDTO loginDTO);
         Task<ServiceResponse<AddressDTO>> GetUser();
-
+		Task<ServiceResponse<List<UserDTO>>> GetUsers(int page);
+ 
         Task<ServiceResponse<bool>> ChangePassword(ChangePasswordDTO changePasswordDTO);
         Task<ServiceResponse<bool>> ChangeEmail(ChangeEmailDTO changeEmailDTO);
         Task<ServiceResponse<bool>> AddAddress(AddressDTO addressDTO);

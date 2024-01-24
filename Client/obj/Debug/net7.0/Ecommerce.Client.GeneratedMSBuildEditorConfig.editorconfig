@@ -30,6 +30,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWRtaW5pc3RyYXRpb24ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Pages/Admin/EditBook.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRWRpdEJvb2sucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Filda/Desktop/.NET/Ecommerce/Client/Pages/Authentication/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

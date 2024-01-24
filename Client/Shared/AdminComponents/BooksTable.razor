@@ -13,7 +13,7 @@
 		<MudTd DataLabel="Image"><MudImage ObjectFit="ObjectFit.Contain" Alt="@context.Title" Width="100" Height="100" Src="@context.Image" /></MudTd>
 		<MudTd DataLabel="Title"><MudLink Typo="Typo.h6" Href="@($"/books/book/{context.Id}")">@context.Title</MudLink></MudTd>
 		<MudTd DataLabel="Author"><MudLink Typo="Typo.subtitle2" Href="@($"/authors/author/{context.AuthorUrl}")">@context.AuthorName</MudLink></MudTd>
-		<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit book</MudButton></MudTd>
+		<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Href="@($"/admin/edit/book/{context.Id}")" Color="Color.Primary">Edit book</MudButton></MudTd>
 	</RowTemplate>
 	<PagerContent>
 		<MudTablePager HideRowsPerPage="true"/>

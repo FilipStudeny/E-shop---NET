@@ -25,7 +25,16 @@ namespace Ecommerce.Server.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+
+		[HttpGet]
+        [Route("admin/{page}")]
+		public async Task<ActionResult<ServiceResponse<AddressDTO>>> GetUsers(int page)
+		{
+			var response = await userService.GetUsers(page);
+			return Ok(response);
+		}
+
+		[HttpPut]
 		[Route("change/address")]
 
 		public async Task<ActionResult<ServiceResponse<bool>>> AddShippingAddress(AddressDTO addressDTO)

@@ -12,3 +12,10 @@ Server/appsettings.json
 
 /Server/obj
 ./Server/obj
+
+.vs/
+/.vs
+./Server/obj/
+./Client/obj/
+Server/obj/
+/Server/obj

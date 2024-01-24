@@ -1,5 +1,43 @@
-﻿<h3>UsersTable</h3>
+﻿@inject IUserService UsersService
+
+<MudTable RowsPerPage="7" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<UserDTO>>>(LoadData))" @ref="table">
+	<HeaderContent>
+		<MudTh>Id</MudTh>
+		<MudTh>Email</MudTh>
+		<MudTh>Role [Id - Name]</MudTh>
+		<MudTh>Register date</MudTh>
+		<MudTh>Actions</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Id">@context.Id</MudTd>
+			<MudTd DataLabel="Email"><MudText Typo="Typo.h6" >@context.Email</MudText></MudTd>
+			<MudTd DataLabel="Role"><MudText Typo="Typo.h6" >@context.Role.Id - @context.Role.Name</MudText></MudTd>
+			<MudTd DataLabel="Register date"><MudText Typo="Typo.h6">@context.RegisterDate.ToString("dd/MM/yyyy")</MudText></MudTd>
+			<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit user</MudButton></MudTd>
+		</RowTemplate>
+		<PagerContent>
+			<MudTablePager HideRowsPerPage="true" />
+		</PagerContent>
+	</MudTable>
 
 @code {
+	private IEnumerable<UserDTO>? pagedData;
+	private MudTable<UserDTO>? table;
+	private int totalItems;
+
+	private async Task<TableData<UserDTO>> LoadData(TableState state)
+	{
+		var page = state.Page + 1;
+		await UsersService.GetUsers(page);
+
+		pagedData = UsersService.Users;
+		totalItems = UsersService.UsersCount;
+
+		return new TableData<UserDTO>()
+			{
+				TotalItems = totalItems,
+				Items = pagedData
+			};
+	}
 
 }

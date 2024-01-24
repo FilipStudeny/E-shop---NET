@@ -1,0 +1,126 @@
+﻿@page "/admin/edit/book/{id:int}"
+@page "/admin/book/new"
+
+@inject IAuthorsService AuthorsService
+@inject ICategoryService CategoryService
+@inject ISeriesService SeriesService
+@inject IJSRuntime JSruntime
+<PageTitle>E-Shop | Edit book data</PageTitle>
+
+<MudText Typo="Typo.h4">Edit book</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="d-flex flex-column justify-content-between">
+	<EditForm Model="bookModel" OnValidSubmit="OnValidSubmit" class="mt-5">
+		<DataAnnotationsValidator />
+		<MudStack>
+			<MudTextField Label="Book title" @bind-Value="bookModel.Title" For="(() => bookModel.Title)" />
+			<MudTextField T="string" Counter="200" Label="Short description" Variant="Variant.Outlined" Lines="5"/>
+
+			<MudFileUpload T="IReadOnlyList<IBrowserFile>" Accept=".png, .jpg" FilesChanged="UploadFiles" MaximumFileCount="100">
+				<ButtonTemplate Context="image_context">
+					<MudButton HtmlTag="label"
+							   Variant="Variant.Filled"
+							   Color="Color.Primary"
+							   StartIcon="@Icons.Material.Filled.CloudUpload"
+							   for="@image_context.Id">
+						Only image files
+					</MudButton>
+				</ButtonTemplate>
+			</MudFileUpload>
+
+
+			<MudGrid Spacing="3" Class="my-5">
+				@foreach (var image in bookModel.Images)
+				{
+					<MudItem xs="3">
+						<MudImage Src="@image.Data" Width="200" Height="200" ObjectFit="ObjectFit.Contain" Class="mud-elevation-4" />
+
+					</MudItem>
+				}
+			</MudGrid>
+
+			
+
+			<MudSelect T="string" Label="Author" AnchorOrigin="Origin.BottomCenter">
+
+			</MudSelect>
+			<MudSelect T="string" Label="Series" AnchorOrigin="Origin.BottomCenter">
+
+			</MudSelect>
+			<MudTextField T="string" Counter="1000" Label="Description" Variant="Variant.Outlined" Lines="10" />
+			<MudDatePicker Label="Release date" @bind-Date="date" DisableToolbar="true"/>
+			<MudTextField Label="ISBN" InputType="InputType.Number" @bind-Value="bookModel.Isbn" For="(() => bookModel.Isbn)" />
+			<MudTextField Label="Page count" InputType="InputType.Number" @bind-Value="bookModel.PageCount" For="(() => bookModel.PageCount)" />
+			<MudTextField Label="Order in series" InputType="InputType.Number" @bind-Value="bookModel.SeriesOrder" For="(() => bookModel.SeriesOrder)" />
+
+
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				@if (Success)
+				{
+					<MudText Color="Color.Success">@Message</MudText>
+				}
+				else
+				{
+					<MudText Color="Color.Error">@Message</MudText>
+				}
+				<MudSpacer/>
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit book</MudButton>
+			</MudStack>
+		</MudStack>
+
+
+	</EditForm>
+
+	<MudStack Style="margin-top: 50px;" Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+		<MudText>Don't have an account yet ?</MudText>
+		<MudButton Href="/register" StartIcon="@Icons.Material.Outlined.AppRegistration" Variant="Variant.Outlined" Color="Color.Primary">
+			Create an account
+		</MudButton>
+	</MudStack>
+</MudContainer>
+
+@code {
+
+	[Parameter] public int Id { get; set; }
+
+	public Book bookModel = new();
+	private DateTime? date = DateTime.Today;
+
+	private bool Success = false;
+	private string Message = string.Empty;
+
+	IList<IBrowserFile> Images = new List<IBrowserFile>();
+	private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
+	{
+		var format = "image/png";
+		foreach (var file in files)
+		{
+			var resizeImage = await file.RequestImageFileAsync(format, 200, 200);
+			var buffer = new byte[resizeImage.Size];
+			await resizeImage.OpenReadStream().ReadAsync(buffer);
+
+			var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+			bookModel.Images.Add(
+				new Image
+				{
+					Data = imageData
+				}
+			);
+
+		}
+		//TODO upload the files to the server
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		
+	}
+
+	private async Task OnValidSubmit(EditContext editorContext)
+	{
+
+	}
+
+}
