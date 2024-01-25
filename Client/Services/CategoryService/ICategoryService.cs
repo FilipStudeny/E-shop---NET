@@ -1,4 +1,6 @@
-﻿using Ecommerce.Shared.Books;
+﻿using Ecommerce.Shared;
+using Ecommerce.Shared.Books;
+using Ecommerce.Shared.DTOs.Authors;
 
 namespace Ecommerce.Client.Services.CategoryService
 {
@@ -10,5 +12,7 @@ namespace Ecommerce.Client.Services.CategoryService
 
 
 		Task GetCategories(bool getAll = false);
+		Task<ServiceResponse<List<DataSelectDTO>>> GetAllCategoryNames();
+
 	}
 }

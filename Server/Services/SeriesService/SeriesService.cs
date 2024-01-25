@@ -4,6 +4,7 @@ using Ecommerce.Server.Services.BookService;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Services.SeriesService
@@ -47,6 +48,31 @@ namespace Ecommerce.Server.Services.SeriesService
 				NumberOfPages = pageCount,
 				ItemCount = seriesCount
 				
+			};
+		}
+
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetSeriesNames()
+		{
+			var seriesFromDb = await dataContext.Series.ToListAsync();
+			if (seriesFromDb == null)
+			{
+				return new ServiceResponse<List<DataSelectDTO>>
+				{
+					Success = false,
+					Message = "No books found."
+				};
+			}
+
+			var series = seriesFromDb.Select(author => new DataSelectDTO
+			{
+				Id = author.Id,
+				Name = author.Name
+			}).ToList();
+
+
+			return new ServiceResponse<List<DataSelectDTO>>
+			{
+				Data = series
 			};
 		}
 

@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Shared.Books;
 using Ecommerce.Shared;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 
 namespace Ecommerce.Client.Services.AuthorsService
 {
@@ -16,5 +17,7 @@ namespace Ecommerce.Client.Services.AuthorsService
 
 		Task<bool> GetAuthors(int Page, bool getAll = false);
 		Task<ServiceResponse<AuthorDTO>> GetAuthor(string Name);
+		Task<ServiceResponse<List<DataSelectDTO>>> GetAllAuthorsNames();
+
 	}
 }

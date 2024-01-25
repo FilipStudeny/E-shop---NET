@@ -3,6 +3,8 @@ using Ecommerce.Shared.Books;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Ecommerce.Server.Services.SeriesService;
+using Ecommerce.Client.Services.AuthorsService;
+using Ecommerce.Shared.DTOs.Authors;
 
 namespace Ecommerce.Server.Controllers
 {
@@ -38,6 +40,16 @@ namespace Ecommerce.Server.Controllers
 		public async Task<ActionResult<ServiceResponse<List<Series>>>> GetSeries(string name)
 		{
 			var response = await seriesService.GetSingleSeries(name);
+			return Ok(response);
+		}
+
+
+		//**EDITS**//
+		[HttpGet]
+		[Route("admin/all")]
+		public async Task<ActionResult<ServiceResponse<List<DataSelectDTO>>>> GetAllSeriesNames()
+		{
+			var response = await seriesService.GetSeriesNames();
 			return Ok(response);
 		}
 	}

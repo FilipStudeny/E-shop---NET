@@ -13,9 +13,11 @@ Server/appsettings.json
 /Server/obj
 ./Server/obj
 
-.vs/
-/.vs
-./Server/obj/
-./Client/obj/
-Server/obj/
-/Server/obj
+.vs
+Client/obj
+Client/bin
+Server/obj
+Server/bin
+Shared/bin
+Shared/obj
+

@@ -6,6 +6,7 @@ using Ecommerce.Client.Services.AuthorsService;
 using Ecommerce.Client.Services.BookService;
 using Ecommerce.Client.Services.CategoryService;
 using Ecommerce.Client.Services.SeriesService;
+using Ecommerce.Client.Services.TypeService;
 using Ecommerce.Client.Services.UserService;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<ISeriesService, SeriesService>();
 builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBookTypeService, BookTypeService>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 

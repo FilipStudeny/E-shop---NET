@@ -2,6 +2,7 @@
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Services.CategoryService
@@ -32,7 +33,32 @@ namespace Ecommerce.Server.Services.CategoryService
 
 			return new ServiceResponse<List<Category>> { Data = categories };
 		}
-		
+
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetCategoryNames()
+		{
+			var categoryFromDb = await dataContext.Category.ToListAsync();
+			if (categoryFromDb == null)
+			{
+				return new ServiceResponse<List<DataSelectDTO>>
+				{
+					Success = false,
+					Message = "No books found."
+				};
+			}
+
+			var categories = categoryFromDb.Select(author => new DataSelectDTO
+			{
+				Id = author.Id,
+				Name = author.Name
+			}).ToList();
+
+
+			return new ServiceResponse<List<DataSelectDTO>>
+			{
+				Data = categories
+			};
+		}
+
 		public Task<ServiceResponse<Category>> AddCategory(CategoryDTO category)
 		{
 			throw new NotImplementedException();

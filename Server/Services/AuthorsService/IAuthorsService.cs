@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared;
+using Ecommerce.Shared.DTOs.Authors;
 
 namespace Ecommerce.Server.Services.AuthorsService
 {
@@ -11,6 +12,10 @@ namespace Ecommerce.Server.Services.AuthorsService
 		Task<ServiceResponse<bool>> AddAuthor(Author author);
 		Task<ServiceResponse<bool>> UpdateAuthor(Author author);
 		Task<ServiceResponse<bool>> DeleteAuthor(int id);
+
+
+
+		Task<ServiceResponse<List<DataSelectDTO>>> GetAuthorsForEdit();
 
 
 	}

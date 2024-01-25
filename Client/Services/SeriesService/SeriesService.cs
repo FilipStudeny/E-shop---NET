@@ -2,6 +2,7 @@
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using MudBlazor;
 using System.Net.Http.Json;
 
@@ -51,6 +52,13 @@ namespace Ecommerce.Client.Services.SeriesService
 			var response = await httpClient.GetFromJsonAsync<ServiceResponse<SeriesDTO>>($"api/series/series/{name}");
 			return response!;
 			
+		}
+
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetAllSeriesNames()
+		{
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<DataSelectDTO>>>($"api/series/admin/all");
+			return response!;
+
 		}
 	}
 }

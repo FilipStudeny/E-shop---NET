@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
+using Ecommerce.Shared.DTOs.Authors;
 using System.Net.Http.Json;
 
 namespace Ecommerce.Client.Services.CategoryService
@@ -36,6 +37,13 @@ namespace Ecommerce.Client.Services.CategoryService
 			}
 
 			OnChange?.Invoke();
+		}
+
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetAllCategoryNames()
+		{
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<DataSelectDTO>>>($"api/category/admin/all");
+			return response!;
+
 		}
 	}
 }

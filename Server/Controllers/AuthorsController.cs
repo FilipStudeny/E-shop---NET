@@ -2,6 +2,7 @@
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Server.Controllers
@@ -33,12 +34,23 @@ namespace Ecommerce.Server.Controllers
 			return Ok(response);
 		}
 
-
 		[HttpGet]
 		[Route("author/{name}")]
 		public async Task<ActionResult<ServiceResponse<AuthorDTO>>> GetAuthor(string name)
 		{
 			var response = await authorsService.GetAuthor(name);
+			return Ok(response);
+		}
+
+
+
+
+		//**EDITS**//
+		[HttpGet]
+		[Route("admin/all")]
+		public async Task<ActionResult<ServiceResponse<List<DataSelectDTO>>>> GetAllAuthorNames()
+		{
+			var response = await authorsService.GetAuthorsForEdit();
 			return Ok(response);
 		}
 	}

@@ -2,9 +2,11 @@
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using MudBlazor;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.NetworkInformation;
 
 namespace Ecommerce.Client.Services.AuthorsService
 {
@@ -47,8 +49,15 @@ namespace Ecommerce.Client.Services.AuthorsService
 
 			OnChange?.Invoke();
 			return true;
+		}
+
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetAllAuthorsNames()
+		{
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<DataSelectDTO>>>($"api/authors/admin/all");
+			return response!;
 
 		}
+
 
 		public async Task<ServiceResponse<AuthorDTO>> GetAuthor(string Name)
 		{

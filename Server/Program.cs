@@ -1,6 +1,7 @@
 using Ecommerce.Server.Database;
 using Ecommerce.Server.Services.AuthorsService;
 using Ecommerce.Server.Services.BookService;
+using Ecommerce.Server.Services.BookTypeService;
 using Ecommerce.Server.Services.CategoryService;
 using Ecommerce.Server.Services.SeriesService;
 using Ecommerce.Server.Services.UserService;
@@ -34,6 +35,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
 builder.Services.AddScoped<IAuthorsService, AuthorService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBookTypeService, BookTypeService>();
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

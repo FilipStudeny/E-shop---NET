@@ -4,6 +4,8 @@ using Ecommerce.Server.Services.SeriesService;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
+using Ecommerce.Shared.DTOs.Books;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
 
@@ -57,6 +59,31 @@ namespace Ecommerce.Server.Services.AuthorsService
 			};
 		}
 
+
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetAuthorsForEdit()
+		{
+			var authorsFromDb = await dataContext.Authors.ToListAsync();
+			if (authorsFromDb == null)
+			{
+				return new ServiceResponse<List<DataSelectDTO>>
+				{
+					Success = false,
+					Message = "No books found."
+				};
+			}
+
+			var authors = authorsFromDb.Select(author => new DataSelectDTO
+			{
+				Id = author.Id,
+				Name = author.Name
+			}).ToList();
+
+
+			return new ServiceResponse<List<DataSelectDTO>>
+			{
+				Data = authors
+			};
+		}
 		public async Task<ServiceResponse<AuthorDTO>> GetAuthor(string name)
 		{
 			var author = await dataContext.Authors.FirstOrDefaultAsync(author => author.Url == name && author.Visible && !author.Deleted);
