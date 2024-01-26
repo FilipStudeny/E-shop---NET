@@ -108,5 +108,27 @@ namespace Ecommerce.Client.Services.BookService
             
         }
 
+		public Task<ServiceResponse<bool>> EditBook(EditBookModel editBookModel)
+		{
+			return null;
+
+			/*
+			var response = await httpClient.PutAsJsonAsync("api/user/change/address", addressDTO);
+			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to change shipping address, try again later" };
+			}
+			return responseData;
+
+			var response = await httpClient.PostAsJsonAsync("api/auth/login", loginDTO);
+			var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<string>>();
+			if (responseContent == null)
+			{
+				return new ServiceResponse<string> { Success = false, Message = "Error login in, try again later" };
+			}
+			return responseContent;
+			*/
+		}
 	}
 }

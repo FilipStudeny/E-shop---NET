@@ -24,5 +24,7 @@ namespace Ecommerce.Client.Services.BookService
 
 		Task<ServiceResponse<Book>> GetBook(int id);
         Task<List<string>> GetSuggestedBooks(string search);
+
+        Task<ServiceResponse<bool>> EditBook(EditBookModel editBookModel);
     }
 }

@@ -5,6 +5,7 @@
 @inject ICategoryService CategoryService
 @inject ISeriesService SeriesService
 @inject IBookTypeService BookTypeService
+@inject IBookService BookService
 @inject IJSRuntime JSruntime
 <PageTitle>E-Shop | Edit book data</PageTitle>
 
@@ -17,7 +18,7 @@
 		<DataAnnotationsValidator />
 		<MudStack>
 			<MudTextField Label="Book title" @bind-Value="bookModel.Title" For="(() => bookModel.Title)" />
-			<MudTextField T="string" Counter="200" Label="Short description" Variant="Variant.Outlined" Lines="5" For="(() => bookModel.ShortDescription)"/>
+			<MudTextField T="string" Counter="200" Label="Short description" @bind-Value="bookModel.ShortDescription" Variant="Variant.Outlined" Lines="5" For="(() => bookModel.ShortDescription)"/>
 
 			<MudFileUpload T="IReadOnlyList<IBrowserFile>" Accept=".png, .jpg" FilesChanged="UploadFiles" MaximumFileCount="100">
 				<ButtonTemplate Context="image_context">
@@ -45,14 +46,14 @@
 			</MudGrid>
 
 			
-			<MudTextField T="string" Counter="1000" Label="Description" Variant="Variant.Outlined" Lines="10"  For="(() => bookModel.Description)"/>/>
+			<MudTextField T="string" Counter="1000" Label="Description" @bind-Value="bookModel.Description" Variant="Variant.Outlined" Lines="10"  For="(() => bookModel.Description)" />
 
 			@if (AuthorsSuccess)
 			{
-				<MudSelect T="string" Label="Author" AnchorOrigin="Origin.BottomCenter">
+				<MudSelect T="DataSelectDTO" Label="Author" @bind-Value="bookModel.Author" For="(() => bookModel.Author)" AnchorOrigin="Origin.BottomCenter">
 					@foreach (var author in authorsList)
 					{
-						<MudSelectItem Value="@($"{author.Id}")">@author.Name</MudSelectItem>
+						<MudSelectItem Value="@(new DataSelectDTO{ Id = author.Id, Name = author.Name})">@author.Name</MudSelectItem>
 					}
 				</MudSelect>
 			}else{
@@ -61,10 +62,10 @@
 
 			@if (SeriesSuccess)
 			{
-				<MudSelect T="string" Label="Series" AnchorOrigin="Origin.BottomCenter">
+				<MudSelect T="DataSelectDTO" Label="Series" @bind-Value="bookModel.Series" For="(() => bookModel.Series)" AnchorOrigin="Origin.BottomCenter">
 					@foreach (var series in seriesList)
 					{
-						<MudSelectItem Value="@($"{series.Id}")">@series.Name</MudSelectItem>
+						<MudSelectItem Value="@(new DataSelectDTO{ Id = series.Id, Name = series.Name})">@series.Name</MudSelectItem>
 					}
 				</MudSelect>
 			}else{
@@ -79,17 +80,17 @@
 			<MudStack Row="true">
 				@if (CategorySuccess)
 				{
-					<MudSelect T="string" Label="Category" AnchorOrigin="Origin.BottomCenter">
+					<MudSelect T="DataSelectDTO" Label="Category" @bind-Value="bookModel.Category" For="(() => bookModel.Category)" AnchorOrigin="Origin.BottomCenter">
 						@foreach (var category in categoryList)
 						{
-							<MudSelectItem Value="@($"{category.Id}")">@category.Name</MudSelectItem>
+							<MudSelectItem Value="@(new DataSelectDTO{ Id = category.Id, Name = category.Name})">@category.Name</MudSelectItem>
 						}
 					</MudSelect>
 				}
 				<MudDatePicker Label="Release date" @bind-Date="date" DisableToolbar="true" />
 			</MudStack>
 			<MudStack Row="true">
-				<MudTextField Label="ISBN" InputType="InputType.Number" @bind-Value="bookModel.Isbn" For="(() => bookModel.Isbn)" />
+				<MudTextField Label="ISBN" InputType="InputType.Text" @bind-Value="bookModel.Isbn" For="(() => bookModel.Isbn)" />
 				<MudTextField Label="Page count" InputType="InputType.Number" @bind-Value="bookModel.PageCount" For="(() => bookModel.PageCount)" />
 			</MudStack>
 			<MudStack Row="true">
@@ -103,17 +104,21 @@
 				<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@TypeMessage</MudAlert>
 			}
 
-			<MudStack Row="true">
-				<MudSelect T="string" Label="Variant" @bind-Value="BookVariant" AnchorOrigin="Origin.BottomCenter">
-					@foreach (var type in typeList)
-					{
-						<MudSelectItem Value="@($"{type.Id.ToString()}")">@type.Name</MudSelectItem>
-					}
-				</MudSelect>
-				<MudTextField Label="Price" InputType="InputType.Number" @bind-Value="Price" For="(() => Price)" />
-				<MudTextField Label="Original price" InputType="InputType.Number" @bind-Value="OriginalPrice" For="(() => OriginalPrice)" />
-				<MudButton OnClick="AddVariant" ButtonType="ButtonType.Button" Variant="Variant.Outlined" Color="Color.Secondary" >Add new variant</MudButton>
-			</MudStack>
+			@if(typeList.Count > 0)
+			{
+				<MudStack Row="true">
+					<MudSelect T="DataSelectDTO" Label="Variant" @bind-Value="BookVariant" AnchorOrigin="Origin.BottomCenter">
+						@foreach (var type in typeList)
+						{
+							<MudSelectItem Value="@(new DataSelectDTO{ Id = type.Id, Name = type.Name})">@type.Name</MudSelectItem>
+						}
+					</MudSelect>
+					<MudTextField Label="Price" InputType="InputType.Number" @bind-Value="Price" For="(() => Price)" />
+					<MudTextField Label="Original price" InputType="InputType.Number" @bind-Value="OriginalPrice" For="(() => OriginalPrice)" />
+					<MudButton OnClick="AddVariant" ButtonType="ButtonType.Button" Variant="Variant.Outlined" Color="Color.Secondary" >Add new variant</MudButton>
+				</MudStack>
+			}
+			
 
 			@if (bookModel?.Variants != null && bookModel.Variants.Count == 0)
 			{
@@ -149,7 +154,12 @@
 				}
 				<MudSpacer/>
 
-				<MudButton Disabled="@SubmitDisabled" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit book</MudButton>
+				@if (bookModel?.Variants?.Count > 0 && AuthorsSuccess && SeriesSuccess && CategorySuccess && TypeSuccess)
+				{
+					<MudButton Disabled="false" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit book</MudButton>
+				}else{
+					<MudButton Disabled="true" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit book</MudButton>
+				}
 				
 			</MudStack>
 		</MudStack>
@@ -163,7 +173,7 @@
 
 	[Parameter] public int Id { get; set; }
 
-	public Book bookModel = new();
+	public EditBookModel bookModel = new();
 
 	private DateTime? date = DateTime.Today;
 	private bool Success = false;
@@ -173,26 +183,24 @@
 
 	private List<DataSelectDTO> authorsList = new();
 	private bool AuthorsSuccess = false;
-	private string AuthorsMessage = string.Empty;
+	private string AuthorsMessage = "Loading authors";
 
 	private List<DataSelectDTO> seriesList = new();
 	private bool SeriesSuccess = false;
-	private string SeriesMessage = string.Empty;
+	private string SeriesMessage = "Loading book series";
 
 	private List<DataSelectDTO> categoryList = new();
 	private bool CategorySuccess = false;
-	private string CategoryMessage = string.Empty;
+	private string CategoryMessage = "Loading categories";
 
 	private List<DataSelectDTO> typeList = new();
+	private List<DataSelectDTO> removedTypes = new();
 	private bool TypeSuccess = false;
-	private string TypeMessage = string.Empty;
-
-	private bool SubmitDisabled = true;
-
+	private string TypeMessage = "Loading book variants";
 
 	private decimal OriginalPrice = 0;
 	private decimal Price = 0;
-	private string BookVariant = "1";
+	private DataSelectDTO? BookVariant;
 
 
 	protected override async Task OnInitializedAsync()
@@ -245,10 +253,31 @@
 			typeList = responseTypes?.Data!;
 		}
 
-		if (AuthorsSuccess && SeriesSuccess && CategorySuccess && TypeSuccess)
+		var response = await BookService.GetBook(Id);
+		var book = response?.Data;
+		bookModel.Title = book.Title;
+		bookModel.ShortDescription = book.ShortDescription;
+		bookModel.Description = book.Description;
+		bookModel.Category = new DataSelectDTO { Id = book.Category.Id, Name = book.Category.Name };
+		bookModel.Author = new DataSelectDTO { Id = book.Author.Id, Name = book.Author.Name };
+		bookModel.Series = new DataSelectDTO { Id = book.Series.Id, Name = book.Series.Name };
+		bookModel.PageCount = book.PageCount;
+		bookModel.Isbn = book.Isbn;
+		bookModel.SeriesOrder = book.SeriesOrder;
+		bookModel.ReleaseDate = book.ReleaseDate;
+		bookModel.Variants = book.Variants;
+
+
+		foreach (var variant in bookModel?.Variants!)
 		{
-			SubmitDisabled = false;
+			var variantToRemove = typeList.FirstOrDefault(t => t.Id == variant.BookTypeId);
+			if (variantToRemove != null)
+			{
+				typeList.Remove(variantToRemove);
+				removedTypes.Add(variantToRemove);
+			}
 		}
+
 	}
 
 	private async Task UploadFiles(IReadOnlyList<IBrowserFile> files)
@@ -285,22 +314,27 @@
 
 	private void AddVariant()
 	{
+		var type = typeList.FirstOrDefault(t => t.Id == BookVariant.Id && t.Name == BookVariant.Name);
 
-		var type = typeList.Find(i => i.Id == int.Parse(BookVariant));
-		var booktype = new BookType
-			{
-				Id = type.Id,
-				Name = type.Name
-			};
-		var variant = new BookVariant
-			{
-				BookTypeId = bookModel.Id,
-				OriginalPrice = OriginalPrice,
-				Price = Price,
-				BookType = booktype
-			};
+		if (type != null)
+		{
+			var booktype = new BookType
+				{
+					Id = type.Id,
+					Name = type.Name
+				};
+			var variant = new BookVariant
+				{
+					BookTypeId = BookVariant.Id,
+					OriginalPrice = OriginalPrice,
+					Price = Price,
+					BookType = booktype
+				};
 
-		bookModel?.Variants?.Add(variant);
+			typeList.Remove(type);
+			removedTypes.Add(type);
+			bookModel?.Variants?.Add(variant);
+		}
 	}
 
 	private void DeleteVariant(BookVariant bookVariant)
@@ -312,12 +346,22 @@
 		}
 
 		bookModel?.Variants?.Remove(variant);
+
+		var typeToAdd = removedTypes.Find(t => t.Id == variant?.BookType?.Id);
+		if (typeToAdd != null)
+		{
+			typeList.Add(typeToAdd);
+		}
+
+		BookVariant = typeToAdd;
+		OriginalPrice = variant.OriginalPrice;
+		Price = variant.Price;
 	}
 
 
 	private async Task OnValidSubmit(EditContext editorContext)
 	{
-
+		Console.WriteLine(bookModel.Author.Id);
 	}
 
 }
