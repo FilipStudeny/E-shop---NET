@@ -330,6 +330,60 @@ namespace Ecommerce.Server.Services.BookService
             return books;
 		}
 
+		public async Task<ServiceResponse<bool>> CreateBook(EditBookModel editBookModel)
+		{
+            try
+            {
+				var book = new Book
+				{
+					Title = editBookModel.Title,
+					ShortDescription = editBookModel.ShortDescription,
+					Description = editBookModel.Description,
+					ReleaseDate = editBookModel.ReleaseDate,
+					DateAdded = DateTime.Now,
+					PageCount = editBookModel.PageCount,
+					CopiesInStore = editBookModel.CopiesInStore,
+					AuthorId = editBookModel.Author.Id,
+					SeriesId = editBookModel.Series.Id,
+					CategoryId = editBookModel.Category.Id,
+					Isbn = editBookModel.Isbn
+				};
 
+				dataContext.Books.Add(book);
+				await dataContext.SaveChangesAsync();
+
+				var imageList = new List<Image>();
+				foreach (var image in editBookModel.Images)
+				{
+					imageList.Add(new Image { Data = image.Data, BookId = book.Id });
+				}
+				dataContext.Images.AddRange(imageList);
+
+				var variantsList = new List<BookVariant>();
+				foreach (var variant in editBookModel?.Variants!)
+				{
+					var newVariant = new BookVariant
+					{
+						BookId = book.Id,
+						BookTypeId = variant.BookTypeId,
+						OriginalPrice = variant.OriginalPrice,
+						Price = variant.Price
+					};
+
+					variantsList.Add(newVariant);
+				}
+
+				dataContext.AddRange(variantsList);
+
+				await dataContext.SaveChangesAsync();
+
+
+				return new ServiceResponse<bool> { Data = true };
+			}
+            catch
+            {
+				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Error, couldn't create new book" };
+			}
+		}
 	}
 }

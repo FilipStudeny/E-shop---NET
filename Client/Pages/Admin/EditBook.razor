@@ -253,30 +253,35 @@
 			typeList = responseTypes?.Data!;
 		}
 
-		var response = await BookService.GetBook(Id);
-		var book = response?.Data;
-		bookModel.Title = book.Title;
-		bookModel.ShortDescription = book.ShortDescription;
-		bookModel.Description = book.Description;
-		bookModel.Category = new DataSelectDTO { Id = book.Category.Id, Name = book.Category.Name };
-		bookModel.Author = new DataSelectDTO { Id = book.Author.Id, Name = book.Author.Name };
-		bookModel.Series = new DataSelectDTO { Id = book.Series.Id, Name = book.Series.Name };
-		bookModel.PageCount = book.PageCount;
-		bookModel.Isbn = book.Isbn;
-		bookModel.SeriesOrder = book.SeriesOrder;
-		bookModel.ReleaseDate = book.ReleaseDate;
-		bookModel.Variants = book.Variants;
-
-
-		foreach (var variant in bookModel?.Variants!)
+		if(Id != 0)
 		{
-			var variantToRemove = typeList.FirstOrDefault(t => t.Id == variant.BookTypeId);
-			if (variantToRemove != null)
+			var response = await BookService.GetBook(Id);
+			var book = response?.Data;
+			bookModel.Title = book.Title;
+			bookModel.ShortDescription = book.ShortDescription;
+			bookModel.Description = book.Description;
+			bookModel.Category = new DataSelectDTO { Id = book.Category.Id, Name = book.Category.Name };
+			bookModel.Author = new DataSelectDTO { Id = book.Author.Id, Name = book.Author.Name };
+			bookModel.Series = new DataSelectDTO { Id = book.Series.Id, Name = book.Series.Name };
+			bookModel.PageCount = book.PageCount;
+			bookModel.Isbn = book.Isbn;
+			bookModel.SeriesOrder = book.SeriesOrder;
+			bookModel.ReleaseDate = book.ReleaseDate;
+			bookModel.Variants = book.Variants;
+
+
+			foreach (var variant in bookModel?.Variants!)
 			{
-				typeList.Remove(variantToRemove);
-				removedTypes.Add(variantToRemove);
+				var variantToRemove = typeList.FirstOrDefault(t => t.Id == variant.BookTypeId);
+				if (variantToRemove != null)
+				{
+					typeList.Remove(variantToRemove);
+					removedTypes.Add(variantToRemove);
+				}
 			}
 		}
+
+
 
 	}
 
@@ -361,7 +366,7 @@
 
 	private async Task OnValidSubmit(EditContext editorContext)
 	{
-		Console.WriteLine(bookModel.Author.Id);
+		await BookService.AddBook(bookModel);
 	}
 
 }

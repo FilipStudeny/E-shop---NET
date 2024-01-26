@@ -77,5 +77,14 @@ namespace Ecommerce.Server.Controllers
 			var response = await bookService.GetBooksBySeries(id, page);
 			return Ok(response);
 		}
+
+
+		[HttpPost]
+		[Route("admin/book/add")]
+		public async Task<ActionResult<ServiceResponse<bool>>> CreateBook(EditBookModel editBookModel)
+		{
+            var response = await bookService.CreateBook(editBookModel);
+			return Ok(response);
+		}
 	}
 }

@@ -11,25 +11,19 @@ namespace Ecommerce.Shared.Books
     public class Book
     {
         public int Id { get; set; }
-        [Required]
-		[StringLength(100, ErrorMessage = "Title can't be empty", MinimumLength = 1)]
+
 		public string Title { get; set; } = string.Empty;
 
-		[Required]
-		[StringLength(1000, ErrorMessage = "Book description can't be empty", MinimumLength = 1)]
 		public string Description { get; set; } = string.Empty;
 
-		[Required]
-		[StringLength(200, ErrorMessage = "Short description can't be empty", MinimumLength = 1)]
+
 		public string ShortDescription { get; set; } = string.Empty;
         public List<Image> Images { get; set; } = new();
         public string DefaultImageUrl { get; set; } = string.Empty;
 
-		[Required(ErrorMessage = "Book must contain an author, select No author if books doesn't have one")]
 		public Author? Author { get; set; }
         public int AuthorId { get; set; }
 
-		[Required]
 		public Category? Category { get; set; }
         public int CategoryId { get; set; }
 

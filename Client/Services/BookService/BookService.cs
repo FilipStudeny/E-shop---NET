@@ -108,8 +108,14 @@ namespace Ecommerce.Client.Services.BookService
             
         }
 
-		public Task<ServiceResponse<bool>> EditBook(EditBookModel editBookModel)
+		public async Task<ServiceResponse<bool>> AddBook(EditBookModel editBookModel)
 		{
+			var response = await httpClient.PostAsJsonAsync("api/books/admin/add", editBookModel);
+			//var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			//if (responseContent == null)
+			//{
+			//	return new ServiceResponse<bool> { Success = false, Message = "Error" };
+			//}
 			return null;
 
 			/*

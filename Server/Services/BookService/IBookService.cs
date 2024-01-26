@@ -14,6 +14,7 @@ namespace Ecommerce.Server.Services.BookService
         Task<ServiceResponse<List<BookDTO>>> GetBooksByCategory(int id, int page, int numberOfItems = 5);
 		Task<ServiceResponse<List<Book>>> GetBooksBySeries(int seriesId, int page);
 
+        Task<ServiceResponse<bool>> CreateBook(EditBookModel editBookModel);
 
 		Task<List<Book>> GetBooksInSeries(int seriesId);
 		Task<List<Book>> GetBooksByAuthor(int authorId);

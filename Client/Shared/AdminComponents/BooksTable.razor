@@ -1,5 +1,8 @@
 ﻿@inject IBookService BookService
 
+<MudStack Row="true" Justify="Justify.FlexEnd">
+	<MudButton Href="/admin/book/new" Variant="Variant.Filled" Color="Color.Primary">Create new book</MudButton>
+</MudStack>
 <MudTable RowsPerPage="10" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<BookDTO>>>(LoadData))" @ref="table">
 	<HeaderContent>
 		<MudTh>Id</MudTh>
