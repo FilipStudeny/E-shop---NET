@@ -11,7 +11,6 @@ namespace Ecommerce.Shared.Books
         public int Id { get; set; }
         public string Data { get; set; } = string.Empty;
 
-        public Book? Book { get; set; }
         public int BookId { get; set; }
     }
 }

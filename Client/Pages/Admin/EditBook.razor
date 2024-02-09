@@ -263,6 +263,10 @@
 			bookModel.Category = new DataSelectDTO { Id = book.Category.Id, Name = book.Category.Name };
 			bookModel.Author = new DataSelectDTO { Id = book.Author.Id, Name = book.Author.Name };
 			bookModel.Series = new DataSelectDTO { Id = book.Series.Id, Name = book.Series.Name };
+			bookModel.Images = book.Images;
+
+			Console.WriteLine(book.Images.Count);
+
 			bookModel.PageCount = book.PageCount;
 			bookModel.Isbn = book.Isbn;
 			bookModel.SeriesOrder = book.SeriesOrder;

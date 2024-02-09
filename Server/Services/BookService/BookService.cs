@@ -81,8 +81,8 @@ namespace Ecommerce.Server.Services.BookService
             var book = await dataContext.Books
                 .Include(book => book.Variants.Where(variant => variant.Visible && !variant.Deleted))
                 .ThenInclude(variant => variant.BookType)
-                .Include(book => book.Images)
                 .Include(book => book.Author)
+                .Include(book => book.Images)
 				.Include(book => book.Series)
 				.Include(book => book.Category)
 				.FirstOrDefaultAsync(book => book.Id == id && book.Visible && !book.Deleted);
@@ -96,9 +96,14 @@ namespace Ecommerce.Server.Services.BookService
                 };
             }
 
-            return new ServiceResponse<Book> { Data = book };
-        }
+            if(book.Images != null && book.Images.Count > 0)
+            {
+				book.DefaultImageUrl = book.Images[0].Data;
 
+			}
+
+			return new ServiceResponse<Book> { Data = book };
+        }
 
         public async Task<ServiceResponse<List<BookDTO>>> GetFeaturedBooks(int page, int numberOfItems = 5)
         {

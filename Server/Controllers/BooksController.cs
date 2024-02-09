@@ -1,10 +1,12 @@
-﻿using Ecommerce.Server.Services.BookService;
+﻿using Ecommerce.Server.Database;
+using Ecommerce.Server.Services.BookService;
 using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared.DTOs.Books;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Controllers
 {
@@ -13,11 +15,13 @@ namespace Ecommerce.Server.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookService bookService;
+		private readonly DataContext dataContext;
 
-        public BooksController(IBookService bookService)
+		public BooksController(IBookService bookService, DataContext dataContext)
         {
             this.bookService = bookService;
-        }
+			this.dataContext = dataContext;
+		}
 
         [HttpGet]
         [Route("{page}")]
@@ -54,7 +58,16 @@ namespace Ecommerce.Server.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+		[HttpGet]
+		[Route("images/{id}")]
+
+		public async Task<ActionResult<ServiceResponse<List<BookDTO>>>> GetFeaturedBooks(int id)
+		{
+            var response = await dataContext.Images.Where(image => image.BookId == id).ToListAsync();
+			return Ok(response);
+		}
+
+		[HttpGet]
         [Route("suggestions/{search}")]
         public async Task<ActionResult<ServiceResponse<List<FeaturedBook>>>> GetBookSugestions(string search)
         {
