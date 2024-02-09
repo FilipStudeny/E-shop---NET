@@ -387,6 +387,7 @@ namespace Ecommerce.Server.Services.BookService
 					CopiesInStore = editBookModel.CopiesInStore,
 					AuthorId = editBookModel.Author.Id,
 					SeriesId = editBookModel.Series.Id,
+                    SeriesOrder = editBookModel.SeriesOrder,
 					CategoryId = editBookModel.Category.Id,
 					Isbn = editBookModel.Isbn
 				};
@@ -397,11 +398,14 @@ namespace Ecommerce.Server.Services.BookService
 				var imageList = new List<Image>();
 				foreach (var image in editBookModel.Images)
 				{
-					imageList.Add(new Image { Data = image.Data, BookId = book.Id });
-				}
-				dataContext.Images.AddRange(imageList);
+                    var newImage = new Image{ 
+                        Data = image.Data, 
+                        BookId = book.Id 
+                    };
 
-				var variantsList = new List<BookVariant>();
+                    dataContext.Images.Add(newImage);
+				}
+
 				foreach (var variant in editBookModel?.Variants!)
 				{
 					var newVariant = new BookVariant
@@ -412,14 +416,10 @@ namespace Ecommerce.Server.Services.BookService
 						Price = variant.Price
 					};
 
-					variantsList.Add(newVariant);
+                    dataContext.BookVariants.Add(newVariant);
 				}
 
-				dataContext.AddRange(variantsList);
-
 				await dataContext.SaveChangesAsync();
-
-
 				return new ServiceResponse<bool> { Data = true };
 			}
             catch
@@ -432,32 +432,39 @@ namespace Ecommerce.Server.Services.BookService
 		public async Task<ServiceResponse<bool>> UpdateBook(EditBookModel editBookModel)
 		{
             int bookId = editBookModel.Id;
-
             var bookFound = await dataContext.Books.FindAsync(bookId);
             if(bookFound == null)
             {
-                await CreateBook(editBookModel);
-            }
-
-
-            // GET IMAGES FOR BOOK, COMPARE IMAGES WITH NEW IMAGES AND REMOVE THOSE THAT ARE DIFFERENT
-            var oldImages = await dataContext.Images.Where(image => image.BookId == bookId).ToListAsync();
-			var newImages = editBookModel.Images;
-			var imagesToDelete = oldImages.Where(oldImage => !newImages.Any(newImage => newImage.Id == oldImage.Id));
-			foreach (var imageToDelete in imagesToDelete)
-			{
-				dataContext.Images.Remove(imageToDelete);
+				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Book not found" };
 			}
 
-            // GET BOOK VARIANTS, COMPARE AND REMOVE OLD ONES
-            var oldVariants = await dataContext.BookVariants.Where(variant => variant.BookId == bookId).ToListAsync();
-            var editedVariants = editBookModel.Variants;
+			// GET IMAGES FOR BOOK, REMOVE THEM
+			var bookImages = await dataContext.Images.Where(image => image.BookId == bookId).ToListAsync();
+			dataContext.Images.RemoveRange(bookImages);
 
+			// GET BOOK OLD BOOK VARIANTS, REMOVE THEM AND ADD NEW ONES
+			var oldVariants = await dataContext.BookVariants.Where(variant => variant.BookId == bookId).ToListAsync();
+			dataContext.BookVariants.RemoveRange(oldVariants);
 
-            //UPDATE REST OF BOOK DATA
+            //UPDATE REST OF BOOK
+            bookFound.Title = editBookModel.Title;
+            bookFound.ShortDescription = editBookModel.ShortDescription;
+            bookFound.Description = editBookModel.Description;
+            bookFound.ReleaseDate = editBookModel.ReleaseDate;
+            bookFound.DateAdded = DateTime.Now;
+            bookFound.PageCount = editBookModel.PageCount;
+            bookFound.CopiesInStore = editBookModel.CopiesInStore;
+            bookFound.AuthorId = editBookModel.Author.Id;
+            bookFound.SeriesId = editBookModel.Series.Id;
+            bookFound.SeriesOrder = editBookModel.SeriesOrder;
+            bookFound.CategoryId = editBookModel.Category.Id;
+			bookFound.Isbn = editBookModel.Isbn;
 
-            return new ServiceResponse<bool> { Data = false };
+            dataContext.Books.Update(bookFound);
+			await dataContext.SaveChangesAsync();
 
+			return new ServiceResponse<bool> { Data = true };
+			
         }
 	}
 }

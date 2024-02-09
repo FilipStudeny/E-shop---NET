@@ -367,7 +367,12 @@
 
 	private async Task OnValidSubmit(EditContext editorContext)
 	{
-		await BookService.AddBook(bookModel);
+		if(Id != 0)
+		{
+			await BookService.UpdateBook(bookModel);
+		}else{
+			await BookService.AddBook(bookModel);
+		}
 	}
 
 }

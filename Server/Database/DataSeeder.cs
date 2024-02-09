@@ -19,7 +19,7 @@ namespace Ecommerce.Server.Database
             return roles;
         }
 
-        public List<Author> SeedAuthors()
+		public List<Author> SeedAuthors()
         {
             var authors = new List<Author>
             {

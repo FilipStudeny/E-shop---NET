@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ecommerce.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class DataSeeding : Migration
+    public partial class SeedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -210,9 +210,10 @@ namespace Ecommerce.Server.Migrations
                 name: "BookVariants",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     BookId = table.Column<int>(type: "int", nullable: false),
                     BookTypeId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OriginalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Visible = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -220,7 +221,7 @@ namespace Ecommerce.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookVariants", x => new { x.BookId, x.BookTypeId });
+                    table.PrimaryKey("PK_BookVariants", x => x.Id);
                     table.ForeignKey(
                         name: "FK_BookVariants_BookTypes_BookTypeId",
                         column: x => x.BookTypeId,
@@ -323,37 +324,37 @@ namespace Ecommerce.Server.Migrations
                 columns: new[] { "Id", "AuthorId", "CategoryId", "CopiesInStore", "DateAdded", "DefaultImageUrl", "Deleted", "Description", "Featured", "Isbn", "PageCount", "ReleaseDate", "SeriesId", "SeriesOrder", "ShortDescription", "Title", "Visible" },
                 values: new object[,]
                 {
-                    { 1, 3, 2, 150, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1848), "", false, "Winter is coming. A classic world that best describes George R. R. Martin's epic saga A Song of Ice and Fire. The kingdoms of Westeros have a long summer, which must be followed by a harsh winter. But before that, and before the Others return, the game of thrones is being played out, and there are far fewer contenders than contenders. Perhaps the only one who doesn't want the Iron Throne is Lord Eddard Stark, guardian of the north. Therefore, he must become the mover of events that will change everything.", true, "978-80-257-2282-4", 694, new DateTime(1996, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 1, " The kingdoms of Westeros have a long summer, which must be followed by a harsh winter. But before that, and before the Others return, the game of thrones is being played out, and there are far fewer contenders than contenders.", "Game of Thrones", true },
-                    { 2, 3, 2, 120, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1916), "", false, "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.", false, "978-0553579901", 768, new DateTime(1998, 11, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 2, "Winter approaches and armies gather. The battle for the throne continues...", "A Clash of Kings", true },
-                    { 3, 3, 2, 100, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1923), "", false, "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.", true, "978-0553573428", 992, new DateTime(2000, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 3, "Winter approaches and armies gather. The battle for the throne continues...", "A Storm of Swords", true },
-                    { 4, 4, 2, 130, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1930), "", false, "The first part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. The story begins with the hobbit Frodo Baggins inheriting the Ring from his uncle Bilbo. Together with his fellowship, he embarks on a dangerous journey to destroy the Ring and defeat the Dark Lord Sauron.", false, "978-0618640157", 432, new DateTime(1954, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 1, "The journey to destroy the One Ring begins...", "The Fellowship of the Ring", true },
-                    { 5, 7, 3, 110, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1936), "", false, "Foundation is the first novel in Isaac Asimov's Foundation series. The story follows mathematician Hari Seldon, who predicts the fall of the Galactic Empire. To shorten the impending dark age, he establishes a plan to preserve knowledge and guide humanity's future.", false, "978-0553293357", 244, new DateTime(1951, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, 1, "A tale of the decline and revival of a galactic empire...", "Foundation", true },
-                    { 6, 4, 2, 125, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1945), "", false, "The second part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. Frodo and the fellowship face new challenges as they continue their quest to destroy the Ring, while war threatens to engulf Middle-earth.", false, "978-0618260262", 352, new DateTime(1954, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 2, "The quest continues amidst growing darkness...", "The Two Towers", true },
-                    { 7, 7, 3, 105, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1952), "", false, "Foundation and Empire is the second book in Isaac Asimov's Foundation series. The story follows the rise of a new empire and a confrontation between two powerful forces: the Foundation and the Empire.", true, "978-0553293371", 272, new DateTime(1952, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, 2, "The struggle for dominance in a galaxy at the edge of chaos...", "Foundation and Empire", true },
-                    { 8, 5, 5, 90, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1958), "", false, "Hercule Poirot investigates a murder on the luxurious Orient Express train. A classic murder mystery novel by Agatha Christie.", false, "978-0062693662", 256, new DateTime(1934, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 1, "A murder mystery on a train...", "Murder on the Orient Express", true },
-                    { 9, 6, 4, 85, new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1965), "", false, "A post-apocalyptic horror novel by Stephen King. After a deadly plague kills most of the world's population, survivors are drawn to two charismatic leaders, leading to a final stand between good and evil.", true, "978-0307743688", 1153, new DateTime(1978, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 6, 1, "The battle between good and evil after a pandemic...", "The Stand", true }
+                    { 1, 3, 2, 150, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3255), "", false, "Winter is coming. A classic world that best describes George R. R. Martin's epic saga A Song of Ice and Fire. The kingdoms of Westeros have a long summer, which must be followed by a harsh winter. But before that, and before the Others return, the game of thrones is being played out, and there are far fewer contenders than contenders. Perhaps the only one who doesn't want the Iron Throne is Lord Eddard Stark, guardian of the north. Therefore, he must become the mover of events that will change everything.", true, "978-80-257-2282-4", 694, new DateTime(1996, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 1, " The kingdoms of Westeros have a long summer, which must be followed by a harsh winter. But before that, and before the Others return, the game of thrones is being played out, and there are far fewer contenders than contenders.", "Game of Thrones", true },
+                    { 2, 3, 2, 120, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3327), "", false, "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.", false, "978-0553579901", 768, new DateTime(1998, 11, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 2, "Winter approaches and armies gather. The battle for the throne continues...", "A Clash of Kings", true },
+                    { 3, 3, 2, 100, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3407), "", false, "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.", true, "978-0553573428", 992, new DateTime(2000, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 3, "Winter approaches and armies gather. The battle for the throne continues...", "A Storm of Swords", true },
+                    { 4, 4, 2, 130, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3417), "", false, "The first part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. The story begins with the hobbit Frodo Baggins inheriting the Ring from his uncle Bilbo. Together with his fellowship, he embarks on a dangerous journey to destroy the Ring and defeat the Dark Lord Sauron.", false, "978-0618640157", 432, new DateTime(1954, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 1, "The journey to destroy the One Ring begins...", "The Fellowship of the Ring", true },
+                    { 5, 7, 3, 110, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3424), "", false, "Foundation is the first novel in Isaac Asimov's Foundation series. The story follows mathematician Hari Seldon, who predicts the fall of the Galactic Empire. To shorten the impending dark age, he establishes a plan to preserve knowledge and guide humanity's future.", false, "978-0553293357", 244, new DateTime(1951, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, 1, "A tale of the decline and revival of a galactic empire...", "Foundation", true },
+                    { 6, 4, 2, 125, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3435), "", false, "The second part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. Frodo and the fellowship face new challenges as they continue their quest to destroy the Ring, while war threatens to engulf Middle-earth.", false, "978-0618260262", 352, new DateTime(1954, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 2, "The quest continues amidst growing darkness...", "The Two Towers", true },
+                    { 7, 7, 3, 105, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3443), "", false, "Foundation and Empire is the second book in Isaac Asimov's Foundation series. The story follows the rise of a new empire and a confrontation between two powerful forces: the Foundation and the Empire.", true, "978-0553293371", 272, new DateTime(1952, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, 2, "The struggle for dominance in a galaxy at the edge of chaos...", "Foundation and Empire", true },
+                    { 8, 5, 5, 90, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3450), "", false, "Hercule Poirot investigates a murder on the luxurious Orient Express train. A classic murder mystery novel by Agatha Christie.", false, "978-0062693662", 256, new DateTime(1934, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 1, "A murder mystery on a train...", "Murder on the Orient Express", true },
+                    { 9, 6, 4, 85, new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3457), "", false, "A post-apocalyptic horror novel by Stephen King. After a deadly plague kills most of the world's population, survivors are drawn to two charismatic leaders, leading to a final stand between good and evil.", true, "978-0307743688", 1153, new DateTime(1978, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 6, 1, "The battle between good and evil after a pandemic...", "The Stand", true }
                 });
 
             migrationBuilder.InsertData(
                 table: "BookVariants",
-                columns: new[] { "BookId", "BookTypeId", "Deleted", "Id", "OriginalPrice", "Price", "Visible" },
+                columns: new[] { "Id", "BookId", "BookTypeId", "Deleted", "OriginalPrice", "Price", "Visible" },
                 values: new object[,]
                 {
-                    { 1, 1, false, 1, 30.99m, 20.99m, true },
-                    { 1, 2, false, 2, 20.99m, 15.99m, true },
-                    { 1, 4, false, 3, 20.99m, 10.99m, true },
-                    { 2, 1, false, 4, 30.99m, 25.99m, true },
-                    { 2, 2, false, 5, 25.99m, 20.99m, true },
-                    { 3, 1, false, 6, 35.99m, 30.99m, true },
-                    { 3, 3, false, 7, 20.99m, 15.99m, true },
-                    { 4, 1, false, 8, 28.99m, 22.99m, true },
-                    { 4, 3, false, 9, 23.99m, 17.99m, true },
-                    { 5, 2, false, 10, 24.99m, 19.99m, true },
-                    { 5, 4, false, 11, 19.99m, 14.99m, true },
-                    { 8, 1, false, 12, 19.99m, 14.99m, true },
-                    { 8, 2, false, 13, 24.99m, 19.99m, true },
-                    { 9, 1, false, 14, 25.99m, 20.99m, true },
-                    { 9, 3, false, 15, 20.99m, 15.99m, true }
+                    { 1, 1, 1, false, 30.99m, 20.99m, true },
+                    { 2, 1, 2, false, 20.99m, 15.99m, true },
+                    { 3, 1, 4, false, 20.99m, 10.99m, true },
+                    { 4, 2, 1, false, 30.99m, 25.99m, true },
+                    { 5, 2, 2, false, 25.99m, 20.99m, true },
+                    { 6, 3, 1, false, 35.99m, 30.99m, true },
+                    { 7, 3, 3, false, 20.99m, 15.99m, true },
+                    { 8, 4, 1, false, 28.99m, 22.99m, true },
+                    { 9, 4, 3, false, 23.99m, 17.99m, true },
+                    { 10, 5, 2, false, 24.99m, 19.99m, true },
+                    { 11, 5, 4, false, 19.99m, 14.99m, true },
+                    { 12, 8, 1, false, 19.99m, 14.99m, true },
+                    { 13, 8, 2, false, 24.99m, 19.99m, true },
+                    { 14, 9, 1, false, 25.99m, 20.99m, true },
+                    { 15, 9, 3, false, 20.99m, 15.99m, true }
                 });
 
             migrationBuilder.InsertData(
@@ -386,6 +387,11 @@ namespace Ecommerce.Server.Migrations
                 name: "IX_Books_SeriesId",
                 table: "Books",
                 column: "SeriesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookVariants_BookId",
+                table: "BookVariants",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookVariants_BookTypeId",

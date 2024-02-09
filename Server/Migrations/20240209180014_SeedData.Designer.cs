@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240209113921_DataSeeding")]
-    partial class DataSeeding
+    [Migration("20240209180014_SeedData")]
+    partial class SeedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -204,7 +204,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 3,
                             CategoryId = 2,
                             CopiesInStore = 150,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1848),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3255),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "Winter is coming. A classic world that best describes George R. R. Martin's epic saga A Song of Ice and Fire. The kingdoms of Westeros have a long summer, which must be followed by a harsh winter. But before that, and before the Others return, the game of thrones is being played out, and there are far fewer contenders than contenders. Perhaps the only one who doesn't want the Iron Throne is Lord Eddard Stark, guardian of the north. Therefore, he must become the mover of events that will change everything.",
@@ -224,7 +224,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 3,
                             CategoryId = 2,
                             CopiesInStore = 120,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1916),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3327),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.",
@@ -244,7 +244,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 3,
                             CategoryId = 2,
                             CopiesInStore = 100,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1923),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3407),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "The Seven Kingdoms are divided by revolt and blood feud, and winter approaches like an angry beast. Beyond the Wall, the armies of the Night's Watch are massing for an assault on the kingdom of the dead. The young, the brave, and the foolish, all compete for the throne.",
@@ -264,7 +264,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 4,
                             CategoryId = 2,
                             CopiesInStore = 130,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1930),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3417),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "The first part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. The story begins with the hobbit Frodo Baggins inheriting the Ring from his uncle Bilbo. Together with his fellowship, he embarks on a dangerous journey to destroy the Ring and defeat the Dark Lord Sauron.",
@@ -284,7 +284,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 7,
                             CategoryId = 3,
                             CopiesInStore = 110,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1936),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3424),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "Foundation is the first novel in Isaac Asimov's Foundation series. The story follows mathematician Hari Seldon, who predicts the fall of the Galactic Empire. To shorten the impending dark age, he establishes a plan to preserve knowledge and guide humanity's future.",
@@ -304,7 +304,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 4,
                             CategoryId = 2,
                             CopiesInStore = 125,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1945),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3435),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "The second part of J.R.R. Tolkien's epic masterpiece The Lord of the Rings. Frodo and the fellowship face new challenges as they continue their quest to destroy the Ring, while war threatens to engulf Middle-earth.",
@@ -324,7 +324,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 7,
                             CategoryId = 3,
                             CopiesInStore = 105,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1952),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3443),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "Foundation and Empire is the second book in Isaac Asimov's Foundation series. The story follows the rise of a new empire and a confrontation between two powerful forces: the Foundation and the Empire.",
@@ -344,7 +344,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 5,
                             CategoryId = 5,
                             CopiesInStore = 90,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1958),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3450),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "Hercule Poirot investigates a murder on the luxurious Orient Express train. A classic murder mystery novel by Agatha Christie.",
@@ -364,7 +364,7 @@ namespace Ecommerce.Server.Migrations
                             AuthorId = 6,
                             CategoryId = 4,
                             CopiesInStore = 85,
-                            DateAdded = new DateTime(2024, 2, 9, 12, 39, 21, 161, DateTimeKind.Local).AddTicks(1965),
+                            DateAdded = new DateTime(2024, 2, 9, 19, 0, 14, 457, DateTimeKind.Local).AddTicks(3457),
                             DefaultImageUrl = "",
                             Deleted = false,
                             Description = "A post-apocalyptic horror novel by Stephen King. After a deadly plague kills most of the world's population, survivors are drawn to two charismatic leaders, leading to a final stand between good and evil.",
@@ -419,6 +419,10 @@ namespace Ecommerce.Server.Migrations
 
             modelBuilder.Entity("Ecommerce.Shared.Books.BookVariant", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
@@ -427,9 +431,6 @@ namespace Ecommerce.Server.Migrations
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("OriginalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -440,7 +441,9 @@ namespace Ecommerce.Server.Migrations
                     b.Property<bool>("Visible")
                         .HasColumnType("tinyint(1)");
 
-                    b.HasKey("BookId", "BookTypeId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("BookTypeId");
 
@@ -449,150 +452,150 @@ namespace Ecommerce.Server.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
                             BookId = 1,
                             BookTypeId = 1,
                             Deleted = false,
-                            Id = 1,
                             OriginalPrice = 30.99m,
                             Price = 20.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 2,
                             BookId = 1,
                             BookTypeId = 2,
                             Deleted = false,
-                            Id = 2,
                             OriginalPrice = 20.99m,
                             Price = 15.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 3,
                             BookId = 1,
                             BookTypeId = 4,
                             Deleted = false,
-                            Id = 3,
                             OriginalPrice = 20.99m,
                             Price = 10.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 4,
                             BookId = 2,
                             BookTypeId = 1,
                             Deleted = false,
-                            Id = 4,
                             OriginalPrice = 30.99m,
                             Price = 25.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 5,
                             BookId = 2,
                             BookTypeId = 2,
                             Deleted = false,
-                            Id = 5,
                             OriginalPrice = 25.99m,
                             Price = 20.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 6,
                             BookId = 3,
                             BookTypeId = 1,
                             Deleted = false,
-                            Id = 6,
                             OriginalPrice = 35.99m,
                             Price = 30.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 7,
                             BookId = 3,
                             BookTypeId = 3,
                             Deleted = false,
-                            Id = 7,
                             OriginalPrice = 20.99m,
                             Price = 15.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 8,
                             BookId = 4,
                             BookTypeId = 1,
                             Deleted = false,
-                            Id = 8,
                             OriginalPrice = 28.99m,
                             Price = 22.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 9,
                             BookId = 4,
                             BookTypeId = 3,
                             Deleted = false,
-                            Id = 9,
                             OriginalPrice = 23.99m,
                             Price = 17.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 10,
                             BookId = 5,
                             BookTypeId = 2,
                             Deleted = false,
-                            Id = 10,
                             OriginalPrice = 24.99m,
                             Price = 19.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 11,
                             BookId = 5,
                             BookTypeId = 4,
                             Deleted = false,
-                            Id = 11,
                             OriginalPrice = 19.99m,
                             Price = 14.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 12,
                             BookId = 8,
                             BookTypeId = 1,
                             Deleted = false,
-                            Id = 12,
                             OriginalPrice = 19.99m,
                             Price = 14.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 13,
                             BookId = 8,
                             BookTypeId = 2,
                             Deleted = false,
-                            Id = 13,
                             OriginalPrice = 24.99m,
                             Price = 19.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 14,
                             BookId = 9,
                             BookTypeId = 1,
                             Deleted = false,
-                            Id = 14,
                             OriginalPrice = 25.99m,
                             Price = 20.99m,
                             Visible = true
                         },
                         new
                         {
+                            Id = 15,
                             BookId = 9,
                             BookTypeId = 3,
                             Deleted = false,
-                            Id = 15,
                             OriginalPrice = 20.99m,
                             Price = 15.99m,
                             Visible = true

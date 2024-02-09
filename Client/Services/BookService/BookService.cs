@@ -111,12 +111,13 @@ namespace Ecommerce.Client.Services.BookService
 		public async Task<ServiceResponse<bool>> AddBook(EditBookModel editBookModel)
 		{
 			var response = await httpClient.PostAsJsonAsync("api/books/admin/book/add", editBookModel);
-			//var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-			//if (responseContent == null)
-			//{
-			//	return new ServiceResponse<bool> { Success = false, Message = "Error" };
-			//}
-			return null;
+			var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			if (responseContent == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Error creating new book" };
+			}
+			return responseContent;
+
 
 			/*
 			var response = await httpClient.PutAsJsonAsync("api/user/change/address", addressDTO);
@@ -140,12 +141,12 @@ namespace Ecommerce.Client.Services.BookService
 		public async Task<ServiceResponse<bool>> UpdateBook(EditBookModel editBookModel)
 		{
 			var response = await httpClient.PutAsJsonAsync("api/books/admin/book/update", editBookModel);
-			//var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
-			//if (responseContent == null)
-			//{
-			//	return new ServiceResponse<bool> { Success = false, Message = "Error" };
-			//}
-			return null;
+			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to update book, try again later" };
+			}
+			return responseData;
 		}
 	}
 }

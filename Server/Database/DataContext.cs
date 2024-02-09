@@ -23,12 +23,6 @@ namespace Ecommerce.Server.Database
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BookVariant>().HasKey(book => new
-            {
-                book.BookId,
-                book.BookTypeId
-            });
-
 			modelBuilder.Entity<User>()
 			    .HasOne(u => u.Role)
 			    .WithMany()
