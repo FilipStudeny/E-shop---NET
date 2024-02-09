@@ -10,6 +10,7 @@ namespace Ecommerce.Shared.Books
 {
     public class BookVariant
     {
+        public int Id { get; set; }
         //Composite-primary key
         [JsonIgnore] //Fix for circular reference
         public Book? Book { get; set; }

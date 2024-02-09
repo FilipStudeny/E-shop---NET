@@ -89,8 +89,20 @@ namespace Ecommerce.Server.Services.SeriesService
 				};
 			}
 
-			var books = await dataContext.Books.Where(book => book.SeriesId == series.Id && book.Visible && !book.Deleted).ToListAsync();
-            var author = await dataContext.Authors.FirstOrDefaultAsync(author => author.Id == series.AuthorId && author.Visible && !author.Deleted);
+			var books = await dataContext.Books
+				.Where(book => book.SeriesId == series.Id && book.Visible && !book.Deleted)
+				.Include(book => book.Images)
+				.ToListAsync();
+
+			foreach (var book in books)
+			{
+				if (book.Images != null && book.Images.Count > 0)
+				{
+					book.DefaultImageUrl = book.Images[0].Data;
+				}
+			}
+
+			var author = await dataContext.Authors.FirstOrDefaultAsync(author => author.Id == series.AuthorId && author.Visible && !author.Deleted);
 
             return new ServiceResponse<SeriesDTO>
 			{

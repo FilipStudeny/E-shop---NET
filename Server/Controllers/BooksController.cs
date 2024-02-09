@@ -58,14 +58,6 @@ namespace Ecommerce.Server.Controllers
             return Ok(response);
         }
 
-		[HttpGet]
-		[Route("images/{id}")]
-
-		public async Task<ActionResult<ServiceResponse<List<BookDTO>>>> GetFeaturedBooks(int id)
-		{
-            var response = await dataContext.Images.Where(image => image.BookId == id).ToListAsync();
-			return Ok(response);
-		}
 
 		[HttpGet]
         [Route("suggestions/{search}")]
@@ -97,6 +89,14 @@ namespace Ecommerce.Server.Controllers
 		public async Task<ActionResult<ServiceResponse<bool>>> CreateBook(EditBookModel editBookModel)
 		{
             var response = await bookService.CreateBook(editBookModel);
+			return Ok(response);
+		}
+
+        [HttpPut]
+		[Route("admin/book/update")]
+		public async Task<ActionResult<ServiceResponse<bool>>> UpdateBook(EditBookModel editBookModel)
+		{
+			var response = await bookService.UpdateBook(editBookModel);
 			return Ok(response);
 		}
 	}

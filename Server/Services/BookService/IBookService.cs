@@ -15,6 +15,7 @@ namespace Ecommerce.Server.Services.BookService
 		Task<ServiceResponse<List<Book>>> GetBooksBySeries(int seriesId, int page);
 
         Task<ServiceResponse<bool>> CreateBook(EditBookModel editBookModel);
+		Task<ServiceResponse<bool>> UpdateBook(EditBookModel editBookModel);
 
 		Task<List<Book>> GetBooksInSeries(int seriesId);
 		Task<List<Book>> GetBooksByAuthor(int authorId);

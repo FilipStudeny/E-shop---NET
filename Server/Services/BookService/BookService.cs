@@ -45,6 +45,14 @@ namespace Ecommerce.Server.Services.BookService
 				   .Take(booksOnPage)
 				   .ToListAsync();
 
+			foreach (var book in booksFromDb)
+			{
+				if (book.Images != null && book.Images.Count > 0)
+				{
+					book.DefaultImageUrl = book.Images[0].Data;
+				}
+			}
+
 			if (booksFromDb == null)
             {
                 return new ServiceResponse<List<BookDTO>>
@@ -105,7 +113,8 @@ namespace Ecommerce.Server.Services.BookService
 			return new ServiceResponse<Book> { Data = book };
         }
 
-        public async Task<ServiceResponse<List<BookDTO>>> GetFeaturedBooks(int page, int numberOfItems = 5)
+
+		public async Task<ServiceResponse<List<BookDTO>>> GetFeaturedBooks(int page, int numberOfItems = 5)
         {
 
 			var booksOnPage = numberOfItems;
@@ -120,6 +129,15 @@ namespace Ecommerce.Server.Services.BookService
 				.Skip((page - 1) * booksOnPage)
 				.Take(booksOnPage)
                 .ToListAsync();
+
+
+			foreach (var book in booksFromDb)
+			{
+				if (book.Images != null && book.Images.Count > 0)
+				{
+					book.DefaultImageUrl = book.Images[0].Data;
+				}
+			}
 
 			if (booksFromDb == null)
 			{
@@ -255,6 +273,15 @@ namespace Ecommerce.Server.Services.BookService
                .Take(booksOnPage)
                .ToListAsync();
 
+
+			foreach (var book in booksFromDb)
+			{
+				if (book.Images != null && book.Images.Count > 0)
+				{
+					book.DefaultImageUrl = book.Images[0].Data;
+				}
+			}
+
 			if (booksFromDb == null)
 			{
 				return new ServiceResponse<List<BookDTO>>
@@ -299,7 +326,15 @@ namespace Ecommerce.Server.Services.BookService
                    .Take(booksOnPage)
                    .ToListAsync();
 
-                if (booksFromDb == null)
+				foreach (var book in booksFromDb)
+				{
+					if (book.Images != null && book.Images.Count > 0)
+					{
+						book.DefaultImageUrl = book.Images[0].Data;
+					}
+				}
+
+				if (booksFromDb == null)
                 {
                     return new ServiceResponse<List<Book>>
                     {
@@ -331,8 +366,10 @@ namespace Ecommerce.Server.Services.BookService
 
 		public async Task<List<Book>> GetBooksInSeries(int seriesId)
 		{
-            var books = await dataContext.Books.Where(book => book.SeriesId == seriesId && book.Visible && !book.Deleted).ToListAsync();
-            return books;
+            var books = await dataContext.Books.Where(book => book.SeriesId == seriesId && book.Visible && !book.Deleted)
+				.ToListAsync();
+
+			return books;
 		}
 
 		public async Task<ServiceResponse<bool>> CreateBook(EditBookModel editBookModel)
@@ -390,5 +427,37 @@ namespace Ecommerce.Server.Services.BookService
 				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Error, couldn't create new book" };
 			}
 		}
+
+
+		public async Task<ServiceResponse<bool>> UpdateBook(EditBookModel editBookModel)
+		{
+            int bookId = editBookModel.Id;
+
+            var bookFound = await dataContext.Books.FindAsync(bookId);
+            if(bookFound == null)
+            {
+                await CreateBook(editBookModel);
+            }
+
+
+            // GET IMAGES FOR BOOK, COMPARE IMAGES WITH NEW IMAGES AND REMOVE THOSE THAT ARE DIFFERENT
+            var oldImages = await dataContext.Images.Where(image => image.BookId == bookId).ToListAsync();
+			var newImages = editBookModel.Images;
+			var imagesToDelete = oldImages.Where(oldImage => !newImages.Any(newImage => newImage.Id == oldImage.Id));
+			foreach (var imageToDelete in imagesToDelete)
+			{
+				dataContext.Images.Remove(imageToDelete);
+			}
+
+            // GET BOOK VARIANTS, COMPARE AND REMOVE OLD ONES
+            var oldVariants = await dataContext.BookVariants.Where(variant => variant.BookId == bookId).ToListAsync();
+            var editedVariants = editBookModel.Variants;
+
+
+            //UPDATE REST OF BOOK DATA
+
+            return new ServiceResponse<bool> { Data = false };
+
+        }
 	}
 }

@@ -99,10 +99,20 @@ namespace Ecommerce.Server.Services.AuthorsService
 
             var authorId = author.Id;
 			var series = await seriesService.GetSeriesByAuthor(authorId);
-			var books = await dataContext.Books.Where(book => book.AuthorId == authorId && book.Visible && !book.Deleted).ToListAsync();
+			var books = await dataContext.Books
+				.Where(book => book.AuthorId == authorId && book.Visible && !book.Deleted)
+				.Include(book => book.Images)
+				.ToListAsync();
 
+			foreach (var book in books)
+			{
+				if (book.Images != null && book.Images.Count > 0)
+				{
+					book.DefaultImageUrl = book.Images[0].Data;
+				}
+			}
 
-            var data = new AuthorDTO
+			var data = new AuthorDTO
 			{
 				Author = author,
 				Series = series,

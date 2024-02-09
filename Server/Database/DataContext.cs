@@ -35,11 +35,6 @@ namespace Ecommerce.Server.Database
 			    .HasForeignKey(u => u.RoleId)
 			    .IsRequired();
 
-          /*  modelBuilder.Entity<Image>()
-                .HasOne(i => i.Book)
-                .WithMany(b => b.Images)
-                .HasForeignKey(i => i.BookId);
-            */
 			//Seed data
 			modelBuilder.Entity<Category>().HasData(dataSeeder.SeedCategories());
             modelBuilder.Entity<Author>().HasData(dataSeeder.SeedAuthors());
@@ -48,6 +43,7 @@ namespace Ecommerce.Server.Database
             modelBuilder.Entity<Series>().HasData(dataSeeder.SeedSeries());
             modelBuilder.Entity<Book>().HasData( dataSeeder.SeedBooks());
 			modelBuilder.Entity<Role>().HasData(dataSeeder.SeedRoles());
+			modelBuilder.Entity<Image>().HasData(dataSeeder.SeedBookImages());
 
 		}
 
