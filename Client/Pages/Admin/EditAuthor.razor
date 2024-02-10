@@ -1,0 +1,131 @@
+﻿@page "/admin/edit/author/{name}"
+@page "/admin/author/new"
+
+@inject IAuthorsService AuthorsService
+@inject NavigationManager NavigationManager
+<PageTitle>E-Shop | Edit book data</PageTitle>
+
+<MudText Typo="Typo.h4">Edit author @Name</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="d-flex flex-column justify-content-between mb-5">
+	<EditForm Model="authorModel" OnValidSubmit="OnValidSubmit" class="mt-5">
+		<DataAnnotationsValidator />
+		<MudStack Justify="Justify.Center">
+			<MudTextField T="string" ValueChanged="UpdateUrl" Value="authorModel.Name" Label="Name" For="(() => authorModel.Name)" />
+			<MudTextField Label="Url" @bind-Value="authorModel.Url" For="(() => authorModel.Url)" Disabled="true"/>
+
+			<MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+				<MudFileUpload T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadImage" MaximumFileCount="1">
+					<ButtonTemplate Context="image_context">
+						<MudButton HtmlTag="label"
+								Variant="Variant.Filled"
+								Color="Color.Primary"
+								StartIcon="@Icons.Material.Filled.CloudUpload"
+								for="@image_context.Id">
+							Upload author image
+						</MudButton>
+					</ButtonTemplate>
+				</MudFileUpload>
+
+				@if (!string.IsNullOrEmpty(authorModel.Image))
+				{
+					<MudImage Src="@authorModel.Image" Width="400" Height="400" ObjectFit="ObjectFit.Contain" Class="mud-elevation-4" />
+				}else{
+					<MudAlert Severity="Severity.Warning" Variant="Variant.Filled" Square="true" Class="my-2">Author must have a photo</MudAlert>
+				}
+			</MudStack>
+
+
+			<MudTextField T="string" Counter="1000" Label="Biography" @bind-Value="authorModel.Biography" Variant="Variant.Outlined" Lines="10" For="(() => authorModel.Biography)" />
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				<MudCheckBox Size="Size.Medium" @bind-Value="@authorModel!.Visible" For="(() => authorModel!.Visible)" Label="Visible" Color="Color.Primary"></MudCheckBox>
+			</MudStack>
+
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				@if (Success){
+					<MudText Color="Color.Success">@Message</MudText>
+				}else{
+					<MudText Color="Color.Error">@Message</MudText>
+				}
+				<MudSpacer />
+
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit author</MudButton>
+				
+
+			</MudStack>
+		</MudStack>
+	</EditForm>
+</MudContainer>
+
+@code {
+
+
+	[Parameter] public string Name { get; set; } = string.Empty;
+	public EditAuthorModel authorModel = new();
+	private string oldUrl = string.Empty;
+
+	private bool Success = false;
+	private string Message = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (!string.IsNullOrEmpty(Name)){
+			var response = await AuthorsService.GetAuthorForEdit(Name);
+			Success = response.Success;
+			Message = response.Message;
+
+			if (response.Success)
+			{
+				var author = response.Data;
+				authorModel.Name = author!.Name;
+				authorModel.Url = author.Url;
+				authorModel.Image = author.Image;
+				authorModel.Biography = author.Biography;
+				authorModel.Id = author.Id;
+				authorModel.Visible = author.Visible;
+
+				oldUrl = author.Url;
+			}
+		}
+	}
+
+	private async Task UploadImage(IBrowserFile file)
+	{
+		var format = "image/png";
+
+		var resizeImage = await file.RequestImageFileAsync(format, 400, 400);
+		var buffer = new byte[resizeImage.Size];
+		await resizeImage.OpenReadStream().ReadAsync(buffer);
+		var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+		authorModel.Image = imageData;
+	}
+
+	private async Task OnValidSubmit()
+	{
+		if (!string.IsNullOrEmpty(Name))
+		{
+			var response = await AuthorsService.UpdateAuthor(authorModel, oldUrl);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/authors/author/{authorModel.Url}");
+		}
+		else
+		{
+			var response = await AuthorsService.CreateAuthor(authorModel);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/admin/1");
+		}
+	}
+
+	private void UpdateUrl(string value)
+	{
+		string formattedUrl = value?.Replace(" ", "-").ToLower()!;
+		authorModel.Url = formattedUrl;
+		authorModel.Name = value;
+	}
+}

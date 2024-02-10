@@ -137,5 +137,62 @@ namespace Ecommerce.Server.Services.AuthorsService
 			throw new NotImplementedException();
 		}
 
+		public async Task<ServiceResponse<EditAuthorModel>> GetAuthorForEdit(string name)
+		{
+			var author = await dataContext.Authors.FirstOrDefaultAsync(author => author.Url == name);
+			if(author == null)
+			{
+				return new ServiceResponse<EditAuthorModel> { Data = null, Success = false ,Message = "Author not found" };
+			}
+
+			return new ServiceResponse<EditAuthorModel>
+			{
+				Data = new EditAuthorModel
+				{
+					Id = author.Id,
+					Name = author.Name,
+					Image = author.Image,
+					Biography = author.BiographyText,
+					Url = author.Url
+				}
+			};
+		}
+
+		public async Task<ServiceResponse<bool>> CreateAuthor(EditAuthorModel editAuthorModel)
+		{
+			var author = new Author
+			{
+				Name = editAuthorModel.Name,
+				Url = editAuthorModel.Url,
+				Image = editAuthorModel.Image,
+				BiographyText = editAuthorModel.Biography,
+				Visible = editAuthorModel.Visible
+			};
+
+			dataContext.Authors.Add(author);
+			await dataContext.SaveChangesAsync();
+
+			return new ServiceResponse<bool> { Data = true };
+		}
+
+		public async Task<ServiceResponse<bool>> UpdateAuthor(EditAuthorModel editAuthorModel)
+		{
+			var authorId = editAuthorModel.Id;
+			var author = await dataContext.Authors.FindAsync(authorId);
+			if(author == null)
+			{
+				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Author not found" };
+			}
+
+			author!.Name = editAuthorModel.Name;
+			author.Url = editAuthorModel.Url;
+			author.BiographyText = editAuthorModel.Biography;
+			author.Visible = editAuthorModel.Visible;
+
+			dataContext.Authors.Update(author);
+			await dataContext.SaveChangesAsync();
+
+			return new ServiceResponse<bool> { Data = true, Message = "Author updated" };
+		}
 	}
 }

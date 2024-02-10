@@ -3,6 +3,7 @@ using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared.DTOs.Authors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Server.Controllers
@@ -51,6 +52,30 @@ namespace Ecommerce.Server.Controllers
 		public async Task<ActionResult<ServiceResponse<List<DataSelectDTO>>>> GetAllAuthorNames()
 		{
 			var response = await authorsService.GetAuthorsForEdit();
+			return Ok(response);
+		}
+
+		[HttpGet]
+		[Route("admin/author/{name}"), Authorize]
+		public async Task<ActionResult<ServiceResponse<EditAuthorModel>>> GetAuthorForEdit(string name)
+		{
+			var response = await authorsService.GetAuthorForEdit(name);
+			return Ok(response);
+		}
+
+		[HttpPut]
+		[Route("admin/author/update"), Authorize]
+		public async Task<ActionResult<ServiceResponse<bool>>> UpdateAuthor(EditAuthorModel authorModel)
+		{
+			var response = await authorsService.UpdateAuthor(authorModel);
+			return Ok(response);
+		}
+
+		[HttpPost]
+		[Route("admin/author/add"), Authorize]
+		public async Task<ActionResult<ServiceResponse<bool>>> AddAuthor(EditAuthorModel editAuthorModel)
+		{
+			var response = await authorsService.CreateAuthor(editAuthorModel);
 			return Ok(response);
 		}
 	}

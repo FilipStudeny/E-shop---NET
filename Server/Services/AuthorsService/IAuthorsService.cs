@@ -14,6 +14,9 @@ namespace Ecommerce.Server.Services.AuthorsService
 		Task<ServiceResponse<bool>> DeleteAuthor(int id);
 
 
+		Task<ServiceResponse<EditAuthorModel>> GetAuthorForEdit(string name);
+		Task<ServiceResponse<bool>> UpdateAuthor(EditAuthorModel editAuthorModel);
+		Task<ServiceResponse<bool>> CreateAuthor(EditAuthorModel editAuthorModel);
 
 		Task<ServiceResponse<List<DataSelectDTO>>> GetAuthorsForEdit();
 

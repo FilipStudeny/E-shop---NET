@@ -85,7 +85,7 @@ namespace Ecommerce.Server.Controllers
 
 
 		[HttpPost]
-		[Route("admin/book/add")]
+		[Route("admin/book/add"), Authorize]
 		public async Task<ActionResult<ServiceResponse<bool>>> CreateBook(EditBookModel editBookModel)
 		{
             var response = await bookService.CreateBook(editBookModel);
@@ -93,7 +93,7 @@ namespace Ecommerce.Server.Controllers
 		}
 
         [HttpPut]
-		[Route("admin/book/update")]
+		[Route("admin/book/update"), Authorize]
 		public async Task<ActionResult<ServiceResponse<bool>>> UpdateBook(EditBookModel editBookModel)
 		{
 			var response = await bookService.UpdateBook(editBookModel);

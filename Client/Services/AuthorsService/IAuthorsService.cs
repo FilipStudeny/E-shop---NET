@@ -19,5 +19,10 @@ namespace Ecommerce.Client.Services.AuthorsService
 		Task<ServiceResponse<AuthorDTO>> GetAuthor(string Name);
 		Task<ServiceResponse<List<DataSelectDTO>>> GetAllAuthorsNames();
 
+		Task<ServiceResponse<EditAuthorModel>> GetAuthorForEdit(string name);
+		Task<ServiceResponse<bool>> UpdateAuthor(EditAuthorModel editAuthorModel, string urlName);
+		Task<ServiceResponse<bool>> CreateAuthor(EditAuthorModel editAuthorModel);
+
+
 	}
 }

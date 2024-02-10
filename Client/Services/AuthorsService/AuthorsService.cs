@@ -3,10 +3,12 @@ using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared.DTOs.Authors;
+using Ecommerce.Shared.DTOs.Books;
 using MudBlazor;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Net.NetworkInformation;
+using System.Xml.Linq;
 
 namespace Ecommerce.Client.Services.AuthorsService
 {
@@ -55,14 +57,42 @@ namespace Ecommerce.Client.Services.AuthorsService
 		{
 			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<DataSelectDTO>>>($"api/authors/admin/all");
 			return response!;
-
 		}
-
 
 		public async Task<ServiceResponse<AuthorDTO>> GetAuthor(string Name)
 		{
 			var response = await httpClient.GetFromJsonAsync<ServiceResponse<AuthorDTO>>($"api/authors/author/{Name}");
 			return response!;
+		}
+
+		public async Task<ServiceResponse<EditAuthorModel>> GetAuthorForEdit(string name)
+		{
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<EditAuthorModel>>($"api/authors/admin/author/{name}");
+			return response!;
+		}
+
+		public async Task<ServiceResponse<bool>> UpdateAuthor(EditAuthorModel editAuthorModel, string urlName)
+		{
+			var response = await httpClient.PutAsJsonAsync($"api/authors/admin/author/update", editAuthorModel);
+			var responseData = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to update author, try again later" };
+			}
+
+			return responseData;
+		}
+
+		public async Task<ServiceResponse<bool>> CreateAuthor(EditAuthorModel editAuthorModel)
+		{
+			var response = await httpClient.PostAsJsonAsync("api/authors/admin/author/add", editAuthorModel);
+			var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			if (responseContent == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Error creating new author" };
+			}
+			return responseContent;
 		}
 	}
 }

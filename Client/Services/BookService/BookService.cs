@@ -117,25 +117,6 @@ namespace Ecommerce.Client.Services.BookService
 				return new ServiceResponse<bool> { Success = false, Message = "Error creating new book" };
 			}
 			return responseContent;
-
-
-			/*
-			var response = await httpClient.PutAsJsonAsync("api/user/change/address", addressDTO);
-			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
-			if (responseData == null)
-			{
-				return new ServiceResponse<bool> { Success = false, Message = "Failed to change shipping address, try again later" };
-			}
-			return responseData;
-
-			var response = await httpClient.PostAsJsonAsync("api/auth/login", loginDTO);
-			var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<string>>();
-			if (responseContent == null)
-			{
-				return new ServiceResponse<string> { Success = false, Message = "Error login in, try again later" };
-			}
-			return responseContent;
-			*/
 		}
 
 		public async Task<ServiceResponse<bool>> UpdateBook(EditBookModel editBookModel)

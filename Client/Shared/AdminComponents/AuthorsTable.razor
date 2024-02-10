@@ -1,5 +1,8 @@
 ﻿@inject IAuthorsService AuthorsService
 
+<MudStack Row="true" Justify="Justify.FlexEnd">
+	<MudButton Href="/admin/author/new" Variant="Variant.Filled" Color="Color.Primary">Add new author</MudButton>
+</MudStack>
 <MudTable RowsPerPage="7" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<Author>>>(LoadData))" @ref="table">
 	<HeaderContent>
 		<MudTh>Id</MudTh>
@@ -11,7 +14,7 @@
 		<MudTd DataLabel="Id">@context.Id</MudTd>
 			<MudTd DataLabel="Image"><MudImage ObjectFit="ObjectFit.Contain" Alt="@context.Name" Width="100" Height="100" Src="@context.Image" /></MudTd>
 			<MudTd DataLabel="Name"><MudLink Typo="Typo.h6" Href="@($"/authors/author/{context.Url}")">@context.Name</MudLink></MudTd>
-			<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit Author</MudButton></MudTd>
+			<MudTd DataLabel="Actions"><MudButton Href="@($"/admin/edit/author/{context.Url}")" Variant="Variant.Outlined" Color="Color.Primary">Edit Author</MudButton></MudTd>
 		</RowTemplate>
 		<PagerContent>
 			<MudTablePager HideRowsPerPage="true" />
