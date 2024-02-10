@@ -7,6 +7,7 @@
 @inject IBookTypeService BookTypeService
 @inject IBookService BookService
 @inject IJSRuntime JSruntime
+@inject NavigationManager NavigationManager
 <PageTitle>E-Shop | Edit book data</PageTitle>
 
 <MudText Typo="Typo.h4">Edit book</MudText>
@@ -142,6 +143,10 @@
 				</RowTemplate>
 			</MudTable>
 
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				<MudCheckBox Size="Size.Medium" @bind-Value="@bookModel!.Visible" For="(() => bookModel!.Visible)" Label="Visible" Color="Color.Primary"></MudCheckBox>
+				<MudCheckBox Size="Size.Medium" @bind-Value="@bookModel.Featured" For="(() => bookModel.Featured)" Label="Featured" Color="Color.Primary"></MudCheckBox>
+			</MudStack>
 
 			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
 				@if (Success)
@@ -162,6 +167,7 @@
 				}
 				
 			</MudStack>
+
 		</MudStack>
 
 
@@ -257,18 +263,22 @@
 		{
 			var response = await BookService.GetBook(Id);
 			var book = response?.Data;
+			bookModel.Id = book!.Id;
 			bookModel.Title = book.Title;
 			bookModel.ShortDescription = book.ShortDescription;
 			bookModel.Description = book.Description;
-			bookModel.Category = new DataSelectDTO { Id = book.Category.Id, Name = book.Category.Name };
-			bookModel.Author = new DataSelectDTO { Id = book.Author.Id, Name = book.Author.Name };
-			bookModel.Series = new DataSelectDTO { Id = book.Series.Id, Name = book.Series.Name };
+			bookModel.Category = new DataSelectDTO { Id = book.Category!.Id, Name = book.Category.Name };
+			bookModel.Author = new DataSelectDTO { Id = book.Author!.Id, Name = book.Author.Name };
+			bookModel.Series = new DataSelectDTO { Id = book.Series!.Id, Name = book.Series.Name };
 			bookModel.Images = book.Images;
 			bookModel.PageCount = book.PageCount;
 			bookModel.Isbn = book.Isbn;
 			bookModel.SeriesOrder = book.SeriesOrder;
 			bookModel.ReleaseDate = book.ReleaseDate;
 			bookModel.Variants = book.Variants;
+			bookModel.CopiesInStore = book.CopiesInStore;
+			bookModel.Visible = book.Visible;
+			bookModel.Featured = book.Featured;
 
 
 			foreach (var variant in bookModel?.Variants!)
@@ -301,7 +311,8 @@
 				new Image
 				{
 					Id = i,
-					Data = imageData
+					Data = imageData,
+					IsNew = true
 				}
 			);
 			i++;
@@ -334,7 +345,8 @@
 					BookTypeId = BookVariant.Id,
 					OriginalPrice = OriginalPrice,
 					Price = Price,
-					BookType = booktype
+					BookType = booktype,
+					IsNew = true
 				};
 
 			typeList.Remove(type);
@@ -369,10 +381,21 @@
 	{
 		if(Id != 0)
 		{
-			await BookService.UpdateBook(bookModel);
+			var response = await BookService.UpdateBook(bookModel);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/books/book/{Id}");
+
 		}else{
-			await BookService.AddBook(bookModel);
+			var response = await BookService.AddBook(bookModel);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/admin/1");
+
 		}
 	}
+
 
 }

@@ -1,4 +1,5 @@
-﻿using Ecommerce.Server.Database;
+﻿using Ecommerce.Client.Pages;
+using Ecommerce.Server.Database;
 using Ecommerce.Server.Services.CategoryService;
 using Ecommerce.Server.Services.SeriesService;
 using Ecommerce.Shared;
@@ -6,6 +7,7 @@ using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared.DTOs.Books;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 
 namespace Ecommerce.Server.Services.BookService
 {
@@ -389,7 +391,9 @@ namespace Ecommerce.Server.Services.BookService
 					SeriesId = editBookModel.Series.Id,
                     SeriesOrder = editBookModel.SeriesOrder,
 					CategoryId = editBookModel.Category.Id,
-					Isbn = editBookModel.Isbn
+					Isbn = editBookModel.Isbn,
+                    Visible = editBookModel.Visible,
+                    Featured = editBookModel.Featured
 				};
 
 				dataContext.Books.Add(book);
@@ -432,39 +436,66 @@ namespace Ecommerce.Server.Services.BookService
 		public async Task<ServiceResponse<bool>> UpdateBook(EditBookModel editBookModel)
 		{
             int bookId = editBookModel.Id;
-            var bookFound = await dataContext.Books.FindAsync(bookId);
-            if(bookFound == null)
+            var book = await dataContext.Books.FindAsync(bookId);
+            if(book == null)
             {
-				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Book not found" };
+				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Couldn't update book, book with an Id: " + bookId + " not found" };
 			}
 
-			// GET IMAGES FOR BOOK, REMOVE THEM
+			// GET IMAGES FOR BOOK, CREATE LIST OF IMAGES TO REMOVE, ADD NEW IMAGES
 			var bookImages = await dataContext.Images.Where(image => image.BookId == bookId).ToListAsync();
-			dataContext.Images.RemoveRange(bookImages);
+            var editedImages = editBookModel.Images;
+            var imagesToRemove = bookImages.Where(existingImage => !editedImages.Any(editedImage => editedImage.Id == existingImage.Id && !editedImage.IsNew)).ToList();
+            dataContext.Images.RemoveRange(imagesToRemove);
+
+			var newImages = editedImages
+                .Where(image => image.IsNew)
+				.Select(image => new Image
+				{
+					Data = image.Data,
+					BookId = bookId
+				})
+				.ToList();
+			dataContext.Images.AddRange(newImages);
 
 			// GET BOOK OLD BOOK VARIANTS, REMOVE THEM AND ADD NEW ONES
-			var oldVariants = await dataContext.BookVariants.Where(variant => variant.BookId == bookId).ToListAsync();
-			dataContext.BookVariants.RemoveRange(oldVariants);
+			var bookVariants = await dataContext.BookVariants.Where(variant => variant.BookId == bookId).ToListAsync();
+            var editedVariants = editBookModel.Variants;
+            var variantsToRemove = bookVariants.Where(existingVariant => !editedVariants!.Any(editedVariant => editedVariant.Id == existingVariant.Id && !editedVariant.IsNew)).ToList();
+			dataContext.BookVariants.RemoveRange(variantsToRemove);
+			var newVariants = editedVariants!
+				.Where(v => v.IsNew)
+	            .Select(v => new BookVariant
+	            {
+					BookId = bookId,
+					BookTypeId = v.BookTypeId,
+					OriginalPrice = v.OriginalPrice,
+					Price = v.Price
+				})
+	            .ToList();
+			dataContext.BookVariants.AddRange(newVariants);
 
-            //UPDATE REST OF BOOK
-            bookFound.Title = editBookModel.Title;
-            bookFound.ShortDescription = editBookModel.ShortDescription;
-            bookFound.Description = editBookModel.Description;
-            bookFound.ReleaseDate = editBookModel.ReleaseDate;
-            bookFound.DateAdded = DateTime.Now;
-            bookFound.PageCount = editBookModel.PageCount;
-            bookFound.CopiesInStore = editBookModel.CopiesInStore;
-            bookFound.AuthorId = editBookModel.Author.Id;
-            bookFound.SeriesId = editBookModel.Series.Id;
-            bookFound.SeriesOrder = editBookModel.SeriesOrder;
-            bookFound.CategoryId = editBookModel.Category.Id;
-			bookFound.Isbn = editBookModel.Isbn;
+			//UPDATE BOOK DATA
+			book.Title = editBookModel.Title;
+			book.ShortDescription = editBookModel.ShortDescription;
+			book.Description = editBookModel.Description;
+			book.DefaultImageUrl = editBookModel.Images[0].Data;
+			book.DateAdded = DateTime.Now;
+			book.ReleaseDate = editBookModel.ReleaseDate;
+			book.PageCount = editBookModel.PageCount;
+			book.CopiesInStore = editBookModel.CopiesInStore;
+			book.SeriesOrder = editBookModel.SeriesOrder;
+			book.AuthorId = editBookModel.Author.Id;
+			book.SeriesId = editBookModel.Series.Id;
+			book.CategoryId = editBookModel.Category.Id;
+			book.Isbn = editBookModel.Isbn;
+			book.Featured = editBookModel.Featured;
+			book.Visible = editBookModel.Visible;
 
-            dataContext.Books.Update(bookFound);
+            dataContext.Books.Update(book);
 			await dataContext.SaveChangesAsync();
 
-			return new ServiceResponse<bool> { Data = true };
-			
+			return new ServiceResponse<bool> { Data = true, Message = "Book updated" };	
         }
 	}
 }

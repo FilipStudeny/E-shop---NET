@@ -27,6 +27,9 @@ namespace Ecommerce.Shared.DTOs.Books
 		public int PageCount { get; set; }
 		public int SeriesOrder { get; set; }
 
+		public bool Featured { get; set; } = false;
+		public bool Visible { get; set; } = true;
+
 
 	}
 }
