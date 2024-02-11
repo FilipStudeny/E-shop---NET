@@ -1,7 +1,9 @@
 ﻿using Ecommerce.Server.Database;
 using Ecommerce.Shared;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using Ecommerce.Shared.DTOs.Books;
+using Ecommerce.Shared.DTOs.Users;
 using Ecommerce.Shared.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -292,6 +294,60 @@ namespace Ecommerce.Server.Services.UserService
 			return jwt;
 		}
 
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetRoles()
+		{
+            var roles = await dataContext.Roles.ToListAsync();
 
+            var listOfRoles = new List<DataSelectDTO>();
+            foreach(var role in roles)
+            {
+                listOfRoles.Add(new DataSelectDTO { Id = role.Id, Name = role.Name });
+               
+            }
+            return new ServiceResponse<List<DataSelectDTO>> { Data = listOfRoles };
+		}
+
+		public async Task<ServiceResponse<EditUserModel>> GetUserForEdit(int Id)
+		{
+            var user = await dataContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == Id);
+            if(user == null)
+            {
+                return new ServiceResponse<EditUserModel> { Data = null, Success = false, Message = "User not found" };
+            }
+
+            var userForEdit = new EditUserModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                PasswordHash = user.PasswordHash,
+                PasswordSalt = user.PasswordSalt,
+                RegistrationDate = user.RegistrationDate,
+                Role = new Shared.DTOs.Authors.DataSelectDTO { Id = user.Role.Id, Name = user.Role.Name},
+            };
+
+            return new ServiceResponse<EditUserModel> { Data = userForEdit };
+            
+		}
+
+		public async Task<ServiceResponse<bool>> UpdateUser(EditUserModel editUserModel)
+		{
+            var user = await dataContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == editUserModel.Id);
+            if(user == null)
+            {
+                return new ServiceResponse<bool> { Data = false, Success = false, Message = "User not found" };
+            }
+            var userRole = await dataContext.Roles.FindAsync(editUserModel.Role.Id);
+
+            user.Email = editUserModel.Email;
+            user.PasswordHash = editUserModel.PasswordHash;
+            user.PasswordSalt = editUserModel.PasswordSalt;
+            user.Role = userRole!;
+            user.RoleId = userRole!.Id;
+
+            dataContext.Users.Update(user);
+            await dataContext.SaveChangesAsync();
+
+            return new ServiceResponse<bool> { Data = true, Message = "User updated" };
+		}
 	}
 }

@@ -11,6 +11,6 @@ namespace Ecommerce.Shared.DTOs
     {
         public Author Author { get; set; } = new();
         public List<Book> Books { get; set; } = new();
-        public List<Series> Series { get; set; } = new();
+        public List<Ecommerce.Shared.Books.Series> Series { get; set; } = new();
     }
 }

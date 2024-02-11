@@ -2,6 +2,8 @@
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared;
 using Ecommerce.Shared.DTOs.Authors;
+using Ecommerce.Shared.DTOs.Books;
+using Ecommerce.Shared.DTOs.Series;
 
 namespace Ecommerce.Server.Services.SeriesService
 {
@@ -17,7 +19,12 @@ namespace Ecommerce.Server.Services.SeriesService
 		Task<ServiceResponse<Series>> GetSeriesByUrl(string url);
         Task<List<Series>> GetSeriesByAuthor(int authorId);
 
-        Task<int> GetSeriesCount();
+
+		Task<ServiceResponse<bool>> CreateSeries(EditSeriesModel editSeriesModel);
+		Task<ServiceResponse<bool>> UpdateSeries(EditSeriesModel editSeriesModel);
+
+
+		Task<int> GetSeriesCount();
 		Task<ServiceResponse<List<DataSelectDTO>>> GetSeriesNames();
 
 

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Ecommerce.Server.Services.SeriesService;
 using Ecommerce.Client.Services.AuthorsService;
 using Ecommerce.Shared.DTOs.Authors;
+using Ecommerce.Shared.DTOs.Series;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ecommerce.Server.Controllers
 {
@@ -46,10 +48,26 @@ namespace Ecommerce.Server.Controllers
 
 		//**EDITS**//
 		[HttpGet]
-		[Route("admin/all")]
+		[Route("admin/all"), Authorize]
 		public async Task<ActionResult<ServiceResponse<List<DataSelectDTO>>>> GetAllSeriesNames()
 		{
 			var response = await seriesService.GetSeriesNames();
+			return Ok(response);
+		}
+
+		[HttpPut]
+		[Route("admin/update"), Authorize]
+		public async Task<ActionResult<ServiceResponse<bool>>> UpdateSeries(EditSeriesModel editSeriesModel)
+		{
+			var response = await seriesService.UpdateSeries(editSeriesModel);
+			return Ok(response);
+		}
+
+		[HttpPost]
+		[Route("admin/add"), Authorize]
+		public async Task<ActionResult<ServiceResponse<bool>>> CreateSeries(EditSeriesModel editSeriesModel)
+		{
+			var response = await seriesService.CreateSeries(editSeriesModel);
 			return Ok(response);
 		}
 	}

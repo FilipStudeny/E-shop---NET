@@ -1,7 +1,11 @@
 ﻿using Ecommerce.Client.Pages;
 using Ecommerce.Shared;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using Ecommerce.Shared.DTOs.Books;
+using Ecommerce.Shared.DTOs.Series;
+using Ecommerce.Shared.DTOs.Users;
+using Ecommerce.Shared.User;
 using System.Net.Http.Json;
 
 namespace Ecommerce.Client.Services.UserService
@@ -86,6 +90,31 @@ namespace Ecommerce.Client.Services.UserService
 			return responseData;
 		}
 
-        
-    }
+		public async Task<ServiceResponse<EditUserModel>> GetUserForEdit(int Id)
+		{
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<EditUserModel>>($"api/user/admin/user/{Id}");
+			return response!;
+		}
+
+		public async Task<ServiceResponse<List<DataSelectDTO>>> GetRoles()
+		{
+			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<DataSelectDTO>>>("api/user/roles");
+			if (response == null)
+			{
+				return new ServiceResponse<List<DataSelectDTO>> { Success = false, Message = "Error retrieving roles, try again later" };
+			}
+			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> Update(EditUserModel editUserModel)
+		{
+			var response = await httpClient.PutAsJsonAsync("api/user/admin/update", editUserModel);
+			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to update user, try again later" };
+			}
+			return responseData;
+		}
+	}
 }

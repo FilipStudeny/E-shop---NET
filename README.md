@@ -2,12 +2,14 @@
 
 Simple Ecommerce online bookstore application created using **.NET Blazor WebAssembly**
 
+> WARNING: Contains Spaghetti code
+
 ## Features
-- List books by Series or genre
-- View books written by author or books by series
-- Admin page
-- Shopping cart with checkout using Stripe [Not yet properly rewritten]
-- Book variants such as ebook, hardcopy etc...
+- List books by series or category
+- Wiev featured books
+- Create/Update new book/series/category/author
+- Update user roles
+- Users can change password/email address
 
 ## Tech stack
 | Frontend         | Backend     | Other |
@@ -22,6 +24,8 @@ Simple Ecommerce online bookstore application created using **.NET Blazor WebAss
 - Implementation of PayPaypal and other services..
 - Email client intergation, users will be able to receive emails for password change etc...
 - System for localisation and currency
+- Rewrite for clean code
+- Removal of spaghetti code
 
 
 ### Images

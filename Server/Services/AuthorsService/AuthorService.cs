@@ -166,7 +166,8 @@ namespace Ecommerce.Server.Services.AuthorsService
 				Url = editAuthorModel.Url,
 				Image = editAuthorModel.Image,
 				BiographyText = editAuthorModel.Biography,
-				Visible = editAuthorModel.Visible
+				Visible = editAuthorModel.Visible,
+				Deleted = false
 			};
 
 			dataContext.Authors.Add(author);

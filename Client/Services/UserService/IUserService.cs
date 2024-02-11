@@ -1,6 +1,10 @@
 ﻿using Ecommerce.Shared;
 using Ecommerce.Shared.DTOs;
+using Ecommerce.Shared.DTOs.Authors;
 using Ecommerce.Shared.DTOs.Books;
+using Ecommerce.Shared.DTOs.Series;
+using Ecommerce.Shared.DTOs.Users;
+using Ecommerce.Shared.User;
 
 namespace Ecommerce.Client.Services.UserService
 {
@@ -24,5 +28,11 @@ namespace Ecommerce.Client.Services.UserService
 
         Task GetUsers(int page);
 
-    }
+
+
+		Task<ServiceResponse<EditUserModel>> GetUserForEdit(int Id);
+		Task<ServiceResponse<List<DataSelectDTO>>> GetRoles();
+		Task<ServiceResponse<bool>> Update(EditUserModel editUserModel);
+
+	}
 }

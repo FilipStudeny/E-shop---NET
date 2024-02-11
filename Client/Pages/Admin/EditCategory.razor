@@ -1,0 +1,92 @@
+﻿@page "/admin/edit/category/{name}"
+@page "/admin/category/new"
+
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+<PageTitle>E-Shop | Edit category</PageTitle>
+
+<MudText Typo="Typo.h4">Edit category @Name</MudText>
+	<MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
+
+
+	<MudContainer MaxWidth="MaxWidth.Large" Class="d-flex flex-column justify-content-between mb-5">
+		<EditForm Model="categoryModel" OnValidSubmit="OnValidSubmit" class="mt-5">
+			<DataAnnotationsValidator />
+			<MudTextField T="string" ValueChanged="UpdateUrl" Value="categoryModel.Name" Label="Name" For="(() => categoryModel.Name)" />
+			<MudTextField Label="Url" @bind-Value="categoryModel.Url" For="(() => categoryModel.Url)" Disabled="true" />
+
+		<MudStack Justify="Justify.Center">
+
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+					<MudCheckBox Size="Size.Medium" @bind-Value="@categoryModel!.Visible" For="(() => categoryModel!.Visible)" Label="Visible" Color="Color.Primary"></MudCheckBox>
+			</MudStack>
+
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				@if (Success)
+				{
+					<MudText Color="Color.Success">@Message</MudText>
+				}
+				else
+				{
+					<MudText Color="Color.Error">@Message</MudText>
+				}
+				<MudSpacer />
+
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit author</MudButton>
+			</MudStack>
+		</MudStack>
+	</EditForm>
+</MudContainer>
+
+@code {
+
+
+	[Parameter] public string Name { get; set; } = string.Empty;
+	public Category categoryModel= new();
+	private string oldUrl = string.Empty;
+
+	private bool Success = false;
+	private string Message = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+
+		if (!string.IsNullOrEmpty(Name))
+		{
+			var response = await CategoryService.GetCategory(Name);
+			Success = response.Success;
+			Message = response.Message;
+
+			categoryModel = response.Data!;
+		}
+	}
+
+
+
+	private async Task OnValidSubmit()
+	{
+		if (!string.IsNullOrEmpty(Name))
+		{
+			var response = await CategoryService.Update(categoryModel);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/books/{categoryModel.Url}/1");
+		}
+		else
+		{
+			var response = await CategoryService.Add(categoryModel);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/admin/1");
+		}
+	}
+
+	private void UpdateUrl(string value)
+	{
+		string formattedUrl = value?.Replace(" ", "-").ToLower()!;
+		categoryModel.Url = formattedUrl;
+		categoryModel.Name = value!;
+	}
+}

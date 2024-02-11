@@ -1,0 +1,106 @@
+﻿@page "/admin/edit/user/{Id:int}"
+
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+<PageTitle>E-Shop | Edit book data</PageTitle>
+
+<MudText Typo="Typo.h4">Edit user</MudText>
+	<MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
+
+
+	<MudContainer MaxWidth="MaxWidth.Large" Class="d-flex flex-column justify-content-between mb-5">
+		<EditForm Model="userModel" OnValidSubmit="OnValidSubmit" class="mt-5">
+			<DataAnnotationsValidator />
+			<MudStack Justify="Justify.Center">
+			<MudTextField Value="userModel.Email" Label="Email" For="(() => userModel.Email)" />
+			<MudTextField Label="Password hash" Value="@(userModel.PasswordHash != null ? ByteArrayToString(userModel.PasswordHash) : string.Empty)" AutoGrow Variant="Variant.Outlined" Disabled="true" />
+			<MudTextField Label="Password salt" Value="@(userModel.PasswordSalt != null ? ByteArrayToString(userModel.PasswordSalt) : string.Empty)" AutoGrow Variant="Variant.Outlined" Disabled="true" />
+
+			<MudDatePicker Label="Registration date" @bind-Date="date" ReadOnly="true" />
+			@if (RolesSuccess)
+			{
+				<MudSelect T="DataSelectDTO" Label="Role" @bind-Value="userModel.Role" For="(() => userModel.Role)" AnchorOrigin="Origin.BottomCenter">
+					@foreach (var role in rolesList)
+					{
+						<MudSelectItem Value="@(new DataSelectDTO{ Id = role.Id, Name = role.Name})">@role.Name</MudSelectItem>
+					}
+				</MudSelect>
+			}
+			else
+			{
+				<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@RolesMessage</MudAlert>
+			}
+
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				@if (Success)
+				{
+					<MudText Color="Color.Success">@Message</MudText>
+				}
+				else
+				{
+					<MudText Color="Color.Error">@Message</MudText>
+				}
+				<MudSpacer />
+
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit author</MudButton>
+
+
+			</MudStack>
+		</MudStack>
+	</EditForm>
+</MudContainer>
+
+@code {
+
+
+	[Parameter] public int Id { get; set; }
+	public EditUserModel userModel = new();
+	private string oldUrl = string.Empty;
+
+	private bool Success = false;
+	private string Message = string.Empty;
+
+	private List<DataSelectDTO> rolesList = new();
+	private bool RolesSuccess = false;
+	private string RolesMessage = "Loading roles";
+
+	DateTime? date;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var roleReponse = await UserService.GetRoles();
+		RolesSuccess = roleReponse.Success;
+		RolesMessage = roleReponse.Message;
+		rolesList = roleReponse.Data;
+
+		var response = await UserService.GetUserForEdit(Id);
+		Success = response.Success;
+		Message = response.Message;
+		var user = response.Data;
+
+		if (response.Success)
+		{
+			userModel.Id = user!.Id;
+			userModel.Email = user!.Email;
+			userModel.PasswordHash = user.PasswordHash;
+			userModel.PasswordSalt = user.PasswordSalt;
+			userModel.Role = new DataSelectDTO { Id = user.Role!.Id, Name = user.Role.Name };
+			userModel.RegistrationDate = user.RegistrationDate;
+			date = user.RegistrationDate;
+		}
+	}
+
+	private async Task OnValidSubmit()
+	{
+		var response = await UserService.Update(userModel);
+		Success = response.Success;
+		Message = response.Message;
+
+		NavigationManager.NavigateTo($"/admin/1");
+	}
+
+	string ByteArrayToString(byte[] bytes)
+	{
+		return bytes != null ? BitConverter.ToString(bytes).Replace("-", "") : string.Empty;
+	}
+}

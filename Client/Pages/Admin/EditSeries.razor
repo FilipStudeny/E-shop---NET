@@ -1,0 +1,126 @@
+﻿@page "/admin/edit/series/{name}"
+@page "/admin/series/new"
+
+@inject IAuthorsService AuthorsService
+@inject ISeriesService SeriesService
+@inject NavigationManager NavigationManager
+<PageTitle>E-Shop | Edit series</PageTitle>
+
+<MudText Typo="Typo.h4">Edit series @Name</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="d-flex flex-column justify-content-between mb-5">
+		<EditForm Model="seriesModel" OnValidSubmit="OnValidSubmit" class="mt-5">
+		<DataAnnotationsValidator />
+		<MudTextField T="string" ValueChanged="UpdateUrl" Value="seriesModel.Name" Label="Name" For="(() => seriesModel.Name)" />
+		<MudTextField Label="Url" @bind-Value="seriesModel.Url" For="(() => seriesModel.Url)" Disabled="true" />
+
+		<MudTextField T="string" Counter="1000" Label="Description" @bind-Value="seriesModel.Description" Variant="Variant.Outlined" Lines="10" For="(() => seriesModel.Description)" />
+		@if (AuthorsSuccess)
+		{
+			<MudSelect T="DataSelectDTO" Label="Author" @bind-Value="seriesModel.Author" For="(() => seriesModel.Author)" AnchorOrigin="Origin.BottomCenter">
+				@foreach (var author in authorsList)
+				{
+					<MudSelectItem Value="@(new DataSelectDTO{ Id = author.Id, Name = author.Name})">@author.Name</MudSelectItem>
+				}
+			</MudSelect>
+		}
+		else
+		{
+			<MudAlert Severity="Severity.Error" Variant="Variant.Filled" Square="true" Class="my-2">@AuthorsMessage</MudAlert>
+		}
+
+		<MudStack Justify="Justify.Center">
+				
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				<MudCheckBox Size="Size.Medium" @bind-Value="@seriesModel!.Visible" For="(() => seriesModel!.Visible)" Label="Visible" Color="Color.Primary"></MudCheckBox>
+			</MudStack>
+
+			<MudStack Row="true" AlignItems="AlignItems.Center" Class="mt-5">
+				@if (Success){
+					<MudText Color="Color.Success">@Message</MudText>
+				}else{
+					<MudText Color="Color.Error">@Message</MudText>
+				}
+				<MudSpacer />
+
+				<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Edit author</MudButton>
+			</MudStack>
+		</MudStack>
+	</EditForm>
+</MudContainer>
+
+@code {
+
+
+	[Parameter] public string Name { get; set; } = string.Empty;
+	public EditSeriesModel seriesModel = new();
+	private string oldUrl = string.Empty;
+
+	private bool Success = false;
+	private string Message = string.Empty;
+
+	private List<DataSelectDTO> authorsList = new();
+	private bool AuthorsSuccess = false;
+	private string AuthorsMessage = "Loading authors";
+
+	protected override async Task OnInitializedAsync()
+	{
+		var responseAuthors = await AuthorsService.GetAllAuthorsNames();
+		if (!responseAuthors.Success)
+		{
+			AuthorsSuccess = false;
+			AuthorsMessage = responseAuthors.Message;
+		}
+		else
+		{
+			AuthorsSuccess = true;
+			authorsList = responseAuthors?.Data!;
+		}
+
+		if (!string.IsNullOrEmpty(Name))
+		{
+			var response = await SeriesService.GetSingleSeries(Name);
+			Success = response.Success;
+			Message = response.Message;
+			var series = response?.Data?.Series;
+
+			seriesModel.Name = series.Name;
+			seriesModel.Url = series?.Url!;
+			seriesModel.Id = series!.Id;
+			seriesModel.Description = series.Description;
+			seriesModel.Author = new DataSelectDTO { Id = series.Author!.Id, Name = series.Author.Name };
+			seriesModel.Visible = series.Visible;
+		}
+	}
+
+	
+
+	private async Task OnValidSubmit()
+	{
+		if (!string.IsNullOrEmpty(Name))
+		{
+			var response = await SeriesService.Update(seriesModel);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/series/{seriesModel.Url}");
+		}
+		else
+		{
+			var response = await SeriesService.Add(seriesModel);
+			Success = response.Success;
+			Message = response.Message;
+
+			NavigationManager.NavigateTo($"/admin/1");
+		}
+	}
+
+	private void UpdateUrl(string value)
+	{
+		string formattedUrl = value?.Replace(" ", "-").ToLower()!;
+		seriesModel.Url = formattedUrl;
+		seriesModel.Name = value!;
+	}
+}

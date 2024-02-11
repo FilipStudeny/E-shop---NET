@@ -5,6 +5,8 @@ using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared.DTOs.Authors;
+using Ecommerce.Shared.DTOs.Books;
+using Ecommerce.Shared.DTOs.Series;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Server.Services.SeriesService
@@ -177,6 +179,51 @@ namespace Ecommerce.Server.Services.SeriesService
 			return series;
         }
 
-		
+		public async Task<ServiceResponse<bool>> CreateSeries(EditSeriesModel editSeriesModel)
+		{
+			try
+			{
+				var series = new Series
+				{
+					Name = editSeriesModel.Name,
+					Description = editSeriesModel.Description,
+					Url = editSeriesModel.Url,
+					AuthorId = editSeriesModel.Author.Id,
+					Visible = editSeriesModel.Visible,
+					Deleted = false
+				};
+
+				dataContext.Series.Add(series);
+				await dataContext.SaveChangesAsync();
+
+				return new ServiceResponse<bool> { Data = true };
+			}
+			catch
+			{
+				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Error, couldn't create new series" };
+			}
+		}
+
+		public async Task<ServiceResponse<bool>> UpdateSeries(EditSeriesModel editSeriesModel)
+		{
+			var series = await dataContext.Series.FindAsync(editSeriesModel.Id);
+			if(series == null)
+			{
+				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Series not found" };
+			}
+
+			var author = await dataContext.Authors.FindAsync(editSeriesModel.Author.Id);
+
+			series.Name = editSeriesModel.Name;
+			series.Url = editSeriesModel.Url;
+			series.Description = editSeriesModel.Description;
+			series.Author = author;
+			series.Visible = editSeriesModel.Visible;
+
+			dataContext.Series.Update(series);
+			await dataContext.SaveChangesAsync();
+
+			return new ServiceResponse<bool> { Data = true, Message = "Series updated" };
+		}
 	}
 }

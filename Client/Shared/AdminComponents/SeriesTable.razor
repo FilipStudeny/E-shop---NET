@@ -1,5 +1,9 @@
 ﻿@inject ISeriesService SeriesService
 
+<MudStack Row="true" Justify="Justify.FlexEnd">
+	<MudButton Href="/admin/series/new" Variant="Variant.Filled" Color="Color.Primary">Add new series</MudButton>
+</MudStack>
+
 <MudTable RowsPerPage="10" CurrentPage="0" ServerData="@(new Func<TableState, Task<TableData<Series>>>(LoadData))" @ref="table">
 	<HeaderContent>
 		<MudTh>Id</MudTh>
@@ -9,7 +13,7 @@
 	<RowTemplate>
 		<MudTd DataLabel="Id">@context.Id</MudTd>
 		<MudTd DataLabel="Name"><MudLink Typo="Typo.h6" Href="@($"/series/{context.Url}")">@context.Name</MudLink></MudTd>
-		<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit Series</MudButton></MudTd>
+		<MudTd DataLabel="Actions"><MudButton Href="@($"/admin/edit/series/{context.Url}")" Variant="Variant.Outlined" Color="Color.Primary">Edit Series</MudButton></MudTd>
 	</RowTemplate>
 	<PagerContent>
 		<MudTablePager HideRowsPerPage="true" />

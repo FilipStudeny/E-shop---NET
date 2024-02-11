@@ -97,5 +97,31 @@ namespace Ecommerce.Server.Services.CategoryService
 			return await dataContext.Category.CountAsync(category => !category.Deleted && category.Visible);
 			
 		}
+
+		public async Task<ServiceResponse<bool>> CreateCategory(Category category)
+		{
+			dataContext.Category.Add(category);
+			await dataContext.SaveChangesAsync();
+
+			return new ServiceResponse<bool> { Data = true, Message = "Category createad" };
+		}
+
+		public async Task<ServiceResponse<bool>> UpdateCategory(Category category)
+		{
+			var oldCategory = await dataContext.Category.FindAsync(category.Id);
+			if(oldCategory == null)
+			{
+				return new ServiceResponse<bool> { Data = false, Success = false, Message = "Error, category not found" };
+			}
+
+			oldCategory.Url = category.Url;
+			oldCategory.Name = category.Name;
+			oldCategory.Visible = category.Visible;
+
+			dataContext.Category.Update(oldCategory);
+			await dataContext.SaveChangesAsync();
+
+			return new ServiceResponse<bool> { Data = true, Message = "Categroy updated" };
+		}
 	}
 }

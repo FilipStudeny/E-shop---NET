@@ -1,5 +1,8 @@
 ﻿@inject ICategoryService CategoryService
 
+<MudStack Row="true" Justify="Justify.FlexEnd">
+	<MudButton Href="/admin/category/new" Variant="Variant.Filled" Color="Color.Primary">Add new category</MudButton>
+</MudStack>
 <MudTable Items="@CategoryService.Categories" Loading="@_loading">
 	<HeaderContent>
 		<MudTh>Id</MudTh>
@@ -9,7 +12,7 @@
 	<RowTemplate>
 		<MudTd DataLabel="Id">@context.Id</MudTd>
 			<MudTd DataLabel="Name"><MudText Typo="Typo.h6">@context.Name</MudText></MudTd>
-			<MudTd DataLabel="Actions"><MudButton Variant="Variant.Outlined" Color="Color.Primary">Edit Category</MudButton></MudTd>
+			<MudTd DataLabel="Actions"><MudButton Href="@($"/admin/edit/category/{context.Url}")" Variant="Variant.Outlined" Color="Color.Primary">Edit Category</MudButton></MudTd>
 		</RowTemplate>
 	</MudTable>
 

@@ -41,10 +41,34 @@ namespace Ecommerce.Server.Controllers
 
 		//**EDITS**//
 		[HttpGet]
+		[Route("admin/{name}")]
+		public async Task<ActionResult<ServiceResponse<Category>>> GetAllCategoryNames(string name)
+		{
+			var response = await categoryService.GetCategoryByUrl(name);
+			return Ok(response);
+		}
+
+		[HttpGet]
 		[Route("admin/all")]
 		public async Task<ActionResult<ServiceResponse<List<DataSelectDTO>>>> GetAllCategoryNames()
 		{
 			var response = await categoryService.GetCategoryNames();
+			return Ok(response);
+		}
+
+		[HttpPost]
+		[Route("admin/add")]
+		public async Task<ActionResult<ServiceResponse<bool>>> AddCategory(Category category)
+		{
+			var response = await categoryService.CreateCategory(category);
+			return Ok(response);
+		}
+
+		[HttpPut]
+		[Route("admin/update")]
+		public async Task<ActionResult<ServiceResponse<bool>>> UpdateCategory(Category category)
+		{
+			var response = await categoryService.UpdateCategory(category);
 			return Ok(response);
 		}
 	}

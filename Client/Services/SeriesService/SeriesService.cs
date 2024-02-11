@@ -3,6 +3,8 @@ using Ecommerce.Shared;
 using Ecommerce.Shared.Books;
 using Ecommerce.Shared.DTOs;
 using Ecommerce.Shared.DTOs.Authors;
+using Ecommerce.Shared.DTOs.Books;
+using Ecommerce.Shared.DTOs.Series;
 using MudBlazor;
 using System.Net.Http.Json;
 
@@ -59,6 +61,28 @@ namespace Ecommerce.Client.Services.SeriesService
 			var response = await httpClient.GetFromJsonAsync<ServiceResponse<List<DataSelectDTO>>>($"api/series/admin/all");
 			return response!;
 
+		}
+
+		public async Task<ServiceResponse<bool>> Add(EditSeriesModel editSeriesModel)
+		{
+			var response = await httpClient.PostAsJsonAsync("api/series/admin/add", editSeriesModel);
+			var responseContent = await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			if (responseContent == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Error creating new series" };
+			}
+			return responseContent;
+		}
+
+		public async Task<ServiceResponse<bool>> Update(EditSeriesModel editSeriesModel)
+		{
+			var response = await httpClient.PutAsJsonAsync("api/series/admin/update", editSeriesModel);
+			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to update series, try again later" };
+			}
+			return responseData;
 		}
 	}
 }
