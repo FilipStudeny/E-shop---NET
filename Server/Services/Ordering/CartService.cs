@@ -51,7 +51,7 @@ namespace Ecommerce.Server.Services.Ordering
 
 			foreach(var item in cartItems)
 			{
-				var book = await dataContext.Books.Where(b => b.Id == item.BookId).FirstOrDefaultAsync();
+				var book = await dataContext.Books.Where(b => b.Id == item.BookId).Include(book => book.Images).FirstOrDefaultAsync();
 				if(book == null) { continue; }
 
 				var bookVariant = await dataContext.BookVariants

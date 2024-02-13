@@ -240,7 +240,7 @@ namespace Ecommerce.Server.Services.UserService
 
         public string GetUserEmail()
 		{
-			var userEmailString = httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
+			var userEmailString = httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
 			return userEmailString!;
 		}
 
@@ -349,5 +349,10 @@ namespace Ecommerce.Server.Services.UserService
 
             return new ServiceResponse<bool> { Data = true, Message = "User updated" };
 		}
-	}
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await dataContext.Users.FirstOrDefaultAsync(user => user.Email.Equals(email));
+        }
+    }
 }

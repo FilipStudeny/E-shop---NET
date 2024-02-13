@@ -31,5 +31,7 @@ namespace Ecommerce.Server.Services.UserService
 		bool VerifyPasswordHash(string Password, IEnumerable<byte> PasswordHash, byte[] PasswordSalt);
 		string CreateToken(User user);
 
-	}
+        Task<User> GetUserByEmail(string email);
+
+    }
 }

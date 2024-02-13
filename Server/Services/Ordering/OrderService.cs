@@ -39,7 +39,9 @@ namespace Ecommerce.Server.Services.Ordering
 				UserId = userId,
 				OrderDate = DateTime.Now,
 				TotalPrice = totalPrice,
-				OrderItems = orderItems
+				OrderItems = orderItems,
+				Paid = true,
+				OrderStatus = "Pending"
 			};
 
 			dataContext.Orders.Add(order);

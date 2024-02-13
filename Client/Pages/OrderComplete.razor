@@ -1,0 +1,19 @@
+﻿@page "/order-success"
+@inject ICartService CartService
+
+<PageTitle>E-Shop | Thank you for your purchase</PageTitle>
+
+<MudText Typo="Typo.h4">Cart</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
+
+<MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+	<MudText Typo="Typo.h6">Thank you for your oder.</MudText>
+	<MudText Typo="Typo.subtitle1">You can view you orders <MudLink Href="/profile/orders">here</MudLink></MudText>
+</MudStack>
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await CartService.GetCartItemCount();
+	}
+}

@@ -4,6 +4,7 @@ using Ecommerce.Server.Services.BookService;
 using Ecommerce.Server.Services.BookTypeService;
 using Ecommerce.Server.Services.CategoryService;
 using Ecommerce.Server.Services.Ordering;
+using Ecommerce.Server.Services.Payment;
 using Ecommerce.Server.Services.SeriesService;
 using Ecommerce.Server.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -39,6 +40,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookTypeService, BookTypeService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
