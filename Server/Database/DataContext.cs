@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Shared.Books;
+using Ecommerce.Shared.Orders;
 using Ecommerce.Shared.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,12 @@ namespace Ecommerce.Server.Database
 		public DbSet<Role> Roles { get; set; }
 
 
+        //CART AND ORDERS
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+
 		private DataSeeder dataSeeder = new DataSeeder();
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
@@ -28,6 +35,22 @@ namespace Ecommerce.Server.Database
 			    .WithMany()
 			    .HasForeignKey(u => u.RoleId)
 			    .IsRequired();
+
+            modelBuilder.Entity<CartItem>().HasKey(cart => new
+            {
+                cart.UserId,
+                cart.BookId,
+                cart.BookTypeId
+            });
+
+            modelBuilder.Entity<OrderItem>().HasKey(order => new
+            {
+                order.OrderId,
+                order.BookId,
+                order.BookTypeId
+            });
+
+
 
 			//Seed data
 			modelBuilder.Entity<Category>().HasData(dataSeeder.SeedCategories());

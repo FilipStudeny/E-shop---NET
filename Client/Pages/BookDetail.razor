@@ -1,6 +1,6 @@
 ﻿@page "/books/book/{id:int}"
 @inject IBookService BookService
-
+@inject ICartService CartService
 
 @if (showAlert)
 {
@@ -50,8 +50,23 @@
                                 {
                                     <MudText Align="Align.Center" Typo="Typo.h2" Color="Color.Success">$@GetSelectedVariant()?.Price</MudText>
                                 }
+
                             </MudStack>
                         }
+
+
+                        @if (!bookInCart)
+                        {
+                            <MudButton FullWidth="true" OnClick="AddItemToCart" Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.ShoppingCart">Add to cart</MudButton>
+                        }
+                        else
+                        {
+                            <MudButton FullWidth="true" OnClick="RemoveFromCart" Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.ShoppingCart">Remove from cart</MudButton>
+
+                        }
+
+                   
+
                         
                     </MudContainer>
                 </MudContainer>
@@ -83,6 +98,7 @@
     private string Message = string.Empty;
 
     private string CurrentVariant = string.Empty;
+    private bool bookInCart = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,11 +116,49 @@
                 CurrentVariant = book?.Variants[0]!.BookType.Name!;
             }
         }
+
+        bookInCart = await IsItemInCart(book.Id);
+    }
+
+    public async Task<bool> IsItemInCart(int itemId)
+    {
+        var cartProducts = await CartService.GetCartProducts();
+
+        foreach (var item in cartProducts)
+        {
+            if (item.BookId == itemId)
+            {
+                return true; 
+            }
+        }
+
+        return false;
     }
 
     private BookVariant? GetSelectedVariant()
     {
         var variant = book?.Variants?.FirstOrDefault(variant => variant.BookType?.Name == CurrentVariant);
         return variant;
+    }
+
+
+    private async Task AddItemToCart()
+    {
+        var productVariant = GetSelectedVariant();
+        var cartItem = new CartItem
+            {
+                BookId = productVariant.BookId,
+                BookTypeId = productVariant.BookTypeId
+            };
+
+        await CartService.AddToCart(cartItem);
+        bookInCart = true;
+    }
+
+    private async Task RemoveFromCart()
+    {
+        var productVariant = GetSelectedVariant();
+        await CartService.RemoveItemFromCart(book.Id, productVariant.BookTypeId);
+        bookInCart = false;
     }
 }

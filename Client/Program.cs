@@ -5,6 +5,7 @@ using Ecommerce.Client.Services.AuthenticationService;
 using Ecommerce.Client.Services.AuthorsService;
 using Ecommerce.Client.Services.BookService;
 using Ecommerce.Client.Services.CategoryService;
+using Ecommerce.Client.Services.Ordering;
 using Ecommerce.Client.Services.SeriesService;
 using Ecommerce.Client.Services.TypeService;
 using Ecommerce.Client.Services.UserService;
@@ -30,6 +31,8 @@ builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBookTypeService, BookTypeService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
