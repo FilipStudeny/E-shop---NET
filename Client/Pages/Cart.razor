@@ -1,0 +1,116 @@
+﻿@page "/cart"
+
+@inject ICartService CartService
+@inject IOrderService OrderService
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+<PageTitle>E-Shop | Cart</PageTitle>
+
+<MudText Typo="Typo.h4">Cart</MudText>
+<MudDivider DividerType="DividerType.FullWidth" Style="border-color:#212121; border-width: 2px;" />
+
+
+@if (!cartProducts.Any())
+{
+    <MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Left">Your cart is empty</MudAlert>
+
+}
+else
+{
+    <MudTable Items="cartProducts">
+        <HeaderContent>
+            <MudTh>Image</MudTh>
+            <MudTh>Title</MudTh>
+            <MudTh>Variant</MudTh>
+            <MudTh>Quantity</MudTh>
+            <MudTh>Price</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Image"><MudImage ObjectFit="ObjectFit.Contain" Alt="@context.Image" Width="100" Height="100" Src="@context.Image" /></MudTd>
+            <MudTd DataLabel="Title"><MudLink Typo="Typo.h6" Href="@($"/books/book/{context.BookId}")">@context.BookTitle</MudLink></MudTd>
+            <MudTd DataLabel="Variant">@context.BookType</MudTd>
+            <MudTd DataLabel="Quantity">
+                    <input type="number" value="@context.Quantity"
+                           @onchange="@((ChangeEventArgs e) => UpdateQuantity(context, e))"
+                           class="form-control input-quantity"
+                           min="1" />
+
+                </MudTd>
+            <MudTd DataLabel="Price">$@(context.Price * context.Quantity)</MudTd>
+            <MudTd>
+                  <MudButton OnClick="()=> RemoveItem(context.BookId, context.BookTypeId)" Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Delete">Remove</MudButton>
+            </MudTd>
+
+        </RowTemplate>
+
+    </MudTable>
+
+    <MudStack Row="true" Class="my-5" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+        <MudText Typo="Typo.h6">Total (@cartProducts.ToList().Count()): $@cartProducts.Sum(product => product.Price * product.Quantity)</MudText>
+        <MudButton OnClick="PlaceOrder" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.AttachMoney">Place order</MudButton>
+    </MudStack>
+
+}
+
+
+@code {
+        IEnumerable<CartDTO> cartProducts = new List<CartDTO>();
+        string message = "Loading products in cart ...";
+        bool isAuthenticated = false;
+
+        protected override async Task OnInitializedAsync()
+        {
+            isAuthenticated = await AuthenticationService.IsAuthenticated();
+            await LoadCartItems();
+        }
+
+        private async Task LoadCartItems()
+        {
+            await CartService.GetCartItemCount();
+            cartProducts = await CartService.GetCartProducts();
+            if (cartProducts.Any())
+            {
+                message = "Your cart is empty.";
+            }
+        }
+
+        private async Task RemoveItemFromCart(int productId, int productTypeId)
+        {
+            await CartService.RemoveItemFromCart(productId, productTypeId);
+            await LoadCartItems();
+        }
+
+        private async Task UpdateQuantity(CartDTO item, ChangeEventArgs e)
+        {
+            item.Quantity = int.Parse(e.Value.ToString());
+            if (item.Quantity < 1)
+                item.Quantity = 1;
+
+            await CartService.UpdateQuantityForProduct(item);
+
+        }
+
+        private async Task PlaceOrder()
+        {
+            string url = await OrderService.PlaceOrder();
+            // await CartService.GetCartItemCount();
+            //  _orderCreated = true;
+            NavigationManager.NavigateTo(url);
+        }
+
+        private async Task RemoveItem(int bookId, int bookTypeId)
+        {
+            await CartService.RemoveItemFromCart(bookId, bookTypeId);
+
+            // Remove the item from the cartProducts list
+            var itemToRemove = cartProducts.FirstOrDefault(item => item.BookId == bookId && item.BookTypeId == bookTypeId);
+            if (itemToRemove != null)
+            {
+                cartProducts = cartProducts.Except(new[] { itemToRemove });
+            }
+
+        }
+
+}
