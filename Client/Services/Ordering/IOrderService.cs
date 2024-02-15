@@ -1,4 +1,5 @@
-﻿using Ecommerce.Shared.Orders;
+﻿using Ecommerce.Shared;
+using Ecommerce.Shared.Orders;
 
 namespace Ecommerce.Client.Services.Ordering
 {
@@ -7,5 +8,9 @@ namespace Ecommerce.Client.Services.Ordering
 		Task<string> PlaceOrder();
 		Task<List<OrderDTO>> GetOrders();
 		Task<OrderDetailDTO> GetOrderDetails(int orderId);
+
+
+		Task<List<OrderDTO>> GetAllOrders();
+		Task<ServiceResponse<bool>> UpdateOrder(int id, string status);
 	}
 }

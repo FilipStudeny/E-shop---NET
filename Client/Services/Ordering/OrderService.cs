@@ -3,6 +3,8 @@ using Ecommerce.Shared.Orders;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
+using Ecommerce.Shared.DTOs.Books;
+using System.Net.Http;
 
 namespace Ecommerce.Client.Services.Ordering
 {
@@ -38,6 +40,23 @@ namespace Ecommerce.Client.Services.Ordering
 		{
 			var response = await _httpClient.GetFromJsonAsync<ServiceResponse<OrderDetailDTO>>($"api/order/{orderId}");
 			return response.Data;
+		}
+
+		public async Task<List<OrderDTO>> GetAllOrders()
+		{
+			var response = await _httpClient.GetFromJsonAsync<ServiceResponse<List<OrderDTO>>>("api/order/admin/all");
+			return response.Data;
+		}
+
+		public async Task<ServiceResponse<bool>> UpdateOrder(int id, string status)
+		{
+			var response = await _httpClient.PutAsJsonAsync($"api/order/admin/update/{id}", status);
+			var responseData = (await response.Content.ReadFromJsonAsync<ServiceResponse<bool>>());
+			if (responseData == null)
+			{
+				return new ServiceResponse<bool> { Success = false, Message = "Failed to update order, try again later" };
+			}
+			return responseData;
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Ecommerce.Server.Services.Ordering
 		private readonly IUserService authenticationService;
 
 		public OrderService(DataContext dataContext, ICartService cartService, IUserService authenticationService)
-        {
+		{
 			this.dataContext = dataContext;
 			this.cartService = cartService;
 			this.authenticationService = authenticationService;
@@ -86,6 +86,32 @@ namespace Ecommerce.Server.Services.Ordering
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<OrderDTO>>> GetAllOrders()
+		{
+			var response = new ServiceResponse<List<OrderDTO>>();
+			var orders = await dataContext.Orders
+				.Include(o => o.OrderItems).
+				ThenInclude(oi => oi.Book)
+				.OrderByDescending(o => o.OrderDate)
+				.ToListAsync();
+
+			var ordersResponse = new List<OrderDTO>();
+			orders.ForEach(o => ordersResponse.Add(new OrderDTO
+			{
+				Id = o.Id,
+				OrderDate = o.OrderDate,
+				TotalPrice = o.TotalPrice,
+				Product = o.OrderItems.Count > 1 ?
+					$"{o.OrderItems.First().Book.Title} and" +
+					$" {o.OrderItems.Count - 1} more..." :
+					o.OrderItems.First().Book.Title,
+				Image = o.OrderItems.First().Book.DefaultImageUrl
+			}));
+
+			response.Data = ordersResponse;
+			return response;
+		}
+
 		public async Task<ServiceResponse<OrderDetailDTO>> GetOrderDetails(int orderId)
 		{
 			var userId = authenticationService.GetUserId();
@@ -127,6 +153,16 @@ namespace Ecommerce.Server.Services.Ordering
 
 			response.Data = orderDetailsResponse;
 			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> UpdateOrder(int id, string status)
+		{
+			var order = await dataContext.Orders.FindAsync(id);
+			order.OrderStatus = status;
+			dataContext.Orders.Update(order);
+			await dataContext.SaveChangesAsync();
+
+			return new ServiceResponse<bool> { Data = true, Message = "Order updated" };
 		}
 	}
 }

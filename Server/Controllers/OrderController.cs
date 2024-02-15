@@ -33,5 +33,21 @@ namespace Ecommerce.Server.Controllers
 			return Ok(response);
 		}
 
+		[HttpGet]
+		[Route("/admin/all")]
+		public async Task<ActionResult<ServiceResponse<List<OrderDTO>>>> GetAllOrders()
+		{
+			var response = await _orderingService.GetAllOrders();
+			return Ok(response);
+		}
+
+
+		[HttpPut]
+		[Route("/admin/update/{id}")]
+		public async Task<ActionResult<ServiceResponse<List<OrderDTO>>>> UpdateOrder(int id, string status)
+		{
+			var response = await _orderingService.UpdateOrder(id, status);
+			return Ok(response);
+		}
 	}
 }
